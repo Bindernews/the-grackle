@@ -16,6 +16,3 @@ At the end of your turn, gain 1 **Phoenix Cooldown** and take another turn.
 
 ## Phoenix Charm
 Upon death, removes 1/2 of your Max HP and heals you to full health.
-
-
-

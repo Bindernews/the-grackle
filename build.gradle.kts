@@ -1,5 +1,4 @@
 import org.apache.tools.ant.taskdefs.condition.Os
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val modName = "TheGrackle"
 
 plugins {
@@ -24,16 +23,13 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-    // Look in libs directory for dependencies
-    flatDir {
-        dir("lib/")
-    }
 }
 
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    compileOnly("org.jetbrains:annotations:16.0.2")
     val libs = "$rootDir/lib"
     implementation(files(
         "$libs/BaseMod.jar",
@@ -64,9 +60,4 @@ tasks.register<Copy>("installJar") {
     from(tasks.getByName<Jar>("jar").archiveFile)
     rename { "$modName.jar" }
     into(modsDir)
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-    kotlinOptions.freeCompilerArgs += "-Xno-param-assertions"
 }

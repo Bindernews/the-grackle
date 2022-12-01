@@ -1,0 +1,12 @@
+{
+  "modid": "grackle",
+  "name": "The Grackle",
+  "author_list": [
+    "Binder News"
+  ],
+  "description": "WIP",
+  "dependencies": [
+    "basemod",
+    "stslib"
+  ]
+}
