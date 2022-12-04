@@ -34,4 +34,6 @@ public class CoolingPhoenixPower extends AbstractPower {
     public void atEndOfRound() {
         addToBot(MiscUtil.getLowerPowerAction(this, 1));
     }
+
+
 }

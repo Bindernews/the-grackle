@@ -1,8 +1,8 @@
 package io.bindernews.thegrackle.cards;
 
-import io.bindernews.thegrackle.Const;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
+import io.bindernews.thegrackle.Const;
 
 import static io.bindernews.thegrackle.Const.GK_ID;
 
@@ -19,7 +19,7 @@ public class CardConfig {
     public CardConfig(String name, int cost) {
         this.name = name;
         ID = GK_ID + ":" + name;
-        image = Const.RES_IMAGES + "/card/" + name + ".png";
+        image = Const.MOD_ID + "/cards/" + name;
         strings = CardCrawlGame.languagePack.getCardStrings(ID);
         this.cost = cost;
     }

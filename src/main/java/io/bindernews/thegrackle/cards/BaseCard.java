@@ -4,7 +4,7 @@ import basemod.abstracts.CustomCard;
 
 public abstract class BaseCard extends CustomCard {
     public BaseCard(CardConfig opts, CardColor color, CardType type, CardRarity rarity, CardTarget target) {
-        super(opts.ID, opts.strings.NAME, opts.image, opts.cost, opts.strings.DESCRIPTION,
+        super(opts.ID, opts.strings.NAME, new RegionName(opts.image), opts.cost, opts.strings.DESCRIPTION,
                 type, color, rarity, target);
     }
 

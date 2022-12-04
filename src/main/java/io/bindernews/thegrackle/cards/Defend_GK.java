@@ -1,10 +1,12 @@
 package io.bindernews.thegrackle.cards;
 
+import basemod.AutoAdd;
 import io.bindernews.thegrackle.Grackle;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
+@AutoAdd.Seen
 public class Defend_GK extends BaseCard {
     public static final CardConfig C = new CardConfig("Defend", 1);
     public static final int BLOCK = 5;

@@ -1,5 +1,6 @@
 package io.bindernews.thegrackle.cards;
 
+import basemod.AutoAdd;
 import io.bindernews.thegrackle.Grackle;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
@@ -7,6 +8,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 
+@AutoAdd.Seen
 public class Strike_GK extends BaseCard {
     public static final CardConfig C = new CardConfig("Strike", 1);
     public static final int DAMAGE = 6;

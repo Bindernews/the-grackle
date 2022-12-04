@@ -1,28 +1,41 @@
 package io.bindernews.thegrackle;
 
+import basemod.BaseMod;
+import basemod.abstracts.CustomPlayer;
+import com.badlogic.gdx.Gdx;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.localization.PowerStrings;
+import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
+/**
+ * A collection of miscellaneous utility functions that should be relatively re-usable for other
+ * Slay the Spire mods. Feel free to copy-paste this file into your own projects, as long as you
+ * retain the MIT license.
+ *
+ * @author bindernews
+ */
 public class MiscUtil {
+    static final Logger log = LogManager.getLogger(MiscUtil.class.getPackage().getName());
 
-    /** Returns a new array list containing the given elements. */
+    /**
+     * Returns a new array list containing the given elements. This function exists in later versions
+     * of Java, but not in Java 8. The original use-case was {@link CustomPlayer#getStartingDeck()}.
+     */
     @SafeVarargs
     public static <E> ArrayList<E> arrayListOf(E ...elements) {
         return new ArrayList<>(Arrays.asList(elements));
     }
-
-    public static String cardImagePath(Class<?> clazz) {
-        return Const.RES_IMAGES + "/card/" + clazz.getName() + ".png";
-    }
-
 
     /**
      * Returns either a {@link RemoveSpecificPowerAction} or {@link ReducePowerAction}
@@ -53,5 +66,55 @@ public class MiscUtil {
         p.name = strings.NAME;
         p.owner = owner;
         p.amount = amount;
+    }
+
+
+    private static final HashMap<Class<?>, String> stringTypeMap = new HashMap<>();
+    static {
+        HashMap<Class<?>, String> m = stringTypeMap;
+        m.put(BlightStrings.class, "blight");
+        m.put(CardStrings.class, "card");
+        m.put(CharacterStrings.class, "character");
+        m.put(EventStrings.class, "event");
+        m.put(Keyword.class, "keyword");
+        m.put(MonsterStrings.class, "monster");
+        m.put(OrbStrings.class, "orb");
+        m.put(PotionStrings.class, "potion");
+        m.put(PowerStrings.class, "power");
+        m.put(RelicStrings.class, "relic");
+        m.put(StanceStrings.class, "stance");
+        m.put(UIStrings.class, "ui");
+    }
+
+    /**
+     * Load all localization strings from the specified language at the path.
+     *
+     * <p>
+     * The language directories must be lowercase, and files are named in the singular and without
+     * the 'Strings' suffix. For example {@link CardStrings} would load {@code card.json}, and {@link UIStrings}
+     * would load {@code ui.json}. Missing files will be ignored.
+     * </p>
+     *
+     * @param path Resource directory containing languages, with no trailing slash (e.g. mymod/localization)
+     * @param language Language code
+     */
+    public static void loadLocalization(String path, Settings.GameLanguage language) {
+        String lang = language.name().toLowerCase();
+        for (Class<?> st : stringTypeMap.keySet()) {
+            String filePath = path + "/" + lang + "/" + stringTypeMap.get(st) + ".json";
+            if (Gdx.files.internal(filePath).exists()) {
+                BaseMod.loadCustomStringsFile(st, filePath);
+                log.debug("loadLocalization: loaded " + filePath);
+            }
+        }
+    }
+
+    public static void registerPower(Class<? extends AbstractPower> clazz) {
+        try {
+            String powerId = (String) clazz.getDeclaredField("POWER_ID").get(null);
+            BaseMod.addPower(clazz, powerId);
+        } catch (SecurityException | NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
