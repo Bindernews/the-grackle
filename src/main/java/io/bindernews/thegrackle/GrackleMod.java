@@ -98,7 +98,7 @@ public class GrackleMod implements
         AutoAdd aa = new AutoAdd(Const.MOD_ID);
         aa.packageFilter(BaseCard.class);
         aa.cards();
-//        Stream.of(
+//        for (BaseCard baseCard : Arrays.asList(
 //                new Strike_GK(),
 //                new Defend_GK(),
 //                new Takeoff(),
@@ -106,8 +106,19 @@ public class GrackleMod implements
 //                new PhoenixForm(),
 //                new Cackle(),
 //                new PhoenixFeather(),
-//                new HurricaneWind()
-//        ).forEach(BaseMod::addCard);
+//                new HurricaneWind(),
+//                new AerialAce(),
+//                new AttackU(),
+//                new AttackR(),
+//                new SkillC(),
+//                new SkillU(),
+//                new SkillR(),
+//                new PowerC(),
+//                new PowerU(),
+//                new PowerR()
+//        )) {
+//            BaseMod.addCard(baseCard);
+//        }
     }
 
     @Override
@@ -165,7 +176,7 @@ public class GrackleMod implements
      * Returns a new ID with the mod prefix and the class name as the suffix.
      */
     public static String makeId(Class<?> clazz) {
-        return makeId(clazz.getName());
+        return makeId(clazz.getSimpleName());
     }
 
 }

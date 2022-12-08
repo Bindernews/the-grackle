@@ -1,11 +1,10 @@
 package io.bindernews.thegrackle.cards;
 
-import io.bindernews.thegrackle.Grackle;
-import io.bindernews.thegrackle.stance.StanceAloft;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import io.bindernews.thegrackle.stance.StanceAloft;
 
 public class Takeoff extends BaseCard {
     public static final CardConfig C = new CardConfig("Takeoff", 1);
@@ -13,7 +12,7 @@ public class Takeoff extends BaseCard {
     public static final int UPGRADE_PLUS_BLOCK = 4;
 
     public Takeoff() {
-        super(C, Grackle.En.COLOR_BLACK, CardType.SKILL, CardRarity.BASIC, CardTarget.SELF);
+        super(C, CardType.SKILL, CardRarity.BASIC, CardTarget.SELF);
         tags.add(CardTags.STARTER_DEFEND);
         baseBlock = BLOCK;
     }

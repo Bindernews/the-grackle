@@ -86,7 +86,7 @@ public class Grackle extends CustomPlayer {
     @Override
     public ArrayList<String> getStartingRelics() {
         // TODO
-        return arrayListOf();
+        return arrayListOf("PrismaticShard");
     }
 
     @Override

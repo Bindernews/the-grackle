@@ -1,0 +1,14 @@
+{
+  "grackle:StanceAloft": {
+    "NAME": "Aloft",
+    "DESCRIPTION": [
+      "Your Attacks deal half damage and you take half damage from attacks."
+    ]
+  },
+  "grackle:StancePhoenix": {
+    "NAME": "Phoenix",
+    "DESCRIPTION": [
+      "At the end of your turn regain 10% of your Max HP and take another turn."
+    ]
+  }
+}
