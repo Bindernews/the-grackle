@@ -1,5 +1,7 @@
 package io.bindernews.thegrackle.stance;
 
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.localization.StanceStrings;
 import io.bindernews.thegrackle.GrackleMod;
 import io.bindernews.thegrackle.MiscUtil;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
@@ -9,6 +11,7 @@ import com.megacrit.cardcrawl.stances.AbstractStance;
 
 public class StancePhoenix extends AbstractStance {
     public static final String STANCE_ID = GrackleMod.makeId(StancePhoenix.class);
+    public static final StanceStrings STRINGS = CardCrawlGame.languagePack.getStanceString(STANCE_ID);
 
     /**
      * So we can calculate damage without code duplication.

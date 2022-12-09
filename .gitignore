@@ -1,7 +1,7 @@
 .gradle/
 .idea/
 build/
-lib/*.jar
+lib/
 .env
 .DS_Store
 

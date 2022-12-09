@@ -5,13 +5,15 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.StanceStrings;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.stances.AbstractStance;
+import io.bindernews.thegrackle.GrackleMod;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StanceAloft extends AbstractStance {
-    public static final String STANCE_ID = "Aloft";
+    public static final String STANCE_ID = GrackleMod.makeId(StanceAloft.class);
     public static final StanceStrings STRINGS = CardCrawlGame.languagePack.getStanceString(STANCE_ID);
 
     /**
@@ -25,6 +27,8 @@ public class StanceAloft extends AbstractStance {
 
     public StanceAloft() {
         ID = STANCE_ID;
+        name = STRINGS.NAME;
+        updateDescription();
     }
 
     @Override
@@ -47,7 +51,7 @@ public class StanceAloft extends AbstractStance {
 
     @Override
     public void updateDescription() {
-
+        description = STRINGS.DESCRIPTION[0];
     }
 
     /**
@@ -55,11 +59,15 @@ public class StanceAloft extends AbstractStance {
      * @param p player
      * @param card the card to update
      */
-    public static boolean checkPlay(AbstractPlayer p, AbstractCard card) {
-        boolean b = ALOFT_STANCES.contains(p.stance.ID);
+    public static boolean checkPlay(AbstractCard card, AbstractPlayer p, AbstractMonster ignoredM) {
+        boolean b = isAloft(p);
         if (!b) {
             card.cantUseMessage = "Card may only be played while aloft";
         }
         return b;
+    }
+
+    public static boolean isAloft(AbstractPlayer p) {
+        return ALOFT_STANCES.contains(p.stance.ID);
     }
 }

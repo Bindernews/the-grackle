@@ -1,0 +1,15 @@
+{
+  "grackle:grackle": {
+    "NAMES": [
+      "The Grackle",
+      "the Grackle"
+    ],
+    "TEXT": [
+      "A flying ace with a propensity for setting both herself and others on fire. NL Arrived at the Spire while testing an experimental aircraft.",
+      "NL You prepare for a bombing run...",
+      "A bat alights near you, and suddenly transforms into a human figure. NL ~\"Join~ ~us,~ ~sister.\"~",
+      "EVENT 1",
+      "EVENT 2"
+    ]
+  }
+}

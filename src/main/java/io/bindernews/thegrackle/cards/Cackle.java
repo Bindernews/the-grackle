@@ -1,6 +1,5 @@
 package io.bindernews.thegrackle.cards;
 
-import io.bindernews.thegrackle.Grackle;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -11,7 +10,7 @@ public class Cackle extends BaseCard {
     public static final CardConfig C = new CardConfig("Cackle", 0);
 
     public Cackle() {
-        super(C, Grackle.En.COLOR_BLACK, CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY);
+        super(C, CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY);
         baseMagicNumber = 1;
         magicNumber = baseMagicNumber;
     }

@@ -1,0 +1,67 @@
+{
+  "grackle:Strike_GK": {
+    "NAME": "Strike",
+    "DESCRIPTION": "Deal !D! damage."
+  },
+  "grackle:Defend_GK": {
+    "NAME": "Defend",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:PhoenixFeather": {
+    "NAME": "Phoenix Feather",
+    "DESCRIPTION": "At the end of combat, heal !M! HP."
+  },
+  "grackle:Takeoff": {
+    "NAME": "Takeoff",
+    "DESCRIPTION": "Gain !B! Block. Enter grackle:Aloft."
+  },
+  "grackle:CrashLanding": {
+    "NAME": "Crash Landing",
+    "DESCRIPTION": "Must be grackle:Aloft. NL Deal !D! damage. Exit grackle:Aloft."
+  },
+  "grackle:HurricaneWind": {
+    "NAME": "Hurricane Wind",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies X times."
+  },
+  "grackle:Cackle": {
+    "NAME": "Cackle",
+    "DESCRIPTION": "TODO"
+  },
+  "grackle:AerialAce": {
+    "NAME": "Aerial Ace",
+    "DESCRIPTION": "Deal !D! damage."
+  },
+  "grackle:FightFire": {
+    "NAME": "Attack Uncommon",
+    "DESCRIPTION": "Deal !D! damage.",
+    "EXTENDED_DESCRIPTION": ["Fight fire, with fire."]
+  },
+  "grackle:AttackR": {
+    "NAME": "Attack Rare",
+    "DESCRIPTION": "Deal !D! damage."
+  },
+  "grackle:SkillC": {
+    "NAME": "Skill Common",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:SkillU": {
+    "NAME": "Skill Uncommon",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:SkillR": {
+    "NAME": "Skill Rare",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:PowerC": {
+    "NAME": "Power Common",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:PowerU": {
+    "NAME": "Power Uncommon",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:PowerR": {
+    "NAME": "Power Rare",
+    "DESCRIPTION": "Gain !B! Block."
+  }
+}
