@@ -4,13 +4,18 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import io.bindernews.bnsts.CardNums;
 
 public class AttackR extends BaseCard {
-    public static final CardConfig C = new CardConfig("AttackR", 1);
+    public static final CardConfig C = new CardConfig("AttackR");
+    public static final CardNums NUM = CardNums.builder()
+            .cost(1)
+            .damage(8).damageUpg(16)
+            .build();
 
     public AttackR() {
         super(C, CardType.ATTACK, CardRarity.RARE, CardTarget.ENEMY);
-        damage = baseDamage = 8;
+        NUM.init(this);
         damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
     }
 
@@ -20,6 +25,7 @@ public class AttackR extends BaseCard {
     }
 
     @Override
-    public void onUpgrade() {
+    public void upgrade() {
+        NUM.upgrade(this, false);
     }
 }

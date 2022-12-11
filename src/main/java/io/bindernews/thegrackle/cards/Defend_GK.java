@@ -4,18 +4,20 @@ import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import io.bindernews.bnsts.CardNums;
 
 @AutoAdd.Seen
 public class Defend_GK extends BaseCard {
-    public static final CardConfig C = new CardConfig("Defend_GK", 1);
-    public static final int BLOCK = 5;
-    public static final int UPGRADE_PLUS_BLOCK = 3;
+    public static final CardConfig C = new CardConfig("Defend_GK");
+    public static final CardNums NUM = CardNums.builder()
+            .cost(1)
+            .block(5).blockUpg(8)
+            .build();
 
     public Defend_GK() {
         super(C, CardType.SKILL, CardRarity.BASIC, CardTarget.SELF);
         tags.add(CardTags.STARTER_DEFEND);
-        baseBlock = BLOCK;
-        block = baseBlock;
+        NUM.init(this);
     }
 
     @Override
@@ -24,7 +26,7 @@ public class Defend_GK extends BaseCard {
     }
 
     @Override
-    public void onUpgrade() {
-        upgradeBlock(UPGRADE_PLUS_BLOCK);
+    public void upgrade() {
+        NUM.upgrade(this, false);
     }
 }

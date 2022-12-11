@@ -4,17 +4,22 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.actions.LazyAction;
 import io.bindernews.thegrackle.stance.StanceAloft;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
 public class AerialAce extends BaseCard {
-    public static final CardConfig C = new CardConfig("AerialAce", 1);
+    public static final CardConfig CFG = new CardConfig("AerialAce");
+    public static final CardNums NUM = CardNums.builder()
+            .cost(1)
+            .damage(8).damageUpg(12)
+            .build();
 
     public AerialAce() {
-        super(C, CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
-        damage = baseDamage = 8;
+        super(CFG, CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
+        NUM.init(this);
         damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
     }
 
@@ -32,7 +37,7 @@ public class AerialAce extends BaseCard {
     }
 
     @Override
-    public void onUpgrade() {
-        upgradeDamage(4);
+    public void upgrade() {
+        NUM.upgrade(this, false);
     }
 }

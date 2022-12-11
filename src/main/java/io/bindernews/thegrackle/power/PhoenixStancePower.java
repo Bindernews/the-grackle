@@ -3,32 +3,28 @@ package io.bindernews.thegrackle.power;
 import charbosses.actions.unique.EnemyChangeStanceAction;
 import charbosses.bosses.AbstractCharBoss;
 import charbosses.stances.AbstractEnemyStance;
-import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
-import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.MiscUtil;
-import io.bindernews.thegrackle.stance.StancePhoenix;
+import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.InvisiblePower;
+import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.stances.AbstractStance;
+import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.stance.StancePhoenix;
 
 /**
  * Implements most of the features of PhoenixStance.
  */
-public class PhoenixStancePower extends AbstractPower {
+public class PhoenixStancePower extends BasePower implements InvisiblePower {
     public static final String POWER_ID = GrackleMod.makeId(PhoenixStancePower.class);
-    public static final PowerStrings STRINGS = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
 
     public PhoenixStancePower(AbstractCreature owner) {
-        MiscUtil.powerInit(this, owner, -1, POWER_ID, STRINGS);
+        super(POWER_ID);
+        setOwnerAmount(owner, -1);
         type = PowerType.BUFF;
         isTurnBased = false;
     }
@@ -52,6 +48,11 @@ public class PhoenixStancePower extends AbstractPower {
             addToBot(new ApplyPowerAction(owner, owner, new CoolingPhoenixPower(owner, 1)));
             addToBot(getStanceAction("Neutral"));
         }
+    }
+
+    @Override
+    public AbstractPower makeCopy() {
+        return new PhoenixStancePower(owner);
     }
 
     public AbstractGameAction getStanceAction(String stance) {

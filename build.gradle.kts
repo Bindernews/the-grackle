@@ -1,10 +1,6 @@
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.ReaderInputStream
-import org.gradle.api.internal.file.CopyActionProcessingStreamAction
-import org.gradle.api.internal.file.FileResolver
-import org.gradle.api.internal.file.copy.CopyAction
-import org.gradle.api.internal.file.copy.FileCopyDetailsInternal
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -27,9 +23,8 @@ buildscript {
 plugins {
     id("java")
     id("co.uzzu.dotenv.gradle") version "2.0.0"
+    id("io.freefair.lombok") version "6.6"
 }
-
-
 
 // Constants
 /** Map of deps to their Steam workshop IDs */
@@ -200,45 +195,13 @@ class ResizeFilter(`in`: Reader) : FilterReader(`in`) {
         scaledBuf.graphics.drawImage(scaled, 0, 0, null)
         val outBuf = ByteArrayOutputStream()
         ImageIO.write(scaledBuf, "png", outBuf)
-        return StringReader(outBuf.toString(Charsets.ISO_8859_1))
-    }
-}
-
-open class ResizeImageCopy : Copy() {
-
-    @Input var width: Int = 0
-    @Input var height: Int = 0
-
-    private lateinit var resolver: FileResolver
-
-    override fun createCopyAction(): CopyAction {
-        resolver = fileLookup.getFileResolver(destinationDir)
-        return CopyAction { stream ->
-            val w = ResizeWorker()
-            stream.process(w)
-            WorkResults.didWork(w.didWork)
-        }
-    }
-
-    inner class ResizeWorker: CopyActionProcessingStreamAction {
-        var didWork: Boolean = false
-        private val scaledBuf = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-
-        override fun processFile(details: FileCopyDetailsInternal) {
-            val target = resolver.resolve(details.relativePath.pathString)
-            val buf = ImageIO.read(details.file)
-            val scaled = buf.getScaledInstance(width, height, BufferedImage.SCALE_SMOOTH)
-            scaledBuf.graphics.drawImage(scaled, 0, 0, null)
-            ImageIO.write(scaledBuf, "png", target)
-            didWork = true
-        }
+        return StringReader(outBuf.toString(Charsets.ISO_8859_1.name()))
     }
 }
 
 fun findMod(name: String): File {
     val workshopId = WORKSHOP_IDS[name]
-    // TODO change to a list
-    val paths = files("$rootDir/libs", modsDir, "$workshopDir/$workshopId")
+    val paths = listOf("$rootDir/libs", modsDir, "$workshopDir/$workshopId").map { file(it) }
     for (p in paths) {
         val child = p.resolve(name)
         if (p.resolve(name).isFile) {

@@ -15,13 +15,8 @@ public abstract class BaseCard extends CustomCard {
      */
     protected CardPredicate<BaseCard> canUseTest = (c,p,m) -> true;
 
-    /**
-     * The card's flavor text, to be displayed when viewing the card up-close.
-     */
-    public String flavorText = "";
-
     public BaseCard(CardConfig opts, CardType type, CardRarity rarity, CardTarget target) {
-        super(opts.ID, opts.strings.NAME, new RegionName(opts.image), opts.cost, opts.strings.DESCRIPTION,
+        super(opts.ID, opts.getStrings().NAME, new RegionName(opts.image), 1, opts.getStrings().DESCRIPTION,
                 type, Grackle.En.COLOR_BLACK, rarity, target);
     }
 
@@ -29,17 +24,4 @@ public abstract class BaseCard extends CustomCard {
     public boolean canUse(AbstractPlayer p, AbstractMonster m) {
         return super.canUse(p, m) && canUseTest.test(this, p, m);
     }
-
-    @Override
-    public void upgrade() {
-        if (!this.upgraded) {
-            upgradeName();
-            onUpgrade();
-        }
-    }
-
-    /**
-     * Called by {@code upgrade()} when the card has not been upgraded already.
-     */
-    public abstract void onUpgrade();
 }

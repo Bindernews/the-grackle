@@ -5,14 +5,18 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import com.megacrit.cardcrawl.powers.WeakPower;
+import io.bindernews.bnsts.CardNums;
 
 public class Cackle extends BaseCard {
-    public static final CardConfig C = new CardConfig("Cackle", 0);
+    public static final CardConfig C = new CardConfig("Cackle");
+    static final CardNums NUM = CardNums.builder()
+            .cost(0)
+            .magic(1).magicUpg(2)
+            .build();
 
     public Cackle() {
         super(C, CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY);
-        baseMagicNumber = 1;
-        magicNumber = baseMagicNumber;
+        NUM.init(this);
     }
 
     @Override
@@ -22,7 +26,7 @@ public class Cackle extends BaseCard {
     }
 
     @Override
-    public void onUpgrade() {
-        upgradeMagicNumber(1);
+    public void upgrade() {
+        NUM.upgrade(this, false);
     }
 }

@@ -1,23 +1,20 @@
 package io.bindernews.thegrackle.power;
 
-import io.bindernews.thegrackle.MiscUtil;
-import io.bindernews.thegrackle.stance.StancePhoenix;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.stances.AbstractStance;
+import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.MiscUtil;
+import io.bindernews.thegrackle.stance.StancePhoenix;
 
-import static io.bindernews.thegrackle.Const.GK_ID;
+public class CoolingPhoenixPower extends BasePower {
 
-public class CoolingPhoenixPower extends AbstractPower {
-
-    public static final String POWER_ID = GK_ID + ":CoolingPhoenixPower";
-    public static final PowerStrings STRINGS = CardCrawlGame.languagePack.getPowerStrings(POWER_ID);
+    public static final String POWER_ID = GrackleMod.makeId(CoolingPhoenixPower.class);
 
     public CoolingPhoenixPower(AbstractCreature owner, int amount) {
-        MiscUtil.powerInit(this, owner, amount, POWER_ID, STRINGS);
+        super(POWER_ID);
+        setOwnerAmount(owner, amount);
         this.type = PowerType.DEBUFF;
         this.isTurnBased = true;
         this.updateDescription();
@@ -35,5 +32,13 @@ public class CoolingPhoenixPower extends AbstractPower {
         addToBot(MiscUtil.getLowerPowerAction(this, 1));
     }
 
+    @Override
+    public void updateDescription() {
+        description = strings.DESCRIPTIONS[0];
+    }
 
+    @Override
+    public AbstractPower makeCopy() {
+        return new CoolingPhoenixPower(owner, amount);
+    }
 }

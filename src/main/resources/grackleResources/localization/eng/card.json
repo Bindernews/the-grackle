@@ -32,21 +32,23 @@
     "DESCRIPTION": "Deal !D! damage."
   },
   "grackle:FightFire": {
-    "NAME": "Attack Uncommon",
-    "DESCRIPTION": "Deal !D! damage.",
-    "EXTENDED_DESCRIPTION": ["Fight fire, with fire."]
+    "NAME": "Fight Fire",
+    "DESCRIPTION": "Exhaust each *Burn in your discard pile. NL Deal !D! damage (!M! for each card exhausted).",
+    "FLAVOR": "...with fire."
   },
   "grackle:AttackR": {
     "NAME": "Attack Rare",
     "DESCRIPTION": "Deal !D! damage."
   },
-  "grackle:SkillC": {
-    "NAME": "Skill Common",
-    "DESCRIPTION": "Gain !B! Block."
+  "grackle:SelfBurn": {
+    "NAME": "Self Burn",
+    "DESCRIPTION": "Draw !M! cards. NL Add a *Burn to your discard pile.",
+    "FLAVOR": "Do you want some burn cream for that?"
   },
-  "grackle:SkillU": {
-    "NAME": "Skill Uncommon",
-    "DESCRIPTION": "Gain !B! Block."
+  "grackle:TryThatAgain": {
+    "NAME": "Let's Try That Again",
+    "DESCRIPTION": "Discard your hand, NL then draw that many cards.",
+    "FLAVOR": "A Game Over is only temporary."
   },
   "grackle:SkillR": {
     "NAME": "Skill Rare",

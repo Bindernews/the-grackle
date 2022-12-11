@@ -6,32 +6,30 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import io.bindernews.bnsts.CardNums;
+import lombok.val;
 
 @AutoAdd.Seen
 public class Strike_GK extends BaseCard {
-    public static final CardConfig C = new CardConfig("Strike_GK", 1);
-    public static final int DAMAGE = 6;
-    public static final int UPGRADE_PLUS_DAMAGE = 3;
+    public static final CardConfig CFG = new CardConfig("Strike_GK");
+    public static final CardNums NUM = CardNums.builder()
+            .cost(1).damage(6).damageUpg(9).build();
 
     public Strike_GK() {
-        super(C, CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY);
+        super(CFG, CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY);
         tags.add(CardTags.STARTER_STRIKE);
         tags.add(CardTags.STRIKE);
-        baseDamage = DAMAGE;
-        damage = DAMAGE;
+        NUM.init(this);
     }
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        addToBot(new DamageAction(
-                m,
-                new DamageInfo(p, damage, damageTypeForTurn),
-                AbstractGameAction.AttackEffect.SLASH_HORIZONTAL
-        ));
+        val fx = AbstractGameAction.AttackEffect.SLASH_HORIZONTAL;
+        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
     }
 
     @Override
-    public void onUpgrade() {
-        upgradeDamage(UPGRADE_PLUS_DAMAGE);
+    public void upgrade() {
+        NUM.upgrade(this, false);
     }
 }

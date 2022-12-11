@@ -4,17 +4,17 @@ import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.stance.StanceAloft;
 
 public class Takeoff extends BaseCard {
-    public static final CardConfig C = new CardConfig("Takeoff", 1);
-    public static final int BLOCK = 6;
-    public static final int UPGRADE_PLUS_BLOCK = 4;
+    public static final CardConfig CFG = new CardConfig("Takeoff");
+    public static final CardNums NUM = CardNums.builder().cost(1).block(6).blockUpg(10).build();
 
     public Takeoff() {
-        super(C, CardType.SKILL, CardRarity.BASIC, CardTarget.SELF);
+        super(CFG, CardType.SKILL, CardRarity.BASIC, CardTarget.SELF);
         tags.add(CardTags.STARTER_DEFEND);
-        baseBlock = BLOCK;
+        NUM.init(this);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class Takeoff extends BaseCard {
     }
 
     @Override
-    public void onUpgrade() {
-        upgradeBlock(UPGRADE_PLUS_BLOCK);
+    public void upgrade() {
+        NUM.upgrade(this, false);
     }
 }

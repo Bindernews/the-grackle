@@ -79,7 +79,6 @@ At the end of your turn, gain 1 **Phoenix Cooldown** and take another turn.
     - Art: Group of birds mocking/bullying a crying Gremlin Nob
 - From Above! (C); Cost 1; Deal ??? damage. If Airborne, gain 1 Energy
     - Dominic Deegan reference
-- Kamikaze (R); Cost 2; Deal ??? damage. Receive 1/4 of damage dealt. Add 3 Burn to your discard pile. Exhaust.
 
 ## Skill
 - Takeoff (C); Cost 2; Gain 8 Block. Become Airborne
@@ -102,6 +101,7 @@ At the end of your turn, gain 1 **Phoenix Cooldown** and take another turn.
     - Plus: Gain 3 Strength
 - Evasive Manouvers (R); Cost 2; Gain 2 Intangible. Exhaust.
     - Maybe Buffer instead of Intangible? Or other things?
+- Fly-By (U); Cost 0/1; (Airborne) The damage of the next Attack you play is not reduced by Aloft. 
 
 ## Undecided / Ideas
 - This is Fine

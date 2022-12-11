@@ -3,6 +3,7 @@ package io.bindernews.thegrackle;
 import basemod.BaseMod;
 import basemod.abstracts.CustomPlayer;
 import com.badlogic.gdx.Gdx;
+import com.evacipated.cardcrawl.mod.stslib.Keyword;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
@@ -11,12 +12,11 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * A collection of miscellaneous utility functions that should be relatively re-usable for other
@@ -34,7 +34,9 @@ public class MiscUtil {
      */
     @SafeVarargs
     public static <E> ArrayList<E> arrayListOf(E ...elements) {
-        return new ArrayList<>(Arrays.asList(elements));
+        ArrayList<E> lst = new ArrayList<>();
+        Collections.addAll(lst, elements);
+        return lst;
     }
 
     /**
@@ -57,15 +59,6 @@ public class MiscUtil {
      */
     public static void addToBot(AbstractGameAction a) {
         AbstractDungeon.actionManager.addToBottom(a);
-    }
-
-    public static void powerInit(
-            AbstractPower p, AbstractCreature owner, int amount, String id, PowerStrings strings
-    ) {
-        p.ID = id;
-        p.name = strings.NAME;
-        p.owner = owner;
-        p.amount = amount;
     }
 
 
@@ -110,11 +103,35 @@ public class MiscUtil {
     }
 
     public static void registerPower(Class<? extends AbstractPower> clazz) {
+        String powerId = null;
         try {
-            String powerId = (String) clazz.getDeclaredField("POWER_ID").get(null);
-            BaseMod.addPower(clazz, powerId);
-        } catch (SecurityException | NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            powerId = (String) clazz.getDeclaredField("POWER_ID").get(null);
+        } catch (Exception ignored) {}
+        if (powerId == null) {
+            try {
+                val ctor = clazz.getDeclaredConstructor(AbstractCreature.class, int.class);
+                powerId = ctor.newInstance(null, 0).ID;
+            } catch (Exception ignore) {}
         }
+        if (powerId == null) {
+            throw new RuntimeException("cannot determine power ID for class " + clazz);
+        }
+        BaseMod.addPower(clazz, powerId);
+    }
+
+    /**
+     * Returns {@code desc[0] + args[0] + desc[1] + args[1] + desc[2]},
+     * repeating the pattern until {@code args} is empty.
+     * @param desc Array of description strings
+     * @param args Values to put between each description string
+     * @return Concatenated description string
+     */
+    public static String concatDescriptions(String[] desc, Object... args) {
+        val sb = new StringBuilder(desc[0]);
+        for (int i = 0; i < args.length; i += 1) {
+            sb.append(args[i]);
+            sb.append(desc[i + 1]);
+        }
+        return sb.toString();
     }
 }

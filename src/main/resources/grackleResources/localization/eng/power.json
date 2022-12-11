@@ -5,5 +5,26 @@
       "A",
       "B"
     ]
+  },
+  "grackle:FireWithinPower": {
+    "NAME": "Fire Within",
+    "DESCRIPTIONS": [
+      "Gain %d Fireheart at the start of each turn."
+    ]
+  },
+  "grackle:CoolingPhoenixPower": {
+    "NAME": "Cooling Phoenix",
+    "DESCRIPTIONS": [
+      "Cannot enter Phoenix Stance."
+    ]
+  },
+  "grackle:PhoenixStancePower": {
+    "NAME": "Phoenix Stance"
+  },
+  "grackle:TargetingComputerPower": {
+    "NAME": "Targeting Computer",
+    "DESCRIPTIONS": [
+      "Gain %d Vigor at the start of each turn."
+    ]
   }
 }

@@ -9,17 +9,12 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.EnergyManager;
-import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.core.*;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
-import io.bindernews.thegrackle.cards.CrashLanding;
-import io.bindernews.thegrackle.cards.Defend_GK;
-import io.bindernews.thegrackle.cards.Strike_GK;
-import io.bindernews.thegrackle.cards.Takeoff;
+import io.bindernews.thegrackle.cards.*;
 
 import java.util.ArrayList;
 
@@ -77,9 +72,9 @@ public class Grackle extends CustomPlayer {
     @Override
     public ArrayList<String> getStartingDeck() {
         return arrayListOf(
-                Strike_GK.C.ID, Strike_GK.C.ID, Strike_GK.C.ID, Strike_GK.C.ID,
+                Strike_GK.CFG.ID, Strike_GK.CFG.ID, Strike_GK.CFG.ID, Strike_GK.CFG.ID,
                 Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID,
-                Takeoff.C.ID, CrashLanding.C.ID
+                Takeoff.CFG.ID, CrashLanding.CFG.ID
         );
     }
 
