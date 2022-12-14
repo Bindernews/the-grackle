@@ -64,8 +64,8 @@
   },
   "grackle:SummonEgrets": {
     "NAME": "Summon Egrets",
-    "DESCRIPTION": "Prevent the next !M! times you would lose HP. Incr",
-    "FLAVOR": "The flock grows..."
+    "DESCRIPTION": "Deal !D! damage to ALL enemies X times.",
+    "FLAVOR": "And Some Egrets in a pear tree"
   },
   "grackle:FiredUpCard": {
     "NAME": "Fired Up",

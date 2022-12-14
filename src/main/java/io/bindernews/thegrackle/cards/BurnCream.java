@@ -9,7 +9,7 @@ import io.bindernews.bnsts.CardNums;
 public class BurnCream extends BaseCard {
     public static final CardConfig C = new CardConfig("BurnCream", CardType.POWER);
     public static final CardNums NUM = CardNums.builder()
-            .cost(1).magic(1).magic(2).build();
+            .cost(1).magic(1).magicUpg(2).build();
 
     public BurnCream() {
         super(C, CardRarity.UNCOMMON, CardTarget.SELF);
@@ -18,7 +18,7 @@ public class BurnCream extends BaseCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        this.addToBot(new ApplyPowerAction(p, p, new EvolvePower(p, this.magicNumber), this.magicNumber));
+        addToBot(new ApplyPowerAction(p, p, new EvolvePower(p, this.magicNumber), this.magicNumber));
     }
 
     @Override

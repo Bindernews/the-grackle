@@ -196,6 +196,7 @@ public class GrackleMod implements
                 new SelfBurn(),
                 new SkillR(),
                 new Strike_GK(),
+                new SummonEgrets(),
                 new Takeoff(),
                 new TargetingComputer(),
                 new TryThatAgain()

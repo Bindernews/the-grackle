@@ -11,11 +11,13 @@ import static io.bindernews.thegrackle.helper.BurnHelper.exhaustBurnsInGroup;
 
 public class FightFireAction extends AbstractGameAction {
     private final AbstractPlayer player;
+    private final int baseDmg;
 
-    public FightFireAction(AbstractPlayer player, AbstractCreature target, int damageMultiplier) {
+    public FightFireAction(AbstractPlayer player, AbstractCreature target, int baseDmg, int damageMultiplier) {
         this.source = player;
         this.player = player;
         this.target = target;
+        this.baseDmg = baseDmg;
         this.amount = damageMultiplier;
         this.attackEffect = AttackEffect.FIRE;
     }
@@ -24,10 +26,8 @@ public class FightFireAction extends AbstractGameAction {
     public void update() {
         isDone = true;
         if (target != null && target.currentHealth > 0) {
-            val dmg = exhaustBurnsInGroup(player.discardPile) * amount;
+            val dmg = baseDmg + (exhaustBurnsInGroup(player.discardPile) * amount);
             addToTop(new DamageAction(target, new DamageInfo(player, dmg, damageType), attackEffect));
         }
     }
-
-
 }

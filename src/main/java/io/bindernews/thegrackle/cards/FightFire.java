@@ -44,7 +44,7 @@ public class FightFire extends BaseCard {
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        addToBot(new FightFireAction(p, m, magicNumber));
+        addToBot(new FightFireAction(p, m, NUM.damage, magicNumber));
     }
 
     @Override
