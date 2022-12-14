@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.*;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
@@ -188,5 +189,10 @@ public class Grackle extends CustomPlayer {
         public static AbstractCard.CardColor COLOR_BLACK;
         @SpireEnum(name = "GRACKLE_BLACK")
         public static CardLibrary.LibraryType LIBRARY_COLOR;
+    }
+
+
+    public static boolean isPlaying() {
+        return AbstractDungeon.player instanceof Grackle;
     }
 }
