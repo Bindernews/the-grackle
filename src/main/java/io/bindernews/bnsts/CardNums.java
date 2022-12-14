@@ -1,14 +1,11 @@
 package io.bindernews.bnsts;
 
 import basemod.abstracts.CustomCard;
+import com.evacipated.cardcrawl.mod.stslib.variables.ExhaustiveVariable;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import lombok.Builder;
-import lombok.SneakyThrows;
-import lombok.val;
+import lombok.*;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
+import java.lang.invoke.*;
 
 /**
  * Holds commonly configured numbers for cards, and has a builder to make it easy to keep
@@ -52,6 +49,8 @@ public class CardNums {
     @Builder.Default public final int magicUpg = -1;
     @Builder.Default public final int heal = -1;
     @Builder.Default public final int healUpg = -1;
+    @Builder.Default public final int exhaustive = -1;
+    @Builder.Default public final int exhaustiveUpg = -1;
 
     public void init(CustomCard card) {
         card.damage = card.baseDamage = damage;
@@ -59,6 +58,7 @@ public class CardNums {
         card.magicNumber = card.baseMagicNumber = magic;
         card.heal = card.baseHeal = heal;
         card.cost = card.costForTurn = cost;
+        ExhaustiveVariable.setBaseValue(card, exhaustive);
     }
 
     @SneakyThrows
@@ -78,6 +78,9 @@ public class CardNums {
         }
         if (magicUpg != -1) {
             hUpgradeMagic.invoke(card, magicUpg - magic);
+        }
+        if (exhaustiveUpg != -1) {
+            ExhaustiveVariable.upgrade(card, exhaustiveUpg - exhaustive);
         }
     }
 }

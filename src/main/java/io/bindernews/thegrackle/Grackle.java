@@ -74,14 +74,14 @@ public class Grackle extends CustomPlayer {
         return arrayListOf(
                 Strike_GK.CFG.ID, Strike_GK.CFG.ID, Strike_GK.CFG.ID, Strike_GK.CFG.ID,
                 Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID,
-                Takeoff.CFG.ID, CrashLanding.CFG.ID
+                Takeoff.CFG.ID, CrashLanding.CFG.ID, FiredUpCard.C.ID, SelfBurn.C.ID
         );
     }
 
     @Override
     public ArrayList<String> getStartingRelics() {
         // TODO
-        return arrayListOf("PrismaticShard");
+        return arrayListOf("Black Star");
     }
 
     @Override

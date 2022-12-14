@@ -6,11 +6,11 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 
 public class TryThatAgain extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("TryThatAgain");
+    public static final CardConfig CFG = new CardConfig("TryThatAgain", CardType.SKILL);
     public static final CardNums NUM = CardNums.builder().cost(1).costUpg(0).build();
 
     public TryThatAgain() {
-        super(CFG, CardType.SKILL, CardRarity.UNCOMMON, CardTarget.NONE);
+        super(CFG, CardRarity.UNCOMMON, CardTarget.NONE);
         NUM.init(this);
     }
 

@@ -8,11 +8,11 @@ import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.stance.StanceAloft;
 
 public class Takeoff extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("Takeoff");
+    public static final CardConfig CFG = new CardConfig("Takeoff", CardType.SKILL);
     public static final CardNums NUM = CardNums.builder().cost(1).block(6).blockUpg(10).build();
 
     public Takeoff() {
-        super(CFG, CardType.SKILL, CardRarity.BASIC, CardTarget.SELF);
+        super(CFG, CardRarity.BASIC, CardTarget.SELF);
         tags.add(CardTags.STARTER_DEFEND);
         NUM.init(this);
     }

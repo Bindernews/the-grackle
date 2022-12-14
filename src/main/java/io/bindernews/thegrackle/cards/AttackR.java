@@ -7,14 +7,14 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 
 public class AttackR extends BaseCard {
-    public static final CardConfig C = new CardConfig("AttackR");
+    public static final CardConfig C = new CardConfig("AttackR", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
             .damage(8).damageUpg(16)
             .build();
 
     public AttackR() {
-        super(C, CardType.ATTACK, CardRarity.RARE, CardTarget.ENEMY);
+        super(C, CardRarity.RARE, CardTarget.ENEMY);
         NUM.init(this);
         damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
     }

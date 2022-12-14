@@ -8,14 +8,14 @@ import com.megacrit.cardcrawl.powers.WeakPower;
 import io.bindernews.bnsts.CardNums;
 
 public class Cackle extends BaseCard {
-    public static final CardConfig C = new CardConfig("Cackle");
+    public static final CardConfig C = new CardConfig("Cackle", CardType.SKILL);
     static final CardNums NUM = CardNums.builder()
             .cost(0)
             .magic(1).magicUpg(2)
             .build();
 
     public Cackle() {
-        super(C, CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY);
+        super(C, CardRarity.COMMON, CardTarget.ENEMY);
         NUM.init(this);
     }
 

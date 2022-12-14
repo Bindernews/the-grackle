@@ -7,12 +7,12 @@ import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.power.TargetingComputerPower;
 
 public class TargetingComputer extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("TargetingComputer");
+    public static final CardConfig CFG = new CardConfig("TargetingComputer", CardType.POWER);
     public static final CardNums NUM = CardNums.builder()
             .cost(1).magic(6).magicUpg(10).build();
 
     public TargetingComputer() {
-        super(CFG, CardType.POWER, CardRarity.COMMON, CardTarget.SELF);
+        super(CFG, CardRarity.COMMON, CardTarget.SELF);
         NUM.init(this);
     }
 

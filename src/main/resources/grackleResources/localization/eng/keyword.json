@@ -1,0 +1,20 @@
+[
+  {
+    "ID": "firedup",
+    "PROPER_NAME": "Fired Up",
+    "NAMES": [
+      "Fired Up",
+      "Fired_Up",
+      "fired_up"
+    ],
+    "DESCRIPTION": "Gain Vigor when a Burn is exhausted."
+  },
+  {
+    "PROPER_NAME": "Fireheart",
+    "NAMES": [
+      "Fireheart",
+      "fireheart"
+    ],
+    "DESCRIPTION": "When you obtain #b10 #Fireheart, enter #yPhoenix Stance."
+  }
+]

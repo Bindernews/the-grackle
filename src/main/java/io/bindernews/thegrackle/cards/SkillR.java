@@ -6,11 +6,11 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 
 public class SkillR extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("SkillR");
+    public static final CardConfig CFG = new CardConfig("SkillR", CardType.SKILL);
     public static final CardNums NUM = CardNums.builder().cost(1).block(6).blockUpg(12).build();
 
     public SkillR() {
-        super(CFG, CardType.SKILL, CardRarity.RARE, CardTarget.SELF);
+        super(CFG, CardRarity.RARE, CardTarget.SELF);
         NUM.init(this);
     }
 

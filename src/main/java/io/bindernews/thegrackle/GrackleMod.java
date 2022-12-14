@@ -2,7 +2,6 @@ package io.bindernews.thegrackle;
 
 import basemod.AutoAdd;
 import basemod.BaseMod;
-import basemod.abstracts.CustomCard;
 import basemod.helpers.RelicType;
 import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
@@ -10,27 +9,28 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import io.bindernews.thegrackle.cards.BaseCard;
+import io.bindernews.thegrackle.cards.*;
 import io.bindernews.thegrackle.relics.PhoenixIdol;
 import javassist.CtClass;
+import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 
 @SpireInitializer
 public class GrackleMod implements
         EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
-        OnPowersModifiedSubscriber,
-        OnStartBattleSubscriber
+        EditKeywordsSubscriber, OnPowersModifiedSubscriber, OnStartBattleSubscriber
 {
     public static final Logger log = LogManager.getLogger(GrackleMod.class);
-
-    public static TextureAtlas cards;
 
     static final String ATTACK_DEFAULT_GRAY = Const.RES_IMAGES + "/512/bg_attack_default_gray.png";
     static final String SKILL_DEFAULT_GRAY = Const.RES_IMAGES + "/512/bg_skill_default_gray.png";
@@ -152,17 +152,53 @@ public class GrackleMod implements
     }
 
     @Override
+    public void receiveEditKeywords() {
+        MiscUtil.loadKeywords(Const.MOD_ID, RES_LANG, Settings.GameLanguage.ENG);
+        if (Settings.language != Settings.GameLanguage.ENG) {
+            MiscUtil.loadKeywords(Const.MOD_ID, RES_LANG, Settings.language);
+        }
+    }
+
+    @Override
     public void receiveOnBattleStart(AbstractRoom abstractRoom) {
 
     }
 
     public void loadTextures() {
-        if (cards == null) {
-            cards = new TextureAtlas(Gdx.files.classpath(Const.RES_IMAGES + "/cards/cards.atlas"));
-            for (TextureAtlas.AtlasRegion r : cards.getRegions()) {
-                CustomCard.imgMap.put(r.name, r.getTexture());
-            }
+        if (BaseCard.cards == null) {
+            BaseCard.cards = new TextureAtlas(Gdx.files.classpath(Const.RES_IMAGES + "/cards/cards.atlas"));
         }
+    }
+
+
+    /**
+     * Exists so that all cards are "used"
+     */
+    @SuppressWarnings("unused")
+    private static ArrayList<AbstractCard> makeCardList() {
+        val list = new ArrayList<AbstractCard>();
+        Collections.addAll(list,
+                new AerialAce(),
+                new AttackR(),
+                new BurnCream(),
+                new Cackle(),
+                new CrashLanding(),
+                new Defend_GK(),
+                new Duck(),
+                new FightFire(),
+                new FireWithin(),
+                new FiredUpCard(),
+                new HurricaneWind(),
+                new PhoenixFeather(),
+                new PhoenixForm(),
+                new SelfBurn(),
+                new SkillR(),
+                new Strike_GK(),
+                new Takeoff(),
+                new TargetingComputer(),
+                new TryThatAgain()
+        );
+        return list;
     }
 
     /**

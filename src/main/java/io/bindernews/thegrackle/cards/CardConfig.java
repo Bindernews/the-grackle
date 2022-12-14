@@ -1,10 +1,14 @@
 package io.bindernews.thegrackle.cards;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.Const;
+import lombok.Getter;
+import lombok.val;
 
 /**
  * Card configuration class. Reduces the repetitiveness of creating a card.
@@ -12,14 +16,61 @@ import io.bindernews.thegrackle.Const;
 public class CardConfig {
     public final String name;
     public final String ID;
-    public final String image;
+    public final AbstractCard.CardType type;
     private final Lazy<CardStrings> strings;
+    @Getter private TextureAtlas.AtlasRegion portrait;
+    @Getter private TextureAtlas.AtlasRegion betaPortrait;
 
-    public CardConfig(String name) {
+    public CardConfig(String name, AbstractCard.CardType type) {
         this.name = name;
+        this.type = type;
         ID = Const.MOD_ID + ":" + name;
-        image = Const.MOD_ID + "/cards/" + name;
         strings = Lazy.of(() -> CardCrawlGame.languagePack.getCardStrings(ID));
+    }
+
+    public void loadImages(TextureAtlas atlas) {
+        if (portrait == null) {
+            portrait = findFirstRegion(atlas, makeImagePaths(""));
+            betaPortrait = findFirstRegion(atlas, makeImagePaths("_b"));
+            if (betaPortrait == null) {
+                betaPortrait = portrait;
+            }
+        }
+    }
+
+    private String[] makeImagePaths(String suffix) {
+        String path = Const.MOD_ID + "/cards/";
+        return new String[]{
+                path + name + suffix,
+                path + typeToName(type) + suffix,
+        };
+    }
+    
+    private static TextureAtlas.AtlasRegion findFirstRegion(TextureAtlas atlas, String[] names) {
+        for (val name : names) {
+            val r = atlas.findRegion(name);
+            if (r != null) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    private static String typeToName(AbstractCard.CardType type) {
+        switch (type) {
+            case ATTACK:
+                return "Attack";
+            case SKILL:
+                return "Skill";
+            case POWER:
+                return "Power";
+            case STATUS:
+                return "Status";
+            case CURSE:
+                return "Curse";
+            default:
+                return "";
+        }
     }
 
     public CardStrings getStrings() {

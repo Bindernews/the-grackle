@@ -17,6 +17,7 @@ public class CoolingPhoenixPower extends BasePower {
         setOwnerAmount(owner, amount);
         this.type = PowerType.DEBUFF;
         this.isTurnBased = true;
+        loadRegion("frail");
         this.updateDescription();
     }
 

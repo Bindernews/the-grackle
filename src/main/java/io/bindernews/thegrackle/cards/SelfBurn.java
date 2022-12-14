@@ -8,13 +8,13 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 
 public class SelfBurn extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("SelfBurn");
+    public static final CardConfig C = new CardConfig("SelfBurn", CardType.SKILL);
     public static final CardNums NUM = CardNums.builder()
             .cost(0).magic(1).magicUpg(2).build();
     static final int BURN_COUNT = 1;
 
     public SelfBurn() {
-        super(CFG, CardType.SKILL, CardRarity.COMMON, CardTarget.NONE);
+        super(C, CardRarity.COMMON, CardTarget.NONE);
         NUM.init(this);
     }
 

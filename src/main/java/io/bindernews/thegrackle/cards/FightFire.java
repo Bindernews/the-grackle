@@ -2,30 +2,44 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.actions.FightFireAction;
+import io.bindernews.thegrackle.helper.BurnHelper;
 
 public class FightFire extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("FightFire");
+    public static final CardConfig C = new CardConfig("FightFire", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
-            .magic(3).magicUpg(6)
+            .damage(4)
+            .magic(4).magicUpg(6)
             .build();
 
     public FightFire() {
-        super(CFG, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
+        super(C, CardRarity.UNCOMMON, CardTarget.ENEMY);
         NUM.init(this);
         damageType = DamageInfo.DamageType.NORMAL;
+        rawDescription = String.format(rawDescription, NUM.damage);
+        initializeDescription();
     }
 
     @Override
     public void applyPowers() {
-        int burnCount = FightFireAction.countBurnsInGroup(AbstractDungeon.player.discardPile);
-        baseDamage = burnCount * magicNumber;
+        updateBaseDamage();
         super.applyPowers();
         initializeDescription();
+    }
+
+    @Override
+    public void calculateCardDamage(AbstractMonster mo) {
+        updateBaseDamage();
+        super.calculateCardDamage(mo);
+        initializeDescription();
+    }
+
+    public void updateBaseDamage() {
+        int burnCount = BurnHelper.countBurnsInGroup(BurnHelper.getDiscard());
+        baseDamage = NUM.damage + burnCount * magicNumber;
     }
 
     @Override

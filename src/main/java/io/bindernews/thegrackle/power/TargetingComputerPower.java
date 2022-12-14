@@ -12,6 +12,7 @@ public class TargetingComputerPower extends BasePower {
     public TargetingComputerPower(AbstractCreature owner, int amount) {
         super(POWER_ID);
         setOwnerAmount(owner, amount);
+        loadRegion("lockon");
     }
 
     @Override

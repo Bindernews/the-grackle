@@ -11,6 +11,7 @@ public class FireWithinPower extends BasePower {
     public FireWithinPower(AbstractCreature owner, int amount) {
         super(POWER_ID);
         setOwnerAmount(owner, amount);
+        loadRegion("devotion");
     }
 
     @Override

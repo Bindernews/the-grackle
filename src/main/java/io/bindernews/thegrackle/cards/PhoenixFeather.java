@@ -10,14 +10,14 @@ import io.bindernews.bnsts.CardNums;
  * It's Self-Repair.
  */
 public class PhoenixFeather extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("PhoenixFeather");
+    public static final CardConfig CFG = new CardConfig("PhoenixFeather", CardType.POWER);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
             .magic(7).magicUpg(10)
             .build();
 
     public PhoenixFeather() {
-        super(CFG, CardType.POWER, CardRarity.UNCOMMON, CardTarget.SELF);
+        super(CFG, CardRarity.UNCOMMON, CardTarget.SELF);
         NUM.init(this);
         tags.add(CardTags.HEALING);
     }

@@ -10,14 +10,14 @@ import io.bindernews.thegrackle.power.HealingPhoenixPower;
 
 @AutoAdd.Ignore
 public class PhoenixForm extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("PhoenixForm");
+    public static final CardConfig CFG = new CardConfig("PhoenixForm", CardType.POWER);
     public static final CardNums NUM = CardNums.builder()
             .cost(3).costUpg(2)
             .magic(6)
             .build();
 
     public PhoenixForm() {
-        super(CFG, CardType.POWER, CardRarity.RARE, CardTarget.SELF);
+        super(CFG, CardRarity.RARE, CardTarget.SELF);
         tags.add(BaseModCardTags.FORM);
         NUM.init(this);
     }

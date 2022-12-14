@@ -5,14 +5,14 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 
 public class HurricaneWind extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("HurricaneWind");
+    public static final CardConfig CFG = new CardConfig("HurricaneWind", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(-1)
             .damage(5).damageUpg(10)
             .build();
 
     public HurricaneWind() {
-        super(CFG, CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
+        super(CFG, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
         NUM.init(this);
     }
 

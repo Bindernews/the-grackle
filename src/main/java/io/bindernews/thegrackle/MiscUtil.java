@@ -4,6 +4,7 @@ import basemod.BaseMod;
 import basemod.abstracts.CustomPlayer;
 import com.badlogic.gdx.Gdx;
 import com.evacipated.cardcrawl.mod.stslib.Keyword;
+import com.google.gson.Gson;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
@@ -16,6 +17,7 @@ import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -27,6 +29,7 @@ import java.util.*;
  */
 public class MiscUtil {
     static final Logger log = LogManager.getLogger(MiscUtil.class.getPackage().getName());
+    private static final Gson gson = new Gson();
 
     /**
      * Returns a new array list containing the given elements. This function exists in later versions
@@ -69,7 +72,6 @@ public class MiscUtil {
         m.put(CardStrings.class, "card");
         m.put(CharacterStrings.class, "character");
         m.put(EventStrings.class, "event");
-        m.put(Keyword.class, "keyword");
         m.put(MonsterStrings.class, "monster");
         m.put(OrbStrings.class, "orb");
         m.put(PotionStrings.class, "potion");
@@ -100,6 +102,36 @@ public class MiscUtil {
                 log.debug("loadLocalization: loaded " + filePath);
             }
         }
+    }
+
+    /**
+     * Read a JSON file containing an array of Keyword entries
+     * @param path The {@code localizations} directory, with no trailing slash
+     * @param language Language code
+     * @return Array of keywords
+     */
+    public static Keyword[] readKeywords(String path, Settings.GameLanguage language) {
+        val filePath = langPath(path, "keyword.json", language);
+        val content = Gdx.files.internal(filePath).readString(StandardCharsets.UTF_8.name());
+        return gson.fromJson(content, Keyword[].class);
+    }
+
+    /**
+     * Calls {@link MiscUtil#readKeywords} and then {@link BaseMod#addKeyword}.
+     * @param modId The mod ID to prefix the keywords with
+     * @param path The {@code localizations} directory, with no trailing slash
+     * @param language Language code
+     */
+    public static void loadKeywords(String modId, String path, Settings.GameLanguage language) {
+        val keywords = MiscUtil.readKeywords(path, language);
+        for (val k : keywords) {
+            BaseMod.addKeyword(modId, k.PROPER_NAME, k.NAMES, k.DESCRIPTION);
+        }
+    }
+
+    public static String langPath(String base, String fileName, Settings.GameLanguage language) {
+        val lang = language.name().toLowerCase();
+        return base + "/" + lang + "/" + fileName;
     }
 
     public static void registerPower(Class<? extends AbstractPower> clazz) {

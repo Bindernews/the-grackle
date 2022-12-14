@@ -25,7 +25,7 @@
   },
   "grackle:Cackle": {
     "NAME": "Cackle",
-    "DESCRIPTION": "TODO"
+    "DESCRIPTION": "Apply !M! Vulnerable and !M! Weak."
   },
   "grackle:AerialAce": {
     "NAME": "Aerial Ace",
@@ -33,7 +33,7 @@
   },
   "grackle:FightFire": {
     "NAME": "Fight Fire",
-    "DESCRIPTION": "Exhaust each *Burn in your discard pile. NL Deal !D! damage (!M! for each card exhausted).",
+    "DESCRIPTION": "Exhaust each *Burn in your discard pile. NL Deals %s + !M! damage for each card exhausted NL (Deals !D! damage.)",
     "FLAVOR": "...with fire."
   },
   "grackle:AttackR": {
@@ -62,8 +62,29 @@
     "NAME": "Power Uncommon",
     "DESCRIPTION": "Gain !B! Block."
   },
-  "grackle:PowerR": {
-    "NAME": "Power Rare",
-    "DESCRIPTION": "Gain !B! Block."
+  "grackle:SummonEgrets": {
+    "NAME": "Summon Egrets",
+    "DESCRIPTION": "Prevent the next !M! times you would lose HP. Incr",
+    "FLAVOR": "The flock grows..."
+  },
+  "grackle:FiredUpCard": {
+    "NAME": "Fired Up",
+    "DESCRIPTION": "Gain !M! grackle:Fired_Up."
+  },
+  "grackle:BurnCream": {
+    "NAME": "Burn Cream",
+    "DESCRIPTION": "Whenever you draw a Status card, draw !M! card."
+  },
+  "grackle:Duck": {
+    "NAME": "Duck!",
+    "DESCRIPTION": "Gain !B! Block. NL Quack."
+  },
+  "grackle:TargetingComputer": {
+    "NAME": "Targeting Computer",
+    "DESCRIPTION": "At the start of your turn, gain !M! Vigor."
+  },
+  "grackle:FireWithin": {
+    "NAME": "Fire Within",
+    "DESCRIPTION": "At the start of your turn, gain !M! Fireheart."
   }
 }

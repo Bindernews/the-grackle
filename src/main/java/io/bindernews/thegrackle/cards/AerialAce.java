@@ -11,14 +11,14 @@ import io.bindernews.thegrackle.stance.StanceAloft;
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
 public class AerialAce extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("AerialAce");
+    public static final CardConfig CFG = new CardConfig("AerialAce", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
             .damage(8).damageUpg(12)
             .build();
 
     public AerialAce() {
-        super(CFG, CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
+        super(CFG, CardRarity.COMMON, CardTarget.ENEMY);
         NUM.init(this);
         damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
     }

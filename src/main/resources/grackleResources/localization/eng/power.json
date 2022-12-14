@@ -26,5 +26,11 @@
     "DESCRIPTIONS": [
       "Gain %d Vigor at the start of each turn."
     ]
+  },
+  "grackle:FiredUpPower": {
+    "NAME": "Fired Up!",
+    "DESCRIPTIONS": [
+      "Gain %d Vigor whenever a Burn card is exhausted."
+    ]
   }
 }

@@ -11,12 +11,12 @@ import lombok.val;
 
 @AutoAdd.Seen
 public class Strike_GK extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("Strike_GK");
+    public static final CardConfig CFG = new CardConfig("Strike_GK", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1).damage(6).damageUpg(9).build();
 
     public Strike_GK() {
-        super(CFG, CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY);
+        super(CFG, CardRarity.BASIC, CardTarget.ENEMY);
         tags.add(CardTags.STARTER_STRIKE);
         tags.add(CardTags.STRIKE);
         NUM.init(this);

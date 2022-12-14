@@ -12,14 +12,14 @@ import io.bindernews.thegrackle.stance.StanceAloft;
 import lombok.val;
 
 public class CrashLanding extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("CrashLanding");
+    public static final CardConfig CFG = new CardConfig("CrashLanding", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
             .damage(12).damageUpg(20)
             .build();
 
     public CrashLanding() {
-        super(CFG, CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY);
+        super(CFG, CardRarity.BASIC, CardTarget.ENEMY);
         NUM.init(this);
         canUseTest = StanceAloft::checkPlay;
         damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
