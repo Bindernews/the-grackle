@@ -1,5 +1,6 @@
 package io.bindernews.thegrackle.power;
 
+import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -30,7 +31,7 @@ public class CoolingPhoenixPower extends BasePower {
 
     @Override
     public void atEndOfRound() {
-        addToBot(MiscUtil.getLowerPowerAction(this, 1));
+        addToBot(new ReducePowerAction(owner, owner, POWER_ID, 1));
     }
 
     @Override

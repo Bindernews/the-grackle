@@ -27,6 +27,7 @@ public class PhoenixStancePower extends BasePower implements InvisiblePower {
         setOwnerAmount(owner, -1);
         type = PowerType.BUFF;
         isTurnBased = false;
+        loadRegion("ai");
     }
 
     @Override

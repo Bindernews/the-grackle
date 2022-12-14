@@ -20,6 +20,8 @@ public class StancePhoenix extends AbstractStance {
 
     public StancePhoenix() {
         ID = STANCE_ID;
+        name = STRINGS.NAME;
+        updateDescription();
     }
 
     @Override
@@ -50,7 +52,7 @@ public class StancePhoenix extends AbstractStance {
 
     @Override
     public void updateDescription() {
-        // TODO
+        description = STRINGS.DESCRIPTION[0];
     }
 
     public static boolean is(AbstractStance s) {

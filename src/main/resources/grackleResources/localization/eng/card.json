@@ -86,5 +86,9 @@
   "grackle:FireWithin": {
     "NAME": "Fire Within",
     "DESCRIPTION": "At the start of your turn, gain !M! Fireheart."
+  },
+  "grackle:FireTouch": {
+    "NAME": "Fire Touch",
+    "DESCRIPTION": "Apply !M! grackle:Burning."
   }
 }

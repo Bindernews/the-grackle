@@ -18,6 +18,7 @@ public class FireheartPower extends BasePower {
         type = PowerType.BUFF;
         CreatureStats.mgr.get(owner).fireheartGained += amount;
         loadRegion("flameBarrier");
+        updateDescription();
     }
 
     @Override

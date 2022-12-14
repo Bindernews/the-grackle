@@ -188,6 +188,8 @@ public class GrackleMod implements
                 new FightFire(),
                 new FireWithin(),
                 new FiredUpCard(),
+                new FireTouch(),
+                new FireWithin(),
                 new HurricaneWind(),
                 new PhoenixFeather(),
                 new PhoenixForm(),

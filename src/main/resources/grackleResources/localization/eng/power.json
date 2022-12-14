@@ -2,8 +2,7 @@
   "grackle:FireheartPower": {
     "NAME": "Fireheart",
     "DESCRIPTIONS": [
-      "A",
-      "B"
+      "At 10 Fireheat, enter Phoenix Stance"
     ]
   },
   "grackle:FireWithinPower": {
@@ -19,7 +18,8 @@
     ]
   },
   "grackle:PhoenixStancePower": {
-    "NAME": "Phoenix Stance"
+    "NAME": "Phoenix Stance",
+    "DESCRIPTIONS": [""]
   },
   "grackle:TargetingComputerPower": {
     "NAME": "Targeting Computer",
