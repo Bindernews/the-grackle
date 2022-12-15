@@ -65,7 +65,7 @@
   "grackle:SummonEgrets": {
     "NAME": "Summon Egrets",
     "DESCRIPTION": "Deal !D! damage to ALL enemies X times.",
-    "FLAVOR": "And Some Egrets in a pear tree"
+    "FLAVOR": "[grackle:MusicNoteIcon] And Some Egrets in a pear tree [grackle:MusicNoteIcon]"
   },
   "grackle:FiredUpCard": {
     "NAME": "Fired Up",

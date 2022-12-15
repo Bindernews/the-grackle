@@ -1,9 +1,11 @@
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import com.badlogic.gdx.tools.texturepacker.TexturePackerFileProcessor
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.ReaderInputStream
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
+import java.io.FilenameFilter
 import java.io.FilterReader
 import java.io.Reader
 import java.io.StringReader
@@ -96,7 +98,8 @@ run {
     val resOut = "$buildDir/resources/main/$RES_DIR"
     val packerTmp = "$buildDir/generated/images"
 
-    tasks.register<Copy>("processImages") {
+    tasks.register<Copy>("resizeImages") {
+        group = "images"
         filteringCharset = ResizeFilter.BINARY_CHARSET
         val src = "$resRoot/images"
         from("$src/1024") {
@@ -117,7 +120,8 @@ run {
         into("$resOut/images")
     }
 
-    tasks.register<Copy>("shrinkCards") {
+    val shrinkCards = tasks.register<Copy>("shrinkCards") {
+        group = "images"
         filteringCharset = ResizeFilter.BINARY_CHARSET
         // Resize all _p cards to be smaller
         from("$resRoot/images/cards") {
@@ -127,24 +131,27 @@ run {
             // Real size is 250x190, but this is going from the base game card atlas sizes
             filter(ResizeFilter::class, "width" to 248, "height" to 186)
         }
-        into("$packerTmp/grackle/cards")
+        into("$packerTmp/cards")
     }
 
-    tasks.register("packTextures") {
-        dependsOn("shrinkCards")
-        doLast {
-            val cfg = TexturePacker.Settings()
-            cfg.maxHeight = 4096
-            cfg.maxWidth = 4096
-            cfg.grid = true
-            cfg.combineSubdirectories = true
-            cfg.filterMag = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
-            cfg.filterMin = cfg.filterMag
-            TexturePacker.process(cfg, packerTmp, "$resOut/images/cards", "cards")
-        }
+    tasks.register<PackTextureTask>("packCards") {
+        group = "images"
+        dependsOn(shrinkCards)
+        grid.set(true)
+        source("$packerTmp/cards")
+        output("$resOut/images/cards/cards.atlas")
     }
 
-    tasks.getByName("processResources").dependsOn("processImages", "packTextures")
+    tasks.register<PackTextureTask>("packIcons") {
+        group = "images"
+        source("$resRoot/images/icons")
+        output("$resOut/images/icons.atlas")
+    }
+
+    tasks.getByName<Copy>("processResources") {
+        dependsOn("resizeImages", "packCards", "packIcons")
+        exclude("grackleResources/images/icons")
+    }
 }
 
 tasks.register<DefaultTask>("genIntelliJRuns") {
@@ -196,6 +203,63 @@ class ResizeFilter(`in`: Reader) : FilterReader(`in`) {
         val outBuf = ByteArrayOutputStream()
         ImageIO.write(scaledBuf, "png", outBuf)
         return StringReader(outBuf.toString(Charsets.ISO_8859_1.name()))
+    }
+}
+
+
+abstract class PackTextureTask : DefaultTask() {
+    @get:Input abstract val maxWidth: Property<Int>
+    @get:Input abstract val maxHeight: Property<Int>
+    @get:Input abstract val grid: Property<Boolean>
+    @get:InputDirectory abstract val inputDir: Property<File>
+    @get:OutputFile abstract val outputPath: Property<File>
+    private var filter: FilenameFilter = FilenameFilter { _, _ -> true }
+
+    init {
+        maxWidth.convention(4096)
+        maxHeight.convention(4096)
+        grid.convention(false)
+    }
+
+    fun filter(f: (File, String) -> Boolean) {
+        this.filter = FilenameFilter(f)
+    }
+
+    fun source(path: Any) {
+        inputDir.set(project.file(path))
+    }
+
+    fun output(path: Any) {
+        outputPath.set(project.file(path))
+    }
+
+    @TaskAction
+    fun pack() {
+        val input = inputDir.get()
+        val outputRoot = outputPath.get().parentFile
+        val packName = outputPath.get().name
+        val cfg = TexturePacker.Settings()
+        cfg.maxHeight = maxHeight.get()
+        cfg.maxWidth = maxWidth.get()
+        cfg.grid = grid.get()
+        cfg.combineSubdirectories = true
+        cfg.filterMag = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
+        cfg.filterMin = cfg.filterMag
+
+        didWork = if (TexturePacker.isModified("" + input, "" + outputRoot, packName)) {
+            try {
+                val processor = TexturePackerFileProcessor(cfg, packName)
+                // Sort input files by name to avoid platform-dependent atlas output changes.
+                processor.setComparator(Comparator<File> { file1, file2 -> file1.name.compareTo(file2.name) })
+                processor.setInputFilter(filter)
+                processor.process(input, outputRoot)
+            } catch (ex: Exception) {
+                throw RuntimeException("Error packing images.", ex)
+            }
+            true
+        } else {
+            false
+        }
     }
 }
 

@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.thegrackle.cards.*;
+import io.bindernews.thegrackle.icons.IconHelper;
 import io.bindernews.thegrackle.relics.PhoenixIdol;
 import javassist.CtClass;
 import lombok.val;
@@ -95,6 +96,7 @@ public class GrackleMod implements
     @Override
     public void receiveEditCards() {
         loadTextures();
+        IconHelper.registerAll();
         AutoAdd aa = new AutoAdd(Const.MOD_ID);
         aa.packageFilter(BaseCard.class);
         aa.cards();

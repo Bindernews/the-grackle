@@ -39,10 +39,9 @@ public class CardConfig {
     }
 
     private String[] makeImagePaths(String suffix) {
-        String path = Const.MOD_ID + "/cards/";
         return new String[]{
-                path + name + suffix,
-                path + typeToName(type) + suffix,
+                name + suffix,
+                typeToName(type) + suffix,
         };
     }
     
