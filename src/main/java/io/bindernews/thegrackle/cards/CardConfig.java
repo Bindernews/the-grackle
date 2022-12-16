@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import io.bindernews.bnsts.Lazy;
-import io.bindernews.thegrackle.Const;
+import io.bindernews.thegrackle.GrackleMod;
 import lombok.Getter;
 import lombok.val;
 
@@ -24,7 +24,7 @@ public class CardConfig {
     public CardConfig(String name, AbstractCard.CardType type) {
         this.name = name;
         this.type = type;
-        ID = Const.MOD_ID + ":" + name;
+        ID = GrackleMod.MOD_ID + ":" + name;
         strings = Lazy.of(() -> CardCrawlGame.languagePack.getCardStrings(ID));
     }
 

@@ -77,7 +77,7 @@
   },
   "grackle:Duck": {
     "NAME": "Duck!",
-    "DESCRIPTION": "Gain !B! Block. NL Quack."
+    "DESCRIPTION": "Gain !B! Block. NL Block is not removed at the start of your next turn. NL Quack."
   },
   "grackle:TargetingComputer": {
     "NAME": "Targeting Computer",

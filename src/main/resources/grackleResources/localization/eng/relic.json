@@ -5,5 +5,12 @@
     "DESCRIPTIONS": [
       "Does things I guess?"
     ]
+  },
+  "grackle:LoftwingFeather": {
+    "NAME": "Loftwing Feather",
+    "FLAVOR": "The feather of a red Loftwing.",
+    "DESCRIPTIONS": [
+      "Enter grackle:Aloft at the end of each turn."
+    ]
   }
 }

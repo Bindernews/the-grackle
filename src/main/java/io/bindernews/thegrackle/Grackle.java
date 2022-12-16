@@ -19,6 +19,7 @@ import io.bindernews.thegrackle.cards.*;
 
 import java.util.ArrayList;
 
+import static io.bindernews.thegrackle.GrackleMod.CO.RES_IMAGES;
 import static io.bindernews.thegrackle.MiscUtil.arrayListOf;
 
 public class Grackle extends CustomPlayer {
@@ -32,34 +33,58 @@ public class Grackle extends CustomPlayer {
     static final int CARD_DRAW = 5;
     static final int ENERGY_PER_TURN = 3;
 
-    static final String RES_IMAGES_CHAR = Const.RES_IMAGES + "/char/grackle";
-    static final String BUTTON = RES_IMAGES_CHAR + "/HermitButton.png";
-    static final String PORTRAIT = RES_IMAGES_CHAR + "/HermitPortrait.png";
-    static final String IMG_CAMPFIRE_LIT = RES_IMAGES_CHAR + "/campfire_lit.png";
-    static final String IMG_CAMPFIRE_USED = RES_IMAGES_CHAR + "/campfire_used.png";
-    static final String IMG_CORPSE = RES_IMAGES_CHAR + "/corpse.png";
-    static final String ANIM_ATLAS = RES_IMAGES_CHAR + "/Hermit.atlas";
-    static final String ANIM_SKELETON = RES_IMAGES_CHAR + "/Hermit.json";
 
-    static final String[] ORB_TEXTURES = new String[] {
-            RES_IMAGES_CHAR + "/orb/layer1.png",
-            RES_IMAGES_CHAR + "/orb/layer2.png",
-            RES_IMAGES_CHAR + "/orb/layer3.png",
-            RES_IMAGES_CHAR + "/orb/layer4.png",
-            RES_IMAGES_CHAR + "/orb/layer5.png",
-            RES_IMAGES_CHAR + "/orb/layer6.png",
-            RES_IMAGES_CHAR + "/orb/layer1d.png",
-            RES_IMAGES_CHAR + "/orb/layer2d.png",
-            RES_IMAGES_CHAR + "/orb/layer3d.png",
-            RES_IMAGES_CHAR + "/orb/layer4d.png",
-            RES_IMAGES_CHAR + "/orb/layer5d.png"
-    };
+    public interface Co {
+        String RES_IMAGES_CHAR = RES_IMAGES + "/char/grackle";
+        String BUTTON = RES_IMAGES_CHAR + "/HermitButton.png";
+        String PORTRAIT = RES_IMAGES_CHAR + "/HermitPortrait.png";
+        String IMG_CAMPFIRE_LIT = RES_IMAGES_CHAR + "/campfire_lit.png";
+        String IMG_CAMPFIRE_USED = RES_IMAGES_CHAR + "/campfire_used.png";
+        String IMG_CORPSE = RES_IMAGES_CHAR + "/corpse.png";
+        String ANIM_ATLAS = RES_IMAGES_CHAR + "/Hermit.atlas";
+        String ANIM_SKELETON = RES_IMAGES_CHAR + "/Hermit.json";
+        String[] ORB_TEXTURES = new String[] {
+                RES_IMAGES_CHAR + "/orb/layer1.png",
+                RES_IMAGES_CHAR + "/orb/layer2.png",
+                RES_IMAGES_CHAR + "/orb/layer3.png",
+                RES_IMAGES_CHAR + "/orb/layer4.png",
+                RES_IMAGES_CHAR + "/orb/layer5.png",
+                RES_IMAGES_CHAR + "/orb/layer6.png",
+                RES_IMAGES_CHAR + "/orb/layer1d.png",
+                RES_IMAGES_CHAR + "/orb/layer2d.png",
+                RES_IMAGES_CHAR + "/orb/layer3d.png",
+                RES_IMAGES_CHAR + "/orb/layer4d.png",
+                RES_IMAGES_CHAR + "/orb/layer5d.png"
+        };
+
+        String ATTACK_DEFAULT_GRAY = RES_IMAGES + "/512/bg_attack_default_gray.png";
+        String SKILL_DEFAULT_GRAY = RES_IMAGES + "/512/bg_skill_default_gray.png";
+        String POWER_DEFAULT_GRAY = RES_IMAGES + "/512/bg_power_default_gray.png";
+
+        String ENERGY_ORB_DEFAULT_GRAY = RES_IMAGES + "/512/card_default_gray_orb.png";
+        String CARD_ENERGY_ORB = RES_IMAGES + "/512/card_small_orb.png";
+
+        String ATTACK_DEFAULT_GRAY_PORTRAIT = RES_IMAGES + "/1024/bg_attack_default_gray.png";
+        String SKILL_DEFAULT_GRAY_PORTRAIT = RES_IMAGES + "/1024/bg_skill_default_gray.png";
+        String POWER_DEFAULT_GRAY_PORTRAIT = RES_IMAGES + "/1024/bg_power_default_gray.png";
+
+
+        static void registerColor() {
+            Color C1 = Grackle.En.COLOR_MAIN;
+            BaseMod.addColor(Grackle.En.COLOR_BLACK, C1, C1, C1, C1, C1, C1, C1,
+                    ATTACK_DEFAULT_GRAY, SKILL_DEFAULT_GRAY, POWER_DEFAULT_GRAY,
+                    ENERGY_ORB_DEFAULT_GRAY, CARD_ENERGY_ORB,
+                    ATTACK_DEFAULT_GRAY_PORTRAIT, SKILL_DEFAULT_GRAY_PORTRAIT, POWER_DEFAULT_GRAY_PORTRAIT);
+        }
+    }
+
+
 
     public Grackle(String name) {
-        super(name, En.GRACKLE, ORB_TEXTURES, RES_IMAGES_CHAR + "/orb/vfx.png",
-                new SpineAnimation(ANIM_ATLAS, ANIM_SKELETON, 1.0f));
+        super(name, En.GRACKLE, Co.ORB_TEXTURES, Co.RES_IMAGES_CHAR + "/orb/vfx.png",
+                new SpineAnimation(Co.ANIM_ATLAS, Co.ANIM_SKELETON, 1.0f));
         initializeClass(
-                null, IMG_CAMPFIRE_USED, IMG_CAMPFIRE_LIT, IMG_CORPSE, getLoadout(),
+                null, Co.IMG_CAMPFIRE_USED, Co.IMG_CAMPFIRE_LIT, Co.IMG_CORPSE, getLoadout(),
                 20.f, -10.f, 220.f, 290.f, new EnergyManager(ENERGY_PER_TURN)
         );
 
@@ -173,7 +198,7 @@ public class Grackle extends CustomPlayer {
 
 
     public static void register() {
-        BaseMod.addCharacter(new Grackle(CardCrawlGame.playerName), BUTTON, PORTRAIT, En.GRACKLE);
+        BaseMod.addCharacter(new Grackle(CardCrawlGame.playerName), Co.BUTTON, Co.PORTRAIT, En.GRACKLE);
     }
 
 

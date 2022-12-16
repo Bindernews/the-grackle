@@ -1,67 +1,62 @@
 package io.bindernews.bnsts;
 
-import java.util.concurrent.locks.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public interface Lazy<T> extends Supplier<T> {
     static <T> Lazy<T> of(Supplier<T> creator) {
-        return new Impl.SimpleLazy<>(creator);
+        return new SimpleLazy<>(creator);
     }
 
     static <T> Lazy<T> ofSync(Supplier<T> creator) {
-        return new Impl.SyncLazy<>(creator);
+        return new SyncLazy<>(creator);
     }
 }
 
-// Non-public classes can be in same file. This nicely
-// hides the implementation and keeps it in the same file.
-class Impl {
-    static class SimpleLazy<T> implements Lazy<T> {
-        protected T value;
-        protected final Supplier<T> ctor;
+class SimpleLazy<T> implements Lazy<T> {
+    protected Object value = null;
+    protected final Supplier<T> ctor;
 
-        SimpleLazy(Supplier<T> ctor) {
-            this.value = null;
-            this.ctor = ctor;
-        }
-
-        @Override
-        public T get() {
-            if (value == null) {
-                value = ctor.get();
-            }
-            return value;
-        }
+    SimpleLazy(Supplier<T> ctor) {
+        this.ctor = ctor;
     }
 
-    static class SyncLazy<T> extends SimpleLazy<T> {
-        protected ReadWriteLock rwLock = new ReentrantReadWriteLock();
-
-        protected SyncLazy(Supplier<T> ctor) {
-            super(ctor);
+    @Override
+    @SuppressWarnings("unchecked")
+    public T get() {
+        if (value == null) {
+            Object actual = ctor.get();
+            // If result is invalid, set to ctor
+            value = actual == null ? ctor : actual;
         }
+        return (T)(value == ctor ? null : value);
+    }
+}
 
-        @Override
-        public T get() {
-            // First try to read existing value
-            rwLock.readLock().lock();
-            T tmp = value;
-            rwLock.readLock().unlock();
-            // If it's null, try to initialize
-            if (tmp == null) {
-                rwLock.writeLock().lock();
-                try {
-                    // Someone else may have initialized it while we weren't looking
-                    if (value == null) {
-                        value = ctor.get();
-                    }
-                    tmp = value;
-                } finally {
-                    // ALWAYS release write-lock so we don't deadlock
-                    rwLock.writeLock().unlock();
+class SyncLazy<T> implements Lazy<T> {
+    protected final AtomicReference<Object> value = new AtomicReference<>();
+    protected final Supplier<T> ctor;
+
+    protected SyncLazy(Supplier<T> ctor) {
+        this.ctor = ctor;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public T get() {
+        Object v = value.get();
+        if (v == null) {
+            synchronized (value) {
+                v = value.get();
+                if (v == null) {
+                    final T actual = ctor.get();
+                    // If we set the value to itself, then ctor returned null
+                    v = actual == null ? value : actual;
+                    value.set(v);
                 }
             }
-            return tmp;
         }
+        // If v == value, return (T)null, else return (T)v
+        return (T)(v == value ? null : v);
     }
 }

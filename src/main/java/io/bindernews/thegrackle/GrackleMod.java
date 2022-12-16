@@ -2,10 +2,8 @@ package io.bindernews.thegrackle;
 
 import basemod.AutoAdd;
 import basemod.BaseMod;
-import basemod.helpers.RelicType;
 import basemod.interfaces.*;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
@@ -13,37 +11,43 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.cards.*;
 import io.bindernews.thegrackle.icons.IconHelper;
-import io.bindernews.thegrackle.relics.PhoenixIdol;
+import io.bindernews.thegrackle.relics.LoftwingFeather;
 import javassist.CtClass;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Stream;
 
 
 @SpireInitializer
 public class GrackleMod implements
-        EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
+        AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
         EditKeywordsSubscriber, OnPowersModifiedSubscriber, OnStartBattleSubscriber
 {
     public static final Logger log = LogManager.getLogger(GrackleMod.class);
 
-    static final String ATTACK_DEFAULT_GRAY = Const.RES_IMAGES + "/512/bg_attack_default_gray.png";
-    static final String SKILL_DEFAULT_GRAY = Const.RES_IMAGES + "/512/bg_skill_default_gray.png";
-    static final String POWER_DEFAULT_GRAY = Const.RES_IMAGES + "/512/bg_power_default_gray.png";
+    public static final String MOD_ID = "grackle";
+    private static final String MOD_ID_COLON = MOD_ID + ":";
+    public static final String MOD_RES = "grackleResources";
 
-    static final String ENERGY_ORB_DEFAULT_GRAY = Const.RES_IMAGES + "/512/card_default_gray_orb.png";
-    static final String CARD_ENERGY_ORB = Const.RES_IMAGES + "/512/card_small_orb.png";
+    private static final HashMap<String, Texture> textureCache = new HashMap<>();
 
-    static final String ATTACK_DEFAULT_GRAY_PORTRAIT = Const.RES_IMAGES + "/1024/bg_attack_default_gray.png";
-    static final String SKILL_DEFAULT_GRAY_PORTRAIT = Const.RES_IMAGES + "/1024/bg_skill_default_gray.png";
-    static final String POWER_DEFAULT_GRAY_PORTRAIT = Const.RES_IMAGES + "/1024/bg_power_default_gray.png";
-    static final String RES_LANG = "grackleResources/localization";
+    public interface CO {
+        String RES_IMAGES = MOD_RES + "/images";
+        String RES_LANG = "grackleResources/localization";
+    }
+
+    /**
+     * Sound effect IDs
+     */
+    public interface Sfx {
+        String QUACK = makeId("DUCK");
+    }
 
 
     /**
@@ -55,14 +59,10 @@ public class GrackleMod implements
 
     public GrackleMod() {
         BaseMod.subscribe(this);
-
         interopDownfall = Loader.isModLoaded("downfall");
-
-        Color C1 = Grackle.En.COLOR_MAIN;
-        BaseMod.addColor(Grackle.En.COLOR_BLACK, C1, C1, C1, C1, C1, C1, C1,
-                ATTACK_DEFAULT_GRAY, SKILL_DEFAULT_GRAY, POWER_DEFAULT_GRAY,
-                ENERGY_ORB_DEFAULT_GRAY, CARD_ENERGY_ORB,
-                ATTACK_DEFAULT_GRAY_PORTRAIT, SKILL_DEFAULT_GRAY_PORTRAIT, POWER_DEFAULT_GRAY_PORTRAIT);
+        log.debug("registering color GRACKLE_BLACK");
+        Grackle.Co.registerColor();
+        log.debug("done registering colors");
     }
 
     @SuppressWarnings("unused")
@@ -83,50 +83,32 @@ public class GrackleMod implements
     @Override
     public void receiveEditRelics() {
         // Add shared relics
-        Stream.of(
-                new PhoenixIdol()
-        ).forEach(r -> BaseMod.addRelic(r, RelicType.SHARED));
+//        Stream.of(
+//                new PhoenixIdol()
+//        ).forEach(r -> BaseMod.addRelic(r, RelicType.SHARED));
 
         // Add class-specific relics
-//        Stream.of(
-//                new ClassRelicA()
-//        ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.En.COLOR_BLACK));
+        Stream.of(
+                new LoftwingFeather()
+        ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.En.COLOR_BLACK));
     }
 
     @Override
     public void receiveEditCards() {
-        loadTextures();
+        log.debug("registering icons");
         IconHelper.registerAll();
-        AutoAdd aa = new AutoAdd(Const.MOD_ID);
+        log.debug("done registering icons");
+        log.debug("registering cards");
+        AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(BaseCard.class);
         aa.cards();
-//        for (BaseCard baseCard : Arrays.asList(
-//                new Strike_GK(),
-//                new Defend_GK(),
-//                new Takeoff(),
-//                new CrashLanding(),
-//                new PhoenixForm(),
-//                new Cackle(),
-//                new PhoenixFeather(),
-//                new HurricaneWind(),
-//                new AerialAce(),
-//                new AttackU(),
-//                new AttackR(),
-//                new SkillC(),
-//                new SkillU(),
-//                new SkillR(),
-//                new PowerC(),
-//                new PowerU(),
-//                new PowerR()
-//        )) {
-//            BaseMod.addCard(baseCard);
-//        }
+        log.debug("done registering cards");
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void receivePowersModified() {
-        AutoAdd aa = new AutoAdd(Const.MOD_ID);
+        AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(GrackleMod.class);
         try {
             for (CtClass c : aa.findClasses(AbstractPower.class)) {
@@ -147,31 +129,30 @@ public class GrackleMod implements
 
     @Override
     public void receiveEditStrings() {
-        MiscUtil.loadLocalization(RES_LANG, Settings.GameLanguage.ENG);
+        MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG);
         if (Settings.language != Settings.GameLanguage.ENG) {
-            MiscUtil.loadLocalization(RES_LANG, Settings.language);
+            MiscUtil.loadLocalization(CO.RES_LANG, Settings.language);
         }
     }
 
     @Override
     public void receiveEditKeywords() {
-        MiscUtil.loadKeywords(Const.MOD_ID, RES_LANG, Settings.GameLanguage.ENG);
+        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.GameLanguage.ENG);
         if (Settings.language != Settings.GameLanguage.ENG) {
-            MiscUtil.loadKeywords(Const.MOD_ID, RES_LANG, Settings.language);
+            MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.language);
         }
+    }
+
+    @Override
+    public void receiveAddAudio() {
+        val sfxPath = MOD_RES + "/audio/";
+        BaseMod.addAudio(Sfx.QUACK, sfxPath + "duck_quack.ogg");
     }
 
     @Override
     public void receiveOnBattleStart(AbstractRoom abstractRoom) {
 
     }
-
-    public void loadTextures() {
-        if (BaseCard.cards == null) {
-            BaseCard.cards = new TextureAtlas(Gdx.files.classpath(Const.RES_IMAGES + "/cards/cards.atlas"));
-        }
-    }
-
 
     /**
      * Exists so that all cards are "used"
@@ -206,11 +187,34 @@ public class GrackleMod implements
         return list;
     }
 
+    public static Texture loadTexture(String path) {
+        return textureCache.computeIfAbsent(path, GrackleMod::newTextureOrNull);
+    }
+
+    private static Texture newTextureOrNull(String path) {
+        try {
+            val tex = new Texture(path);
+            tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            return tex;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Convenience function to lazy-load a texture atlas.
+     * @param subPath Path relative to {@link CO#RES_IMAGES}
+     * @return A lazy-loaded {@link TextureAtlas}
+     */
+    public static Lazy<TextureAtlas> lazyAtlas(String subPath) {
+        return Lazy.of(() -> new TextureAtlas(CO.RES_IMAGES + subPath));
+    }
+
     /**
      * Returns a new ID with the mod prefix.
      */
     public static String makeId(String name) {
-        return Const.GK_ID + ":" + name;
+        return MOD_ID_COLON + name;
     }
 
     /**
@@ -218,6 +222,20 @@ public class GrackleMod implements
      */
     public static String makeId(Class<?> clazz) {
         return makeId(clazz.getSimpleName());
+    }
+
+
+    /**
+     * Remove the mod prefix and colon from {@code id}.
+     * @param id ID string
+     * @return ID with prefix removed
+     */
+    public static String removePrefix(String id) {
+        if (id.startsWith(MOD_ID_COLON)) {
+            return id.substring(MOD_ID_COLON.length());
+        } else {
+            return id;
+        }
     }
 
 }

@@ -2,14 +2,18 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import com.badlogic.gdx.tools.texturepacker.TexturePackerFileProcessor
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.ReaderInputStream
+import java.awt.Image
 import java.awt.image.BufferedImage
+import java.awt.image.ImageObserver
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.FilenameFilter
 import java.io.FilterReader
 import java.io.Reader
 import java.io.StringReader
+import java.util.concurrent.locks.ReentrantLock
 import javax.imageio.ImageIO
+import kotlin.concurrent.withLock
 
 val modName = "TheGrackle"
 
@@ -100,7 +104,7 @@ run {
 
     tasks.register<Copy>("resizeImages") {
         group = "images"
-        filteringCharset = ResizeFilter.BINARY_CHARSET
+        filteringCharset = ImageFilter.BINARY_CHARSET
         val src = "$resRoot/images"
         from("$src/1024") {
             include("*.png")
@@ -122,12 +126,12 @@ run {
 
     val shrinkCards = tasks.register<Copy>("shrinkCards") {
         group = "images"
-        filteringCharset = ResizeFilter.BINARY_CHARSET
+        filteringCharset = ImageFilter.BINARY_CHARSET
         // Resize all _p cards to be smaller
         from("$resRoot/images/cards") {
-            val SUFFIX = "_p.png"
-            include("*${SUFFIX}")
-            rename { n -> n.substring(0, n.length - SUFFIX.length) + ".png" }
+            val suffix = "_p.png"
+            include("*${suffix}")
+            rename { n -> n.substring(0, n.length - suffix.length) + ".png" }
             // Real size is 250x190, but this is going from the base game card atlas sizes
             filter(ResizeFilter::class, "width" to 248, "height" to 186)
         }
@@ -142,15 +146,51 @@ run {
         output("$resOut/images/cards/cards.atlas")
     }
 
-    tasks.register<PackTextureTask>("packIcons") {
+    val packIcons = tasks.register<PackTextureTask>("packIcons") {
         group = "images"
         source("$resRoot/images/icons")
         output("$resOut/images/icons.atlas")
     }
 
+    val resizePowers = tasks.register<Copy>("resizePowerImages") {
+        group = "images"
+        filteringCharset = ImageFilter.BINARY_CHARSET
+        from("$resRoot/images/powers") {
+            include("*.png")
+            filter(ResizeFilter::class, "width" to 48, "height" to 48)
+            into("48")
+        }
+        from("$resRoot/images/powers") {
+            include("*.png")
+            filter(ResizeFilter::class, "width" to 128, "height" to 128)
+            into("128")
+        }
+        into("$packerTmp/powers")
+    }
+
+    val packPowers = tasks.register<PackTextureTask>("packPowers") {
+        group = "images"
+        dependsOn(resizePowers)
+        source("$packerTmp/powers")
+        output("$resOut/images/powers/powers.atlas")
+    }
+
+    val relicOutlines = tasks.register<Copy>("relicOutlines") {
+        group = "images"
+        filteringCharset = ImageFilter.BINARY_CHARSET
+        from("$resRoot/images/relics") {
+            include("*.png")
+            filter(OutlineFilter::class)
+            rename { n -> changeSuffix(n, ".png", "_o.png") }
+        }
+        into("$resOut/images/relics")
+    }
+
     tasks.getByName<Copy>("processResources") {
-        dependsOn("resizeImages", "packCards", "packIcons")
-        exclude("grackleResources/images/icons")
+        dependsOn("resizeImages", "packCards", packIcons, packPowers, relicOutlines)
+        // Exclude directories that are directly being packed
+        val resImg = "grackleResources/images"
+        exclude("$resImg/icons", "$resImg/powers")
     }
 }
 
@@ -180,29 +220,100 @@ tasks.register<DefaultTask>("genIntelliJRuns") {
     }
 }
 
-class ResizeFilter(`in`: Reader) : FilterReader(`in`) {
+
+abstract class ImageFilter(`in`: Reader) : FilterReader(`in`) {
     companion object {
         const val BINARY_CHARSET = "ISO-8859-1"
+
+        fun makeBuffered(src: Image): BufferedImage {
+            if (src is BufferedImage) {
+                return src
+            }
+            val w = src.getWidth(null)
+            val h = src.getHeight(null)
+            val buf = BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB)
+            val waiter = WaitObserver()
+            if (!buf.graphics.drawImage(src, 0, 0, w, h, waiter)) {
+                waiter.waitFor()
+            }
+            return buf
+        }
     }
 
     private val outReader: StringReader by lazy { loadImage() }
+    val transformers = ArrayList<Transformer<BufferedImage, BufferedImage>>()
 
-    var width: Int = -1
-    var height: Int = -1
     override fun read(cbuf: CharArray?, off: Int, len: Int): Int {
         return outReader.read(cbuf, off, len)
     }
 
-    fun loadImage(): StringReader {
-        val buf = ImageIO.read(ReaderInputStream(`in`, Charsets.ISO_8859_1))
-        val nWidth = if (width == -1) buf.width else width
-        val nHeight = if (height == -1) buf.height else height
-        val scaled = buf.getScaledInstance(nWidth, nHeight, BufferedImage.SCALE_SMOOTH)
-        val scaledBuf = BufferedImage(nWidth, nHeight, BufferedImage.TYPE_INT_ARGB)
-        scaledBuf.graphics.drawImage(scaled, 0, 0, null)
+    private fun loadImage(): StringReader {
+        val src = ImageIO.read(ReaderInputStream(`in`, Charsets.ISO_8859_1))
+        val dst = processImage(src)
         val outBuf = ByteArrayOutputStream()
-        ImageIO.write(scaledBuf, "png", outBuf)
-        return StringReader(outBuf.toString(Charsets.ISO_8859_1.name()))
+        ImageIO.write(dst, "png", outBuf)
+        return StringReader(outBuf.toString(BINARY_CHARSET))
+    }
+
+    fun add(t: Transformer<BufferedImage, BufferedImage>): ImageFilter {
+        transformers.add(t)
+        return this
+    }
+
+    abstract fun processImage(src: BufferedImage): BufferedImage
+
+    class WaitObserver : ImageObserver {
+        private val lock = ReentrantLock()
+        private val cond = lock.newCondition()
+        private var done = false
+
+        override fun imageUpdate(img: Image, infoflags: Int, x: Int, y: Int, width: Int, height: Int): Boolean {
+            if (infoflags and ImageObserver.ALLBITS > 0) {
+                lock.withLock {
+                    done = true
+                    cond.signalAll()
+                }
+                return false
+            }
+            return true
+        }
+
+        fun waitFor() {
+            lock.withLock {
+                if (!done) {
+                    cond.await()
+                }
+            }
+        }
+    }
+}
+
+class ResizeFilter(`in`: Reader) : ImageFilter(`in`) {
+    var width: Int = -1
+    var height: Int = -1
+
+    override fun processImage(src: BufferedImage): BufferedImage {
+        val nWidth = if (width == -1) src.width else width
+        val nHeight = if (height == -1) src.height else height
+        val scaled = src.getScaledInstance(nWidth, nHeight, BufferedImage.SCALE_SMOOTH)
+        return makeBuffered(scaled)
+    }
+}
+
+
+class OutlineFilter(`in`: Reader) : ImageFilter(`in`) {
+    override fun processImage(src: BufferedImage): BufferedImage {
+        for (y in 0 until src.height) {
+            for (x in 0 until src.width) {
+                val c = src.data.getSample(x, y, 3)
+                if (c > 0) {
+                    src.setRGB(x, y, 0xffffff or c.shl(24))
+                } else {
+                    src.setRGB(x, y, 0)
+                }
+            }
+        }
+        return src
     }
 }
 
@@ -278,4 +389,12 @@ fun findMod(name: String): File {
 fun getStsSteamHome(): String {
     val macPath = "/SlayTheSpire.app/Contents/Resources"
     return "$steamDir/common/SlayTheSpire" + if (Os.isFamily(Os.FAMILY_MAC)) macPath else ""
+}
+
+fun changeSuffix(s: String, suffixIn: String, suffixOut: String): String {
+    return if (s.endsWith(suffixIn)) {
+        s.substring(0, s.length - suffixIn.length) + suffixOut
+    } else {
+        s
+    }
 }

@@ -1,16 +1,12 @@
 package io.bindernews.thegrackle.relics;
 
-import basemod.abstracts.CustomRelic;
-import io.bindernews.thegrackle.Const;
 import io.bindernews.thegrackle.GrackleMod;
 
-public class PhoenixIdol extends CustomRelic {
-
-    public static final String RELIC_ID = GrackleMod.makeId("PhoenixIdol");
-    public static final String IMG = Const.RES_IMAGES + "/relics/PhoenixIdol.png";
+public class PhoenixIdol extends BaseRelic {
+    public static final String ID = GrackleMod.makeId("PhoenixIdol");
 
     public PhoenixIdol() {
-        super(RELIC_ID, IMG, RelicTier.RARE, LandingSound.MAGICAL);
+        super(ID, RelicTier.RARE, LandingSound.MAGICAL);
     }
 
     @Override

@@ -9,10 +9,14 @@ More information is coming. See `ideas.md` for ideas
 of what we might implement.
 
 # Building
-Create a `.env` file and add a line `STEAM_DIR="path/to/your/steam/dir"`.
+Create a `.env` file and add a line `STEAM_DIR="path/to/your/steam/dir/steamapps"`.
 If you have the subscribed to the dependencies with the Steam Workshop
-you can run `gradlew copySteamLibs` to copy the dependencies to the
-`lib/` directory. 
+you can run `gradlew copySteamLibs` to copy the dependencies to the `lib/` directory
+though it's not necessary.
+
+### `.env` examples
+- Windows: `STEAM_DIR="C:/Program Files (x86)/Steam/steamapps"`
+- MacOS: `STEAM_DIR="/Users/bindernews/Library/Application Support/Steam/steamapps/"`
 
 Regardless, running `gradlew installJar` (or running it from your IDE)
 will build the mod and put it in the `mods/` directory

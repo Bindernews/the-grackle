@@ -6,9 +6,10 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.BlurPower;
 import io.bindernews.bnsts.CardNums;
+import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.actions.SoundAction;
 
 public class Duck extends BaseCard {
-
     public static final CardConfig C = new CardConfig("Duck", CardType.SKILL);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
@@ -25,9 +26,7 @@ public class Duck extends BaseCard {
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new GainBlockAction(p, p, block));
         addToBot(new ApplyPowerAction(p, p, new BlurPower(p, BLUR_AMT), BLUR_AMT));
-        // TODO quack!
-//        CardCrawlGame.sound.play()
-//        addToBot(new EffectActionBuilder());
+        addToBot(new SoundAction(GrackleMod.Sfx.QUACK));
     }
 
     @Override
