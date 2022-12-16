@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.GrackleMod;
+import lombok.val;
 
 public abstract class BasePower extends AbstractPower implements CloneablePowerInterface {
 
@@ -24,6 +25,22 @@ public abstract class BasePower extends AbstractPower implements CloneablePowerI
     protected void setOwnerAmount(AbstractCreature owner, int amount) {
         this.owner = owner;
         this.amount = amount;
+    }
+
+
+    @Override
+    protected void loadRegion(String fileName) {
+        val k48 = "48/" + fileName;
+        val k128 = "128/" + fileName;
+
+        region48 = powerAtlas.get().findRegion(k48);
+        if (region48 == null) {
+            region48 = AbstractPower.atlas.findRegion(k48);
+        }
+        region128 = powerAtlas.get().findRegion(k128);
+        if (region128 == null) {
+            region128 = AbstractPower.atlas.findRegion(k128);
+        }
     }
 
     /**

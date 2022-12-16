@@ -1,5 +1,6 @@
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
 import com.badlogic.gdx.tools.texturepacker.TexturePackerFileProcessor
+import groovy.util.Node
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.ReaderInputStream
 import java.awt.Image
@@ -67,7 +68,7 @@ dependencies {
         findMod("ModTheSpire.jar"),
         findMod("StSLib.jar"),
         findMod("downfall.jar"),
-        findMod("TS05_Marisa.jar"),
+//        findMod("TS05_Marisa.jar"),
         "$stsHome/desktop-1.0.jar",
     ))
 }
@@ -102,19 +103,17 @@ run {
     val resOut = "$buildDir/resources/main/$RES_DIR"
     val packerTmp = "$buildDir/generated/images"
 
-    tasks.register<Copy>("resizeImages") {
-        group = "images"
-        filteringCharset = ImageFilter.BINARY_CHARSET
+    tasks.register<ImageCopy>("resizeImages") {
         val src = "$resRoot/images"
         from("$src/1024") {
             include("*.png")
-            filter(ResizeFilter::class, "width" to 512, "height" to 512)
+            filterResize(512, 512)
             into("512")
         }
         from("$src/energy") {
             include("energy_orb.png")
             rename { _ -> "card_small_orb.png" }
-            filter(ResizeFilter::class, "width" to 22, "height" to 22)
+            filterResize(22, 22)
             into("512")
         }
         from("$src/energy") {
@@ -124,16 +123,12 @@ run {
         into("$resOut/images")
     }
 
-    val shrinkCards = tasks.register<Copy>("shrinkCards") {
-        group = "images"
-        filteringCharset = ImageFilter.BINARY_CHARSET
+    val shrinkCards = tasks.register<ImageCopy>("shrinkCards") {
         // Resize all _p cards to be smaller
         from("$resRoot/images/cards") {
-            val suffix = "_p.png"
-            include("*${suffix}")
-            rename { n -> n.substring(0, n.length - suffix.length) + ".png" }
             // Real size is 250x190, but this is going from the base game card atlas sizes
-            filter(ResizeFilter::class, "width" to 248, "height" to 186)
+            filterResize(248, 186)
+            changeSuffix("_p.png", ".png")
         }
         into("$packerTmp/cards")
     }
@@ -152,17 +147,15 @@ run {
         output("$resOut/images/icons.atlas")
     }
 
-    val resizePowers = tasks.register<Copy>("resizePowerImages") {
-        group = "images"
-        filteringCharset = ImageFilter.BINARY_CHARSET
+    val resizePowers = tasks.register<ImageCopy>("resizePowerImages") {
         from("$resRoot/images/powers") {
             include("*.png")
-            filter(ResizeFilter::class, "width" to 48, "height" to 48)
+            filterResize(48, 48)
             into("48")
         }
         from("$resRoot/images/powers") {
             include("*.png")
-            filter(ResizeFilter::class, "width" to 128, "height" to 128)
+            filterResize(128, 128)
             into("128")
         }
         into("$packerTmp/powers")
@@ -175,13 +168,10 @@ run {
         output("$resOut/images/powers/powers.atlas")
     }
 
-    val relicOutlines = tasks.register<Copy>("relicOutlines") {
-        group = "images"
-        filteringCharset = ImageFilter.BINARY_CHARSET
+    val relicOutlines = tasks.register<ImageCopy>("relicOutlines") {
         from("$resRoot/images/relics") {
-            include("*.png")
+            changeSuffix(".png", "_o.png")
             filter(OutlineFilter::class)
-            rename { n -> changeSuffix(n, ".png", "_o.png") }
         }
         into("$resOut/images/relics")
     }
@@ -194,32 +184,42 @@ run {
     }
 }
 
-tasks.register<DefaultTask>("genIntelliJRuns") {
+tasks.register<IntellijJarRun>("genIntelliJRuns") {
     description = "Generate run configurations for IntelliJ"
-    // TODO use groovy.Node to programmatically generate XML
-    val d = "\$"
-    val config = """
-    <component name="ProjectRunConfigurationManager">
-      <configuration default="false" name="Run MTS" type="JarApplication">
-        <option name="JAR_PATH" value="$mtsJar" />
-        <option name="PROGRAM_PARAMETERS" value="--mods basemod,stslib,grackle" />
-        <option name="WORKING_DIRECTORY" value="$stsHome" />
-        <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-        <option name="ALTERNATIVE_JRE_PATH" value="${stsHome}/jre" />
-        <method v="2">
-            <option name="Gradle.BeforeRunTask" enabled="true" tasks="installJar" externalProjectPath="${d}PROJECT_DIR${d}" vmOptions="" scriptParameters="" />
-        </method>
-      </configuration>
-    </component>""".trimIndent()
-
-    outputs.file("$rootDir/.idea/runConfigurations/Run_MTS.xml")
-    doLast {
-        for (f in outputs.files) {
-            f.absoluteFile.writeText(config)
-        }
-    }
+    runName.set("Run MTS")
+    jarPath.set(mtsJar)
+    parameters.set("--mods basemod,stslib,grackle")
+    workingDirectory.set(stsHome)
+    alternateJre.set(file("$stsHome/jre"))
+    beforeRunTask.set("installJar")
 }
 
+
+fun findMod(name: String): File {
+    val workshopId = WORKSHOP_IDS[name]
+    val paths = listOf("$rootDir/libs", modsDir, "$workshopDir/$workshopId").map { file(it) }
+    for (p in paths) {
+        val child = p.resolve(name)
+        if (p.resolve(name).isFile) {
+            return child
+        }
+    }
+    throw FileNotFoundException(name)
+}
+
+fun getStsSteamHome(): String {
+    val macPath = "/SlayTheSpire.app/Contents/Resources"
+    return "$steamDir/common/SlayTheSpire" + if (Os.isFamily(Os.FAMILY_MAC)) macPath else ""
+}
+
+
+//------------------------
+// Begin Library-ish Code
+//------------------------
+
+// This is imperative code, implementing build tasks for the build script above.
+// Eventually it could be moved to buildSrc or a plugin, but for now it's here.
+//
 
 abstract class ImageFilter(`in`: Reader) : FilterReader(`in`) {
     companion object {
@@ -317,13 +317,17 @@ class OutlineFilter(`in`: Reader) : ImageFilter(`in`) {
     }
 }
 
-
 abstract class PackTextureTask : DefaultTask() {
-    @get:Input abstract val maxWidth: Property<Int>
-    @get:Input abstract val maxHeight: Property<Int>
-    @get:Input abstract val grid: Property<Boolean>
-    @get:InputDirectory abstract val inputDir: Property<File>
-    @get:OutputFile abstract val outputPath: Property<File>
+    @get:Input
+    val maxWidth: Property<Int> = project.objects.property()
+    @get:Input
+    val maxHeight: Property<Int> = project.objects.property()
+    @get:Input
+    val grid: Property<Boolean> = project.objects.property()
+    @get:InputDirectory
+    val inputDir: Property<File> = project.objects.property()
+    @get:OutputFile
+    abstract val outputPath: Property<File>
     private var filter: FilenameFilter = FilenameFilter { _, _ -> true }
 
     init {
@@ -374,27 +378,116 @@ abstract class PackTextureTask : DefaultTask() {
     }
 }
 
-fun findMod(name: String): File {
-    val workshopId = WORKSHOP_IDS[name]
-    val paths = listOf("$rootDir/libs", modsDir, "$workshopDir/$workshopId").map { file(it) }
-    for (p in paths) {
-        val child = p.resolve(name)
-        if (p.resolve(name).isFile) {
-            return child
+open class ImageCopy : Copy() {
+    init {
+        group = "images"
+        filteringCharset = ImageFilter.BINARY_CHARSET
+    }
+
+    fun CopySpec.filterResize(width: Int, height: Int) {
+        filter(ResizeFilter::class, "width" to width, "height" to height)
+    }
+
+    /**
+     * Include all files ending with `suffix` and change the output names to end with `newEnd`.
+     * @param suffix Suffix of existing files
+     * @param newEnd Suffix to replace with
+     */
+    fun CopySpec.changeSuffix(suffix: String, newEnd: String) {
+        include("*$suffix")
+        rename { n -> n.removeSuffix(suffix) + newEnd }
+    }
+}
+
+abstract class IntelliJRun : DefaultTask() {
+    @get:Input
+    val runName: Property<String> = project.objects.property()
+    @get:Input
+    val taskType: Property<String> = project.objects.property()
+    @get:Input
+    val isDefault: Property<Boolean> = project.objects.property()
+    @get:Input
+    val options: MutableMap<String, String> = HashMap()
+
+    /**
+     * Name of Gradle task to execute before running this run configuration.
+     */
+    @get:Input
+    val beforeRunTask: Property<String> = project.objects.property()
+
+    init {
+        description = "Generate IntelliJ run configuration"
+        isDefault.convention(false)
+        beforeRunTask.convention("")
+        outputs.file { "${project.rootDir}/.idea/runConfigurations/${runName.get()}.xml" }
+    }
+
+    @TaskAction
+    fun writeFile() {
+        val xml = generate()
+        for (f in outputs.files) {
+            val writer = groovy.xml.XmlNodePrinter(f.printWriter())
+            writer.print(xml)
         }
     }
-    throw FileNotFoundException(name)
+
+    open fun generate(): Node {
+        val root = Node(null, "component", mapOf("name" to "ProjectRunConfigurationManager"))
+        val cfg = Node(root, "configuration",
+                mapOf("default" to isDefault.get(), "name" to runName.get(), "type" to taskType.get()))
+        for (opt in options) {
+            Node(cfg, "option", mapOf("name" to opt.key, "value" to opt.value))
+        }
+        val v2 = Node(cfg, "method", mapOf("v" to "2"))
+        beforeRunTask.orNull?.run {
+            Node(v2, "option", mapOf(
+                    "name" to "Gradle.BeforeRunTask",
+                    "enabled" to "true",
+                    "tasks" to this,
+                    "externalProjectPath" to "\$PROJECT_DIR\$",
+                    "vmOptions" to "",
+                    "scriptParameters" to ""
+            ))
+        }
+        addV2Options(v2)
+        return root
+    }
+
+    open fun addV2Options(node: Node) {}
+
+
+    fun unixPath(s: String): String {
+        return s.replace('\\', '/')
+    }
 }
 
-fun getStsSteamHome(): String {
-    val macPath = "/SlayTheSpire.app/Contents/Resources"
-    return "$steamDir/common/SlayTheSpire" + if (Os.isFamily(Os.FAMILY_MAC)) macPath else ""
-}
+open class IntellijJarRun : IntelliJRun() {
+    @get:Input
+    val jarPath: Property<File> = project.objects.property()
+    @get:Input
+    val parameters: Property<String> = project.objects.property()
+    @get:Input
+    val workingDirectory: Property<String> = project.objects.property()
+    @get:Input
+    val alternateJre: Property<File> = project.objects.property()
 
-fun changeSuffix(s: String, suffixIn: String, suffixOut: String): String {
-    return if (s.endsWith(suffixIn)) {
-        s.substring(0, s.length - suffixIn.length) + suffixOut
-    } else {
-        s
+    init {
+        taskType.convention("JarApplication")
+        parameters.convention("")
+        workingDirectory.convention(null as String?)
+        alternateJre.convention(null as File?)
+    }
+
+    override fun generate(): Node {
+        options["JAR_PATH"] = unixPath(jarPath.get().toString())
+        options["PROGRAM_PARAMETERS"] = parameters.get()
+        workingDirectory.orNull?.run {
+            options["WORKING_DIRECTORY"] = unixPath(this)
+        }
+        alternateJre.orNull?.run {
+            options["ALTERNATIVE_JRE_PATH_ENABLED"] = "true"
+            options["ALTERNATIVE_JRE_PATH"] = unixPath(this.absolutePath)
+        }
+        return super.generate()
     }
 }
