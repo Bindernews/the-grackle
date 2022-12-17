@@ -11,10 +11,18 @@ She has a habit of catching both herself and others on fire.
 - Cards with "Airborne" may ONLY be played while Airborne
 - Cards with "Grounded" may ONLY be played while NOT Airborne
 - Phoenix Stance = player takes 1/2 damage, counts as Airborne and Grounded,
-  at end of turn exit Phoenix Stance, gain 1 Cooling Phoenix, take another turn
+  at end of turn exit Phoenix Stance, gain 1 Cooling Phoenix (prevent infinite turn), take another turn
+- Vigor - build Vigor then perform large attacks, dealing damage even when Airborne or in a Swoop
+- Whipping Wind - Causes multi-hit attacks to hit extra times (not sure if good idea) 
+
+## Playstyles
+- **Swoop**: Stay in Airborne stance and build vigor (or wind). Exit Airborne, do big damage, re-enter Airborne.
+- **Peck Deck**: Lots of small attacks
+- **Phoenix**: Try to enter Phoenix Stance as much as possible, and just generally taking extra turns
+- 
 
 ## Buffs
-- Fireheart - When you gain 10 Fireheart, gain HP, enter Phoenix Stance,
+- Fireheart - When you gain 10 Fireheart, gain HP, enter Phoenix Stance, 
 
 ## Debuffs
 - No-Fly Zone - Exit Airborne, cannot enter Airborne. Permanent.

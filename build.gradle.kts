@@ -11,6 +11,7 @@ import java.io.FileNotFoundException
 import java.io.FilenameFilter
 import java.io.FilterReader
 import java.io.Reader
+import java.io.Serializable
 import java.io.StringReader
 import java.util.concurrent.locks.ReentrantLock
 import javax.imageio.ImageIO
@@ -69,8 +70,15 @@ dependencies {
         findMod("StSLib.jar"),
         findMod("downfall.jar"),
 //        findMod("TS05_Marisa.jar"),
-        "$stsHome/desktop-1.0.jar",
     ))
+    // Prefer the patched version so that we get better debugging results in IntelliJ
+    // but fall back to the normal desktop-1.0.jar if it's not available.
+    val depDesktopModded = file("$projectDir/lib/desktop-1.0-modded.jar")
+    if (depDesktopModded.exists()) {
+        implementation(files(depDesktopModded))
+    } else {
+        implementation(files("$stsHome/desktop-1.0.jar"))
+    }
 }
 
 tasks.getByName<Test>("test") {
@@ -184,16 +192,33 @@ run {
     }
 }
 
-tasks.register<IntellijJarRun>("genIntelliJRuns") {
+tasks.register<IntellijRun>("genIntelliJRuns") {
     description = "Generate run configurations for IntelliJ"
-    runName.set("Run MTS")
-    jarPath.set(mtsJar)
-    parameters.set("--mods basemod,stslib,grackle")
-    workingDirectory.set(stsHome)
-    alternateJre.set(file("$stsHome/jre"))
-    beforeRunTask.set("installJar")
+    add {
+        name = "Run MTS"
+        jar {
+            jarPath(mtsJar)
+            parameters("--mods basemod,stslib,grackle")
+            workingDirectory(stsHome)
+            alternateJre(file("$stsHome/jre"))
+            v2Options.add(V2Option.beforeLaunch("installJar"))
+        }
+    }
 }
 
+tasks.register("packagePatchedJar") {
+    doLast {
+        exec {
+            executable = findJavaExe("$stsHome/jre")
+            workingDir = file(stsHome)
+            args("-jar", mtsJar, "--mods", "basemod,stslib", "--package", "--close-when-finished")
+        }
+        copy {
+            from("$stsHome/desktop-1.0-modded.jar")
+            into("$projectDir/lib")
+        }
+    }
+}
 
 fun findMod(name: String): File {
     val workshopId = WORKSHOP_IDS[name]
@@ -210,6 +235,18 @@ fun findMod(name: String): File {
 fun getStsSteamHome(): String {
     val macPath = "/SlayTheSpire.app/Contents/Resources"
     return "$steamDir/common/SlayTheSpire" + if (Os.isFamily(Os.FAMILY_MAC)) macPath else ""
+}
+
+fun findJavaExe(javaHome: String): String {
+    val exeWin = file("$javaHome/bin/java.exe")
+    val exeNix = file("$javaHome/bin/java")
+    return if (exeWin.exists()) {
+        exeWin.absolutePath
+    } else if (exeNix.exists()) {
+        exeNix.absolutePath
+    } else {
+        throw Exception("could not find java executable")
+    }
 }
 
 
@@ -399,95 +436,142 @@ open class ImageCopy : Copy() {
     }
 }
 
-abstract class IntelliJRun : DefaultTask() {
-    @get:Input
-    val runName: Property<String> = project.objects.property()
-    @get:Input
-    val taskType: Property<String> = project.objects.property()
-    @get:Input
-    val isDefault: Property<Boolean> = project.objects.property()
-    @get:Input
-    val options: MutableMap<String, String> = HashMap()
+//---------------------
+// IntelliJ Run Config
+//---------------------
 
-    /**
-     * Name of Gradle task to execute before running this run configuration.
-     */
+// All this code is about generating intellij run configurations in a way works with the DSL.
+
+interface V2Option : Map<String, String>, Serializable {
+    companion object {
+        /**
+         * Returns a V2Option that will run the named Gradle task before launching the run configuration.
+         */
+        fun beforeLaunch(task: String): V2Option {
+            return from(mapOf(
+                    "name" to "Gradle.BeforeRunTask",
+                    "enabled" to "true",
+                    "tasks" to task,
+                    "externalProjectPath" to "\$PROJECT_DIR\$",
+                    "vmOptions" to "",
+                    "scriptParameters" to "",
+            ))
+        }
+
+        /**
+         * Helper function to create a V2Option from a string map.
+         */
+        fun from(m: Map<String, String>): V2Option {
+            return V2OptionData(m)
+        }
+    }
+}
+
+fun unixPath(s: String): String {
+    return s.replace('\\', '/')
+}
+
+data class V2OptionData(val m: Map<String, String>) : Map<String, String> by m, V2Option
+
+interface IntellijRunSpec : Serializable {
+    var name: String
+    var taskType: String
+    var isDefault: Boolean
+    val options: MutableMap<String, String>
+    val v2Options: MutableList<V2Option>
+
+    fun option(key: String, value: String)
+
+    fun generate(): Node
+
+    companion object {
+        /**
+         * Default generate function.
+         */
+        fun defaultGenerate(spec: IntellijRunSpec): Node {
+            val root = Node(null, "component", mapOf("name" to "ProjectRunConfigurationManager"))
+            val cfg = Node(root, "configuration", mapOf(
+                    "default" to spec.isDefault, "name" to spec.name, "type" to spec.taskType))
+            for (opt in spec.options) {
+                Node(cfg, "option", mapOf("name" to opt.key, "value" to opt.value))
+            }
+            val v2 = Node(cfg, "method", mapOf("v" to "2"))
+            for (opt in spec.v2Options) {
+                Node(v2, "option", opt)
+            }
+            return root
+        }
+    }
+}
+
+interface IntellijRunJarSpec {
+    fun jarPath(f: File)
+    fun parameters(s: String)
+    fun workingDirectory(s: String)
+    fun alternateJre(f: File)
+}
+
+data class IntellijRunData(
+        override var name: String = "",
+        override var taskType: String = "",
+        override var isDefault: Boolean = false,
+        override val options: MutableMap<String, String> = HashMap(),
+        override val v2Options: MutableList<V2Option> = ArrayList(),
+) : IntellijRunSpec {
+    override fun generate(): Node = IntellijRunSpec.defaultGenerate(this)
+
+    override fun option(key: String, value: String) {
+        options[key] = value
+    }
+}
+
+data class IntellijRunJarData(
+        val parent: IntellijRunSpec
+) : IntellijRunSpec by parent, IntellijRunJarSpec {
+    init {
+        taskType = "JarApplication"
+    }
+
+    override fun jarPath(f: File) = option("JAR_PATH", unixPath(f.absolutePath))
+    override fun parameters(s: String) = option("PROGRAM_PARAMETERS", s)
+    override fun workingDirectory(s: String) = option("WORKING_DIRECTORY", unixPath(s))
+    override fun alternateJre(f: File) {
+        options["ALTERNATIVE_JRE_PATH_ENABLED"] = "true"
+        options["ALTERNATIVE_JRE_PATH"] = unixPath(f.absolutePath)
+    }
+}
+
+fun IntellijRunSpec.jar(cf: Action<in IntellijRunJarSpec>) {
+    cf.execute(IntellijRunJarData(this))
+}
+
+
+abstract class IntellijRun : DefaultTask() {
     @get:Input
-    val beforeRunTask: Property<String> = project.objects.property()
+    val configs: ListProperty<IntellijRunSpec> = project.objects.listProperty(IntellijRunSpec::class)
 
     init {
         description = "Generate IntelliJ run configuration"
-        isDefault.convention(false)
-        beforeRunTask.convention("")
-        outputs.file { "${project.rootDir}/.idea/runConfigurations/${runName.get()}.xml" }
+        configs.convention(ArrayList())
     }
 
     @TaskAction
     fun writeFile() {
-        val xml = generate()
-        for (f in outputs.files) {
+        for (spec in configs.get()) {
+            val f = project.file(pathFor(spec))
             val writer = groovy.xml.XmlNodePrinter(f.printWriter())
-            writer.print(xml)
+            writer.print(spec.generate())
         }
     }
 
-    open fun generate(): Node {
-        val root = Node(null, "component", mapOf("name" to "ProjectRunConfigurationManager"))
-        val cfg = Node(root, "configuration",
-                mapOf("default" to isDefault.get(), "name" to runName.get(), "type" to taskType.get()))
-        for (opt in options) {
-            Node(cfg, "option", mapOf("name" to opt.key, "value" to opt.value))
-        }
-        val v2 = Node(cfg, "method", mapOf("v" to "2"))
-        beforeRunTask.orNull?.run {
-            Node(v2, "option", mapOf(
-                    "name" to "Gradle.BeforeRunTask",
-                    "enabled" to "true",
-                    "tasks" to this,
-                    "externalProjectPath" to "\$PROJECT_DIR\$",
-                    "vmOptions" to "",
-                    "scriptParameters" to ""
-            ))
-        }
-        addV2Options(v2)
-        return root
+    fun add(cf: Action<in IntellijRunSpec>) {
+        val spec = IntellijRunData()
+        cf.execute(spec)
+        configs.add(spec)
+        outputs.file(pathFor(spec))
     }
 
-    open fun addV2Options(node: Node) {}
-
-
-    fun unixPath(s: String): String {
-        return s.replace('\\', '/')
-    }
-}
-
-open class IntellijJarRun : IntelliJRun() {
-    @get:Input
-    val jarPath: Property<File> = project.objects.property()
-    @get:Input
-    val parameters: Property<String> = project.objects.property()
-    @get:Input
-    val workingDirectory: Property<String> = project.objects.property()
-    @get:Input
-    val alternateJre: Property<File> = project.objects.property()
-
-    init {
-        taskType.convention("JarApplication")
-        parameters.convention("")
-        workingDirectory.convention(null as String?)
-        alternateJre.convention(null as File?)
-    }
-
-    override fun generate(): Node {
-        options["JAR_PATH"] = unixPath(jarPath.get().toString())
-        options["PROGRAM_PARAMETERS"] = parameters.get()
-        workingDirectory.orNull?.run {
-            options["WORKING_DIRECTORY"] = unixPath(this)
-        }
-        alternateJre.orNull?.run {
-            options["ALTERNATIVE_JRE_PATH_ENABLED"] = "true"
-            options["ALTERNATIVE_JRE_PATH"] = unixPath(this.absolutePath)
-        }
-        return super.generate()
+    private fun pathFor(spec: IntellijRunSpec): String {
+        return "${project.rootDir}/.idea/runConfigurations/${spec.name}.xml"
     }
 }
