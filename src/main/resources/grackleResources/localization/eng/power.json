@@ -32,5 +32,11 @@
     "DESCRIPTIONS": [
       "Gain %d Vigor whenever a Burn card is exhausted."
     ]
+  },
+  "grackle:MultiHitPower": {
+    "NAME": "Multi-Hit",
+    "DESCRIPTIONS": [
+      "The next multi-attack you play will hit %d extra times."
+    ]
   }
 }

@@ -1,5 +1,6 @@
 package io.bindernews.thegrackle.power;
 
+import basemod.AutoAdd;
 import basemod.interfaces.CloneablePowerInterface;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -10,6 +11,7 @@ import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.GrackleMod;
 import lombok.val;
 
+@AutoAdd.Ignore
 public abstract class BasePower extends AbstractPower implements CloneablePowerInterface {
 
     public static final Lazy<TextureAtlas> powerAtlas = GrackleMod.lazyAtlas("/powers/powers.atlas");

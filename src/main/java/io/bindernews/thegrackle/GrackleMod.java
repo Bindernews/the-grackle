@@ -13,9 +13,10 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.cards.*;
+import io.bindernews.thegrackle.helper.MultiHitManager;
 import io.bindernews.thegrackle.icons.IconHelper;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
-import javassist.CtClass;
+import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 @SpireInitializer
 public class GrackleMod implements
         AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
-        EditKeywordsSubscriber, OnPowersModifiedSubscriber, OnStartBattleSubscriber
+        EditKeywordsSubscriber, PostInitializeSubscriber, OnStartBattleSubscriber
 {
     public static final Logger log = LogManager.getLogger(GrackleMod.class);
 
@@ -55,6 +56,8 @@ public class GrackleMod implements
      */
     public static boolean interopDownfall;
 
+    public static MultiHitManager multiHitManager;
+
     private static boolean hasInit = false;
 
     public GrackleMod() {
@@ -70,6 +73,7 @@ public class GrackleMod implements
         if (!hasInit) {
             GrackleMod mod = new GrackleMod();
             hasInit = true;
+            multiHitManager = new MultiHitManager();
         }
     }
 
@@ -98,6 +102,9 @@ public class GrackleMod implements
         log.debug("registering icons");
         IconHelper.registerAll();
         log.debug("done registering icons");
+        log.debug("register dynamic variables");
+        BaseMod.addDynamicVariable(new ExtraHitsVariable());
+        log.debug("done register dynamic variables");
         log.debug("registering cards");
         AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(BaseCard.class);
@@ -106,25 +113,19 @@ public class GrackleMod implements
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void receivePowersModified() {
+    public void receivePostInitialize() {
+        registerPowers();
+    }
+
+
+    private void registerPowers() {
+        log.debug("registering powers");
         AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(GrackleMod.class);
-        try {
-            for (CtClass c : aa.findClasses(AbstractPower.class)) {
-                Class<?> c2 = getClass().getClassLoader().loadClass(c.getName());
-                MiscUtil.registerPower((Class<? extends AbstractPower>)c2);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        for (val c : MiscUtil.autoFindClasses(aa, AbstractPower.class)) {
+            MiscUtil.registerPower(c);
         }
-//        Stream.of(
-//                CoolingPhoenixPower.class,
-//                FireheartPower.class,
-//                HealingPhoenixPower.class,
-//                PhoenixFeatherPower.class,
-//                PhoenixStancePower.class
-//        ).forEach(GrackleMod::registerPower);
+        log.debug("done registering powers");
     }
 
     @Override
@@ -173,11 +174,12 @@ public class GrackleMod implements
                 new FiredUpCard(),
                 new FireTouch(),
                 new FireWithin(),
+                new HenPeck(),
                 new HurricaneWind(),
                 new PhoenixFeather(),
                 new PhoenixForm(),
                 new SelfBurn(),
-                new SkillR(),
+                new BufferInputs(),
                 new Strike_GK(),
                 new SummonEgrets(),
                 new Takeoff(),

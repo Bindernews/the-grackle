@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
+import io.bindernews.thegrackle.helper.MultiHitManager;
 
 public class SummonEgrets extends BaseCard {
     public static final CardConfig C = new CardConfig("SummonEgrets", CardType.ATTACK);
@@ -16,6 +17,7 @@ public class SummonEgrets extends BaseCard {
     public SummonEgrets() {
         super(C, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
         NUM.init(this);
+        tags.add(MultiHitManager.GK_MULTI_HIT);
         isMultiDamage = true;
         initializeDescription();
     }

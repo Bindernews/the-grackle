@@ -1,5 +1,6 @@
 package io.bindernews.thegrackle;
 
+import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.abstracts.CustomPlayer;
 import com.badlogic.gdx.Gdx;
@@ -13,6 +14,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import javassist.CtClass;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -146,9 +149,29 @@ public class MiscUtil {
             } catch (Exception ignore) {}
         }
         if (powerId == null) {
+            try {
+                val ctor = clazz.getDeclaredConstructor();
+                powerId = ctor.newInstance().ID;
+            } catch (Exception ignore) {}
+        }
+        if (powerId == null) {
             throw new RuntimeException("cannot determine power ID for class " + clazz);
         }
         BaseMod.addPower(clazz, powerId);
+    }
+
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    public static <T> List<Class<? extends T>> autoFindClasses(AutoAdd aa, Class<T> type) {
+        ArrayList<Class<? extends T>> lst = new ArrayList<>();
+        for (CtClass c : aa.findClasses(type)) {
+            if (c.getAnnotation(AutoAdd.Ignore.class) != null) {
+                continue;
+            }
+            Class<?> c2 = type.getClassLoader().loadClass(c.getName());
+            lst.add((Class<? extends T>) c2);
+        }
+        return lst;
     }
 
     /**

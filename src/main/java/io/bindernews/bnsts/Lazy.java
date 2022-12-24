@@ -3,11 +3,28 @@ package io.bindernews.bnsts;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
+/**
+ * An interface and implementations of the lazy-evaluation, or lazy initialization, pattern.
+ * @param <T> Type of object to be lazily-loaded
+ */
 public interface Lazy<T> extends Supplier<T> {
+
+    /**
+     * Create a {@link Lazy} which is NOT thread-safe.
+     * @param creator Lazy initializer
+     * @return Lazy instance
+     * @param <T> Lazy type
+     */
     static <T> Lazy<T> of(Supplier<T> creator) {
         return new SimpleLazy<>(creator);
     }
 
+    /**
+     * Create a {@link Lazy} which IS thread-safe.
+     * @param creator Lazy initializer
+     * @return Lazy instance
+     * @param <T> Lazy type
+     */
     static <T> Lazy<T> ofSync(Supplier<T> creator) {
         return new SyncLazy<>(creator);
     }

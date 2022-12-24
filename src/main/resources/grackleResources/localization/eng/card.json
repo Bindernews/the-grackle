@@ -50,9 +50,9 @@
     "DESCRIPTION": "Discard your hand, NL then draw that many cards.",
     "FLAVOR": "A Game Over is only temporary."
   },
-  "grackle:SkillR": {
-    "NAME": "Skill Rare",
-    "DESCRIPTION": "Gain !B! Block."
+  "grackle:BufferInputs": {
+    "NAME": "Buffer Inputs",
+    "DESCRIPTION": "Gain !M! grackle:Peck . NL Exhaust ."
   },
   "grackle:PowerC": {
     "NAME": "Power Common",
@@ -90,5 +90,9 @@
   "grackle:FireTouch": {
     "NAME": "Fire Touch",
     "DESCRIPTION": "Apply !M! grackle:Burning."
+  },
+  "grackle:HenPeck": {
+    "NAME": "Hen Peck",
+    "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
   }
 }

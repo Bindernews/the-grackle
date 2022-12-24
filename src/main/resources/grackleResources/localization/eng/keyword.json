@@ -16,5 +16,13 @@
       "fireheart"
     ],
     "DESCRIPTION": "When you obtain #b10 #Fireheart, enter #yPhoenix Stance."
+  },
+  {
+    "PROPER_NAME": "Peck",
+    "NAMES": [
+      "Peck",
+      "peck"
+    ],
+    "DESCRIPTION": "Increases number of hits for next multi-hit attacks."
   }
 ]

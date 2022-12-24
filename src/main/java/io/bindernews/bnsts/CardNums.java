@@ -2,7 +2,9 @@ package io.bindernews.bnsts;
 
 import basemod.abstracts.CustomCard;
 import com.evacipated.cardcrawl.mod.stslib.variables.ExhaustiveVariable;
+import com.evacipated.cardcrawl.mod.stslib.variables.RefundVariable;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.*;
 
 import java.lang.invoke.*;
@@ -51,6 +53,10 @@ public class CardNums {
     @Builder.Default public final int healUpg = -1;
     @Builder.Default public final int exhaustive = -1;
     @Builder.Default public final int exhaustiveUpg = -1;
+    @Builder.Default public final int refund = -1;
+    @Builder.Default public final int refundUpg = -1;
+    @Builder.Default public final int extraHits = -1;
+    @Builder.Default public final int extraHitsUpg = -1;
 
     public void init(CustomCard card) {
         card.damage = card.baseDamage = damage;
@@ -58,7 +64,15 @@ public class CardNums {
         card.magicNumber = card.baseMagicNumber = magic;
         card.heal = card.baseHeal = heal;
         card.cost = card.costForTurn = cost;
-        ExhaustiveVariable.setBaseValue(card, exhaustive);
+        if (exhaustive != -1) {
+            ExhaustiveVariable.setBaseValue(card, exhaustive);
+        }
+        if (refund != -1) {
+            RefundVariable.setBaseValue(card, refund);
+        }
+        if (extraHits != -1) {
+            ExtraHitsVariable.inst.setBaseValue(card, extraHits);
+        }
     }
 
     @SneakyThrows
@@ -81,6 +95,12 @@ public class CardNums {
         }
         if (exhaustiveUpg != -1) {
             ExhaustiveVariable.upgrade(card, exhaustiveUpg - exhaustive);
+        }
+        if (refundUpg != -1) {
+            RefundVariable.upgrade(card, refundUpg - refund);
+        }
+        if (extraHitsUpg != -1) {
+            ExtraHitsVariable.inst.upgrade(card, extraHitsUpg - extraHits);
         }
     }
 }

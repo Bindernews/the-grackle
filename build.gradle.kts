@@ -65,20 +65,17 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     compileOnly("org.jetbrains:annotations:16.0.2")
     implementation(files(
+        // Add the patched version if it exists, so we can get better IDE help.
+//        file("$projectDir/lib/desktop-1.0-patched.jar").takeIf { it.exists() },
+        // base game
+        "$stsHome/desktop-1.0.jar",
+        // mods
         findMod("BaseMod.jar"),
         findMod("ModTheSpire.jar"),
         findMod("StSLib.jar"),
         findMod("downfall.jar"),
 //        findMod("TS05_Marisa.jar"),
     ))
-    // Prefer the patched version so that we get better debugging results in IntelliJ
-    // but fall back to the normal desktop-1.0.jar if it's not available.
-    val depDesktopModded = file("$projectDir/lib/desktop-1.0-modded.jar")
-    if (depDesktopModded.exists()) {
-        implementation(files(depDesktopModded))
-    } else {
-        implementation(files("$stsHome/desktop-1.0.jar"))
-    }
 }
 
 tasks.getByName<Test>("test") {
@@ -105,6 +102,8 @@ tasks.register<Copy>("installJar") {
     rename { "$modName.jar" }
     into(modsDir)
 }
+
+
 
 run {
     val resRoot = "$projectDir/src/main/resources/$RES_DIR"
@@ -211,10 +210,10 @@ tasks.register("packagePatchedJar") {
         exec {
             executable = findJavaExe("$stsHome/jre")
             workingDir = file(stsHome)
-            args("-jar", mtsJar, "--mods", "basemod,stslib", "--package", "--close-when-finished")
+            args("-jar", mtsJar, "--mods", "basemod,stslib,grackle", "--out-jar", "--close-when-finished")
         }
         copy {
-            from("$stsHome/desktop-1.0-modded.jar")
+            from("$stsHome/desktop-1.0-patched.jar")
             into("$projectDir/lib")
         }
     }
