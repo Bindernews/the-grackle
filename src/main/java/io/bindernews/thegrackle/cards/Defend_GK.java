@@ -2,8 +2,7 @@ package io.bindernews.thegrackle.cards;
 
 import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
 
 @AutoAdd.Seen
@@ -21,7 +20,7 @@ public class Defend_GK extends BaseCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    public void apply(AbstractCreature p, AbstractCreature m) {
         addToBot(new GainBlockAction(p, p, block));
     }
 

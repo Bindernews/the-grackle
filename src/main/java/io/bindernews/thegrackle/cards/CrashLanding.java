@@ -2,10 +2,8 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.stance.StanceAloft;
@@ -26,10 +24,10 @@ public class CrashLanding extends BaseCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    public void apply(AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.SLASH_DIAGONAL;
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), fx));
-        addToBot(new ChangeStanceAction(new NeutralStance()));
+        addToBot(iop().changeStance(p, new NeutralStance()));
     }
 
     @Override

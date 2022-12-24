@@ -32,6 +32,12 @@ public class StanceAloft extends AbstractStance {
     }
 
     @Override
+    public void onEnterStance() {
+
+        super.onEnterStance();
+    }
+
+    @Override
     public float atDamageReceive(float damage, DamageInfo.DamageType damageType) {
         if (damageType == DamageInfo.DamageType.NORMAL) {
             return damage / 2f;
@@ -68,6 +74,10 @@ public class StanceAloft extends AbstractStance {
     }
 
     public static boolean isAloft(AbstractPlayer p) {
-        return ALOFT_STANCES.contains(p.stance.ID);
+        return isAloft(p.stance);
+    }
+
+    public static boolean isAloft(AbstractStance s) {
+        return ALOFT_STANCES.contains(s.ID);
     }
 }

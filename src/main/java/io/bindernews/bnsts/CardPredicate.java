@@ -22,4 +22,8 @@ public interface CardPredicate<T extends AbstractCard> {
         final CardPredicate<T> self = this;
         return (card, p, m) -> (self.test(card, p, m) || other.test(card, p, m));
     }
+
+    static <T extends AbstractCard> CardPredicate<T> of(CardPredicate<T> p) {
+        return p;
+    }
 }

@@ -41,6 +41,8 @@ public class GrackleMod implements
     public interface CO {
         String RES_IMAGES = MOD_RES + "/images";
         String RES_LANG = "grackleResources/localization";
+        String REG_START = "begin registering {}";
+        String REG_END = "done registering {}";
     }
 
     /**
@@ -99,17 +101,17 @@ public class GrackleMod implements
 
     @Override
     public void receiveEditCards() {
-        log.debug("registering icons");
+        log.debug(CO.REG_START, "icons");
         IconHelper.registerAll();
-        log.debug("done registering icons");
-        log.debug("register dynamic variables");
+        log.debug(CO.REG_END, "icons");
+        log.debug(CO.REG_START, "dynamic variables");
         BaseMod.addDynamicVariable(new ExtraHitsVariable());
-        log.debug("done register dynamic variables");
-        log.debug("registering cards");
+        log.debug(CO.REG_END, "dynamic variables");
+        log.debug(CO.REG_START, "cards");
         AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(BaseCard.class);
         aa.cards();
-        log.debug("done registering cards");
+        log.debug(CO.REG_END, "cards");
     }
 
     @Override
