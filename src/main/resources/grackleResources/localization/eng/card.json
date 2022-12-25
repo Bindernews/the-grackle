@@ -94,5 +94,13 @@
   "grackle:HenPeck": {
     "NAME": "Hen Peck",
     "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
+  },
+  "grackle:Grenenade": {
+    "NAME": "Grenenade",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times.",
+    "FLAVOR": "Nene's green grenades!",
+    "EXTENDED_DESCRIPTION": [
+      "Gre", "ne", "nade"
+    ]
   }
 }

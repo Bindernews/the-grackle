@@ -1,9 +1,7 @@
 package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
-import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.stance.StanceAloft;
 
@@ -18,9 +16,9 @@ public class Takeoff extends BaseCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster abstractMonster) {
+    public void apply(AbstractCreature p, AbstractCreature m) {
         addToBot(new GainBlockAction(p, p, block));
-        addToBot(new ChangeStanceAction(new StanceAloft()));
+        addToBot(iop().changeStance(p, StanceAloft.STANCE_ID));
     }
 
     @Override

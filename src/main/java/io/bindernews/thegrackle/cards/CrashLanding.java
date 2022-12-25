@@ -27,7 +27,7 @@ public class CrashLanding extends BaseCard {
     public void apply(AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.SLASH_DIAGONAL;
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), fx));
-        addToBot(iop().changeStance(p, new NeutralStance()));
+        addToBot(iop().changeStance(p, NeutralStance.STANCE_ID));
     }
 
     @Override

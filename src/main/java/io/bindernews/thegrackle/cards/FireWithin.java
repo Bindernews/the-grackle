@@ -1,8 +1,7 @@
 package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.power.FireWithinPower;
 
@@ -16,7 +15,7 @@ public class FireWithin extends BaseCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    public void apply(AbstractCreature p, AbstractCreature m) {
         addToBot(new ApplyPowerAction(p, p, new FireWithinPower(p, magicNumber)));
     }
 

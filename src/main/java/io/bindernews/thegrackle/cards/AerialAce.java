@@ -3,9 +3,9 @@ package io.bindernews.thegrackle.cards;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.actions.LazyAction;
 import io.bindernews.thegrackle.stance.StanceAloft;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
@@ -25,15 +25,15 @@ public class AerialAce extends BaseCard {
 
     @Override
     public float calculateModifiedCardDamage(AbstractPlayer player, AbstractMonster mo, float tmp) {
+        if (StanceAloft.isAloft(player.stance)) {
+            tmp *= 2.f;
+        }
         return tmp;
     }
 
     @Override
-    public void use(final AbstractPlayer p, final AbstractMonster m) {
-        addToBot(new LazyAction(() -> {
-            int damageEf = damage * (StanceAloft.isAloft(p) ? 2 : 1);
-            return new DamageAction(m, new DamageInfo(p, damageEf, damageType), AttackEffect.SLASH_DIAGONAL);
-        }));
+    public void apply(AbstractCreature p, AbstractCreature m) {
+        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), AttackEffect.SLASH_DIAGONAL));
     }
 
     @Override

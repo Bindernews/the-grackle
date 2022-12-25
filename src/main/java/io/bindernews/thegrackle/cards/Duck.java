@@ -2,8 +2,7 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.GainBlockAction;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.BlurPower;
 import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.GrackleMod;
@@ -14,8 +13,13 @@ public class Duck extends BaseCard {
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
             .block(7).blockUpg(11)
+            .magic(1)
             .build();
-    static final int BLUR_AMT = 1;
+
+    /**
+     * Set to false to disable quack sound.
+     */
+    public boolean playSound = true;
 
     public Duck() {
         super(C, CardRarity.COMMON, CardTarget.SELF);
@@ -23,10 +27,12 @@ public class Duck extends BaseCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    public void apply(AbstractCreature p, AbstractCreature m) {
         addToBot(new GainBlockAction(p, p, block));
-        addToBot(new ApplyPowerAction(p, p, new BlurPower(p, BLUR_AMT), BLUR_AMT));
-        addToBot(new SoundAction(GrackleMod.Sfx.QUACK));
+        addToBot(new ApplyPowerAction(p, p, new BlurPower(p, magicNumber), magicNumber));
+        if (playSound) {
+            addToBot(new SoundAction(GrackleMod.Sfx.QUACK));
+        }
     }
 
     @Override

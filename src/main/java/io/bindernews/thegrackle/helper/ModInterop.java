@@ -4,14 +4,21 @@ import basemod.BaseMod;
 import charbosses.actions.unique.EnemyChangeStanceAction;
 import charbosses.bosses.AbstractCharBoss;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import io.bindernews.bnsts.Lazy;
 import lombok.val;
 
 import java.util.function.Function;
+
+import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
+import static com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
 
 /**
  * Provides safe interoperability with one or more optional dependency mods
@@ -40,11 +47,18 @@ public class ModInterop {
         return null;
     }
 
-    public AbstractGameAction changeStance(AbstractCreature c, AbstractStance stance) {
+    public AbstractGameAction changeStance(AbstractCreature c, String stanceId) {
         if (c instanceof AbstractPlayer) {
-            return new ChangeStanceAction(stance);
+            return new ChangeStanceAction(stanceId);
         }
         return null;
+    }
+
+    public AbstractGameAction damageAllEnemies(AbstractCreature c, int[] amount, DamageType type, AttackEffect fx) {
+        if (c instanceof AbstractPlayer) {
+            return new DamageAllEnemiesAction(c, amount, type, fx);
+        }
+        return new DamageAction(AbstractDungeon.player, new DamageInfo(c, amount[0], type), fx);
     }
 
     public static ModInterop get() {
@@ -70,11 +84,11 @@ public class ModInterop {
         }
 
         @Override
-        public AbstractGameAction changeStance(AbstractCreature c, AbstractStance stance) {
+        public AbstractGameAction changeStance(AbstractCreature c, String stanceId) {
             if (c instanceof AbstractCharBoss) {
-                return new EnemyChangeStanceAction(stance.ID);
+                return new EnemyChangeStanceAction(stanceId);
             }
-            return next.changeStance(c, stance);
+            return next.changeStance(c, stanceId);
         }
     }
 }

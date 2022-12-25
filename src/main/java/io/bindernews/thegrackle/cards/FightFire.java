@@ -2,6 +2,7 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.actions.FightFireAction;
@@ -45,6 +46,11 @@ public class FightFire extends BaseCard {
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new FightFireAction(p, m, NUM.damage, magicNumber));
+    }
+
+    @Override
+    public void apply(AbstractCreature p, AbstractCreature m) {
+        throw new UnsupportedOperationException("FightFire only works with AbstractPlayer");
     }
 
     @Override

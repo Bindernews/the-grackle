@@ -20,6 +20,8 @@ import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -36,12 +38,18 @@ public class GrackleMod implements
     private static final String MOD_ID_COLON = MOD_ID + ":";
     public static final String MOD_RES = "grackleResources";
 
+    /** Cache of loaded textures */
     private static final HashMap<String, Texture> textureCache = new HashMap<>();
 
     public interface CO {
+        /** Root path for image resources */
         String RES_IMAGES = MOD_RES + "/images";
-        String RES_LANG = "grackleResources/localization";
+
+        /** Root path of localization resources */
+        String RES_LANG = MOD_RES + "/localization";
+
         String REG_START = "begin registering {}";
+
         String REG_END = "done registering {}";
     }
 
@@ -176,8 +184,8 @@ public class GrackleMod implements
                 new FiredUpCard(),
                 new FireTouch(),
                 new FireWithin(),
+                new Grenenade(),
                 new HenPeck(),
-                new HurricaneWind(),
                 new PhoenixFeather(),
                 new PhoenixForm(),
                 new SelfBurn(),
@@ -191,18 +199,22 @@ public class GrackleMod implements
         return list;
     }
 
-    public static Texture loadTexture(String path) {
-        return textureCache.computeIfAbsent(path, GrackleMod::newTextureOrNull);
-    }
-
-    private static Texture newTextureOrNull(String path) {
-        try {
-            val tex = new Texture(path);
-            tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-            return tex;
-        } catch (Exception e) {
-            return null;
-        }
+    /**
+     * Attempts to load and cache the texture at the given path.
+     * @param path Path of the texture to load
+     * @return Either the texture or {@code null} if not found
+     */
+    @Nullable
+    public static Texture loadTexture(@NotNull String path) {
+        return textureCache.computeIfAbsent(path, (path2) -> {
+            try {
+                val tex = new Texture(path2);
+                tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+                return tex;
+            } catch (Exception e) {
+                return null;
+            }
+        });
     }
 
     /**

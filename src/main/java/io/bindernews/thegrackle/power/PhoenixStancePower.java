@@ -28,13 +28,13 @@ public class PhoenixStancePower extends BasePower implements InvisiblePower {
 
     @Override
     public void onInitialApplication() {
-        addToBot(iop().changeStance(owner, new StancePhoenix()));
+        addToBot(iop().changeStance(owner, StancePhoenix.STANCE_ID));
     }
 
     @Override
     public void onChangeStance(AbstractStance oldStance, AbstractStance newStance) {
         if (!StancePhoenix.is(newStance)) {
-            addToBot(iop().changeStance(owner, new StancePhoenix()));
+            addToBot(iop().changeStance(owner, StancePhoenix.STANCE_ID));
         }
     }
 
@@ -43,7 +43,7 @@ public class PhoenixStancePower extends BasePower implements InvisiblePower {
         if (isPlayer) {
             addToTop(new RemoveSpecificPowerAction(owner, owner, this));
             addToBot(new ApplyPowerAction(owner, owner, new CoolingPhoenixPower(owner, 1)));
-            addToBot(iop().changeStance(owner, new NeutralStance()));
+            addToBot(iop().changeStance(owner, NeutralStance.STANCE_ID));
         }
     }
 
