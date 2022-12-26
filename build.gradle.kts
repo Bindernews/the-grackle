@@ -54,7 +54,7 @@ val mtsJar = findMod("ModTheSpire.jar")
 val RES_DIR = "grackleResources"
 
 group = "io.bindernews.thegrackle"
-version = "1.0-SNAPSHOT"
+version = "0.1-beta-1"
 
 repositories {
     mavenCentral()
@@ -203,6 +203,16 @@ tasks.register<IntellijRun>("genIntelliJRuns") {
             v2Options.add(V2Option.beforeLaunch("installJar"))
         }
     }
+    add {
+        name = "Run MTS with Downfall"
+        jar {
+            jarPath(mtsJar)
+            parameters("--mods basemod,stslib,downfall,grackle")
+            workingDirectory(stsHome)
+            alternateJre(file("$stsHome/jre"))
+            v2Options.add(V2Option.beforeLaunch("installJar"))
+        }
+    }
 }
 
 tasks.register("packagePatchedJar") {
@@ -279,7 +289,7 @@ abstract class ImageFilter(`in`: Reader) : FilterReader(`in`) {
     private val outReader: StringReader by lazy { loadImage() }
     val transformers = ArrayList<Transformer<BufferedImage, BufferedImage>>()
 
-    override fun read(cbuf: CharArray?, off: Int, len: Int): Int {
+    override fun read(cbuf: CharArray, off: Int, len: Int): Int {
         return outReader.read(cbuf, off, len)
     }
 

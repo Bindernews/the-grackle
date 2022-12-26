@@ -1,13 +1,18 @@
 package io.bindernews.thegrackle.stance;
 
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.StanceStrings;
-import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.MiscUtil;
-import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.localization.StanceStrings;
 import com.megacrit.cardcrawl.stances.AbstractStance;
+import com.megacrit.cardcrawl.stances.NeutralStance;
+import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.power.CoolingPhoenixPower;
+
+import static io.bindernews.thegrackle.MiscUtil.addToBot;
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
 public class StancePhoenix extends AbstractStance {
     public static final String STANCE_ID = GrackleMod.makeId(StancePhoenix.class);
@@ -18,9 +23,14 @@ public class StancePhoenix extends AbstractStance {
      */
     private static final StanceAloft aloftInst = new StanceAloft();
 
+    public AbstractCreature owner;
+    public boolean canExitStance;
+
     public StancePhoenix() {
         ID = STANCE_ID;
         name = STRINGS.NAME;
+        owner = AbstractDungeon.player;
+        canExitStance = true;
         updateDescription();
     }
 
@@ -38,16 +48,23 @@ public class StancePhoenix extends AbstractStance {
     }
 
     @Override
+    public void onEnterStance() {
+        canExitStance = false;
+    }
+
+    @Override
     public void onExitStance() {
         // If the turn has not ended then go back into our stance
-        if (!AbstractDungeon.actionManager.turnHasEnded) {
-            MiscUtil.addToBot(new ChangeStanceAction(new StancePhoenix()));
+        if (!canExitStance) {
+            addToBot(iop().changeStance(owner, StancePhoenix.STANCE_ID));
         }
     }
 
     @Override
-    public void onEndOfTurn() {
-
+    public void atStartOfTurn() {
+        canExitStance = true;
+        addToBot(new ApplyPowerAction(owner, owner, new CoolingPhoenixPower(owner, 1)));
+        addToBot(iop().changeStance(owner, NeutralStance.STANCE_ID));
     }
 
     @Override

@@ -15,6 +15,7 @@ import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.cards.*;
 import io.bindernews.thegrackle.helper.MultiHitManager;
 import io.bindernews.thegrackle.icons.IconHelper;
+import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
@@ -131,7 +132,7 @@ public class GrackleMod implements
     private void registerPowers() {
         log.debug("registering powers");
         AutoAdd aa = new AutoAdd(MOD_ID);
-        aa.packageFilter(GrackleMod.class);
+        aa.packageFilter(BasePower.class);
         for (val c : MiscUtil.autoFindClasses(aa, AbstractPower.class)) {
             MiscUtil.registerPower(c);
         }

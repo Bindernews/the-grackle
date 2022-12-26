@@ -24,5 +24,13 @@
       "peck"
     ],
     "DESCRIPTION": "Increases number of hits for next multi-hit attacks."
+  },
+  {
+    "PROPER_NAME": "Aloft",
+    "NAMES": [
+      "Aloft",
+      "aloft"
+    ],
+    "DESCRIPTION": "In this #yStance, you deal and receive half attack damage."
   }
 ]

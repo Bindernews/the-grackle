@@ -9,7 +9,9 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.*;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.EnergyManager;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -61,20 +63,22 @@ public class Grackle extends CustomPlayer {
         String SKILL_DEFAULT_GRAY = RES_IMAGES + "/512/bg_skill_default_gray.png";
         String POWER_DEFAULT_GRAY = RES_IMAGES + "/512/bg_power_default_gray.png";
 
-        String ENERGY_ORB_DEFAULT_GRAY = RES_IMAGES + "/512/card_default_gray_orb.png";
+        String ENERGY_ORB = RES_IMAGES + "/512/card_default_gray_orb.png";
         String CARD_ENERGY_ORB = RES_IMAGES + "/512/card_small_orb.png";
 
         String ATTACK_DEFAULT_GRAY_PORTRAIT = RES_IMAGES + "/1024/bg_attack_default_gray.png";
         String SKILL_DEFAULT_GRAY_PORTRAIT = RES_IMAGES + "/1024/bg_skill_default_gray.png";
         String POWER_DEFAULT_GRAY_PORTRAIT = RES_IMAGES + "/1024/bg_power_default_gray.png";
+        String ENERGY_ORB_PORTRAIT = RES_IMAGES + "/1024/orb_portrait.png";
 
 
         static void registerColor() {
             Color C1 = Grackle.En.COLOR_MAIN;
             BaseMod.addColor(Grackle.En.COLOR_BLACK, C1, C1, C1, C1, C1, C1, C1,
                     ATTACK_DEFAULT_GRAY, SKILL_DEFAULT_GRAY, POWER_DEFAULT_GRAY,
-                    ENERGY_ORB_DEFAULT_GRAY, CARD_ENERGY_ORB,
-                    ATTACK_DEFAULT_GRAY_PORTRAIT, SKILL_DEFAULT_GRAY_PORTRAIT, POWER_DEFAULT_GRAY_PORTRAIT);
+                    ENERGY_ORB,
+                    ATTACK_DEFAULT_GRAY_PORTRAIT, SKILL_DEFAULT_GRAY_PORTRAIT, POWER_DEFAULT_GRAY_PORTRAIT,
+                    ENERGY_ORB_PORTRAIT, CARD_ENERGY_ORB);
         }
     }
 

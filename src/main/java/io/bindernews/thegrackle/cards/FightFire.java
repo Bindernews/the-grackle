@@ -40,7 +40,7 @@ public class FightFire extends BaseCard {
 
     public void updateBaseDamage() {
         int burnCount = BurnHelper.countBurnsInGroup(BurnHelper.getDiscard());
-        baseDamage = NUM.damage + burnCount * magicNumber;
+        baseDamage = NUM.damage + (burnCount * magicNumber);
     }
 
     @Override

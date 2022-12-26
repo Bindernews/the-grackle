@@ -52,7 +52,8 @@
   },
   "grackle:BufferInputs": {
     "NAME": "Buffer Inputs",
-    "DESCRIPTION": "Gain !M! grackle:Peck . NL Exhaust ."
+    "DESCRIPTION": "Gain !M! grackle:Peck . NL Exhaust .",
+    "FLAVOR": "Two full steps and one half-step will get me back on step-route. ~tinahacks"
   },
   "grackle:PowerC": {
     "NAME": "Power Common",
@@ -98,7 +99,7 @@
   "grackle:Grenenade": {
     "NAME": "Grenenade",
     "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times.",
-    "FLAVOR": "Nene's green grenades!",
+    "FLAVOR": "Nene's great grenades!",
     "EXTENDED_DESCRIPTION": [
       "Gre", "ne", "nade"
     ]

@@ -67,6 +67,10 @@ public class MiscUtil {
         AbstractDungeon.actionManager.addToBottom(a);
     }
 
+    public static void addToTop(AbstractGameAction a) {
+        AbstractDungeon.actionManager.addToTop(a);
+    }
+
 
     private static final HashMap<Class<?>, String> stringTypeMap = new HashMap<>();
     static {
