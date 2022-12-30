@@ -185,6 +185,7 @@ public class GrackleMod implements
                 new FiredUpCard(),
                 new FireTouch(),
                 new FireWithin(),
+                new Flock(),
                 new Grenenade(),
                 new HenPeck(),
                 new PhoenixFeather(),

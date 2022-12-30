@@ -13,9 +13,8 @@ import java.io.FilterReader
 import java.io.Reader
 import java.io.Serializable
 import java.io.StringReader
-import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.CountDownLatch
 import javax.imageio.ImageIO
-import kotlin.concurrent.withLock
 
 val modName = "TheGrackle"
 
@@ -110,51 +109,65 @@ run {
     val resOut = "$buildDir/resources/main/$RES_DIR"
     val packerTmp = "$buildDir/generated/images"
 
-    tasks.register<ImageCopy>("resizeImages") {
+    val tResizeImages = tasks.register<ImageCopy>("resizeImages") {
         val src = "$resRoot/images"
         from("$src/1024") {
             include("*.png")
             filterResize(512, 512)
-            into("512")
         }
         from("$src/energy") {
             include("energy_orb.png")
             rename { _ -> "card_small_orb.png" }
             filterResize(22, 22)
-            into("512")
         }
-        from("$src/energy") {
-            include("energy_orb.png")
-            into("1024")
-        }
-        into("$resOut/images")
+        into("$resOut/images/512")
     }
 
-    val shrinkCards = tasks.register<ImageCopy>("shrinkCards") {
+    val tCopyEnergy = tasks.register<ImageCopy>("copyEnergy") {
+        from("$resRoot/images/energy")
+        include("energy_orb.png")
+        into("$resOut/images/1024")
+    }
+
+    val tMaskCards = tasks.register<ImageCopy>("maskCards") {
+        val cardsRoot = "$resRoot/images/cards"
+        from("$cardsRoot/attack") {
+            filterMask(file("$cardsRoot/attack/attack_mask.png"))
+        }
+        from("$cardsRoot/power") {
+            filterMask(file("$cardsRoot/power/power_mask.png"))
+        }
+        from("$cardsRoot/skill") {
+        }
+        include("*_p.png")
+        into("$resOut/images/cards")
+    }
+
+    val tPackCards = tasks.register<ImageCopy>("packCards") {
         // Resize all _p cards to be smaller
-        from("$resRoot/images/cards") {
-            // Real size is 250x190, but this is going from the base game card atlas sizes
-            filterResize(248, 186)
-            changeSuffix("_p.png", ".png")
-        }
+        // Real size is 250x190, but this is going from the base game card atlas sizes
+        dependsOn(tMaskCards)
+        from("$resOut/images/cards")
+        filterResize(248, 186)
+        changeSuffix("_p.png", ".png")
         into("$packerTmp/cards")
+
+        packImages {
+            grid = true
+            source("$packerTmp/cards")
+            output("$resOut/images/cards/cards.atlas")
+        }.forTask(this)
     }
 
-    tasks.register<PackTextureTask>("packCards") {
+    val tPackIcons = tasks.register("packIcons") {
         group = "images"
-        dependsOn(shrinkCards)
-        grid.set(true)
-        source("$packerTmp/cards")
-        output("$resOut/images/cards/cards.atlas")
+        packImages {
+            source("$resRoot/images/icons")
+            output("$resOut/images/icons.atlas")
+        }.forTask(this)
     }
 
-    val packIcons = tasks.register<PackTextureTask>("packIcons") {
-        group = "images"
-        source("$resRoot/images/icons")
-        output("$resOut/images/icons.atlas")
-    }
-
-    val resizePowers = tasks.register<ImageCopy>("resizePowerImages") {
+    val tResizePowers = tasks.register<ImageCopy>("resizePowerImages") {
         from("$resRoot/images/powers") {
             include("*.png")
             filterResize(48, 48)
@@ -166,16 +179,14 @@ run {
             into("128")
         }
         into("$packerTmp/powers")
+
+        packImages {
+            source("$packerTmp/powers")
+            output("$resOut/images/powers/powers.atlas")
+        }.forTask(this)
     }
 
-    val packPowers = tasks.register<PackTextureTask>("packPowers") {
-        group = "images"
-        dependsOn(resizePowers)
-        source("$packerTmp/powers")
-        output("$resOut/images/powers/powers.atlas")
-    }
-
-    val relicOutlines = tasks.register<ImageCopy>("relicOutlines") {
+    val tRelicOutlines = tasks.register<ImageCopy>("relicOutlines") {
         from("$resRoot/images/relics") {
             changeSuffix(".png", "_o.png")
             filter(OutlineFilter::class)
@@ -184,10 +195,10 @@ run {
     }
 
     tasks.getByName<Copy>("processResources") {
-        dependsOn("resizeImages", "packCards", packIcons, packPowers, relicOutlines)
-        // Exclude directories that are directly being packed
+        dependsOn(tResizeImages, tPackIcons, tPackCards, tMaskCards, tResizePowers, tRelicOutlines, tCopyEnergy)
+        // Exclude directories that are directly being packed or manually copied
         val resImg = "grackleResources/images"
-        exclude("$resImg/icons", "$resImg/powers")
+        exclude("$resImg/icons", "$resImg/powers", "$resImg/cards")
     }
 }
 
@@ -271,17 +282,31 @@ abstract class ImageFilter(`in`: Reader) : FilterReader(`in`) {
     companion object {
         const val BINARY_CHARSET = "ISO-8859-1"
 
-        fun makeBuffered(src: Image): BufferedImage {
-            if (src is BufferedImage) {
-                return src
+        fun Image.makeBuffered(): BufferedImage {
+            if (this is BufferedImage) {
+                return this
             }
-            val w = src.getWidth(null)
-            val h = src.getHeight(null)
+
+            val imageReady = CountDownLatch(1)
+            val observer = ImageObserver { _, flags, _, _, _, _ ->
+                val done = flags.and(ImageObserver.ALLBITS.or(ImageObserver.ABORT)) > 0
+                if (done) {
+                    imageReady.countDown()
+                }
+                done
+            }
+
+            var w = getWidth(observer)
+            var h = getHeight(observer)
+            if (w == -1 || h == -1) {
+                imageReady.await()
+                w = getWidth(null)
+                h = getHeight(null)
+            }
             val buf = BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB)
-            val waiter = WaitObserver()
-            if (!buf.graphics.drawImage(src, 0, 0, w, h, waiter)) {
-                waiter.waitFor()
-            }
+            val g = buf.createGraphics()
+            g.drawImage(this, 0, 0, w, h, null)
+            g.dispose()
             return buf
         }
     }
@@ -307,31 +332,6 @@ abstract class ImageFilter(`in`: Reader) : FilterReader(`in`) {
     }
 
     abstract fun processImage(src: BufferedImage): BufferedImage
-
-    class WaitObserver : ImageObserver {
-        private val lock = ReentrantLock()
-        private val cond = lock.newCondition()
-        private var done = false
-
-        override fun imageUpdate(img: Image, infoflags: Int, x: Int, y: Int, width: Int, height: Int): Boolean {
-            if (infoflags and ImageObserver.ALLBITS > 0) {
-                lock.withLock {
-                    done = true
-                    cond.signalAll()
-                }
-                return false
-            }
-            return true
-        }
-
-        fun waitFor() {
-            lock.withLock {
-                if (!done) {
-                    cond.await()
-                }
-            }
-        }
-    }
 }
 
 class ResizeFilter(`in`: Reader) : ImageFilter(`in`) {
@@ -341,11 +341,25 @@ class ResizeFilter(`in`: Reader) : ImageFilter(`in`) {
     override fun processImage(src: BufferedImage): BufferedImage {
         val nWidth = if (width == -1) src.width else width
         val nHeight = if (height == -1) src.height else height
-        val scaled = src.getScaledInstance(nWidth, nHeight, BufferedImage.SCALE_SMOOTH)
-        return makeBuffered(scaled)
+        return src.getScaledInstance(nWidth, nHeight, BufferedImage.SCALE_SMOOTH).makeBuffered()
     }
 }
 
+class MaskFilter(`in`: Reader) : ImageFilter(`in`) {
+    var mask: File? = null
+
+    override fun processImage(src: BufferedImage): BufferedImage {
+        val maskImg = ImageIO.read(mask!!)
+        for (y in 0 until src.height) {
+            for (x in 0 until src.width) {
+                if (maskImg.alphaRaster.getSample(x, y, 0) == 0) {
+                    src.alphaRaster.setSample(x, y, 0, 0)
+                }
+            }
+        }
+        return src
+    }
+}
 
 class OutlineFilter(`in`: Reader) : ImageFilter(`in`) {
     override fun processImage(src: BufferedImage): BufferedImage {
@@ -363,57 +377,45 @@ class OutlineFilter(`in`: Reader) : ImageFilter(`in`) {
     }
 }
 
-abstract class PackTextureTask : DefaultTask() {
-    @get:Input
-    val maxWidth: Property<Int> = project.objects.property()
-    @get:Input
-    val maxHeight: Property<Int> = project.objects.property()
-    @get:Input
-    val grid: Property<Boolean> = project.objects.property()
-    @get:InputDirectory
-    val inputDir: Property<File> = project.objects.property()
-    @get:OutputFile
-    abstract val outputPath: Property<File>
-    private var filter: FilenameFilter = FilenameFilter { _, _ -> true }
 
-    init {
-        maxWidth.convention(4096)
-        maxHeight.convention(4096)
-        grid.convention(false)
-    }
+interface PackTextureSpec : Serializable {
+    var maxWidth: Int
+    var maxHeight: Int
+    var grid: Boolean
+    var inputDir: File
+    var output: File?
+    var filter: FilenameFilter
 
     fun filter(f: (File, String) -> Boolean) {
         this.filter = FilenameFilter(f)
     }
 
-    fun source(path: Any) {
-        inputDir.set(project.file(path))
+    fun source(path: Any)
+    fun output(path: Any)
+
+    fun forTask(t: Task) {
+        t.outputs.file(this.output!!)
+        t.doLast("TexturePackSpec.pack") { pack() }
     }
 
-    fun output(path: Any) {
-        outputPath.set(project.file(path))
-    }
-
-    @TaskAction
-    fun pack() {
-        val input = inputDir.get()
-        val outputRoot = outputPath.get().parentFile
-        val packName = outputPath.get().name
+    fun pack(): Boolean {
+        val outputRoot = output!!.parentFile
+        val packName = output!!.name
         val cfg = TexturePacker.Settings()
-        cfg.maxHeight = maxHeight.get()
-        cfg.maxWidth = maxWidth.get()
-        cfg.grid = grid.get()
+        cfg.maxHeight = maxHeight
+        cfg.maxWidth = maxWidth
+        cfg.grid = grid
         cfg.combineSubdirectories = true
         cfg.filterMag = com.badlogic.gdx.graphics.Texture.TextureFilter.Linear
         cfg.filterMin = cfg.filterMag
 
-        didWork = if (TexturePacker.isModified("" + input, "" + outputRoot, packName)) {
+        val didWork = if (TexturePacker.isModified("" + inputDir, "" + outputRoot, packName)) {
             try {
                 val processor = TexturePackerFileProcessor(cfg, packName)
                 // Sort input files by name to avoid platform-dependent atlas output changes.
                 processor.setComparator(Comparator<File> { file1, file2 -> file1.name.compareTo(file2.name) })
                 processor.setInputFilter(filter)
-                processor.process(input, outputRoot)
+                processor.process(inputDir, outputRoot)
             } catch (ex: Exception) {
                 throw RuntimeException("Error packing images.", ex)
             }
@@ -421,7 +423,29 @@ abstract class PackTextureTask : DefaultTask() {
         } else {
             false
         }
+        return didWork
     }
+
+    open class Impl(private val project: Project) : PackTextureSpec {
+        override var maxWidth: Int = 4096
+        override var maxHeight: Int = 4096
+        override var grid: Boolean = false
+        override var inputDir: File = File("")
+        override var output: File? = null
+        override var filter: FilenameFilter = FilenameFilter { _, _ -> true }
+
+        override fun source(path: Any) {
+            inputDir = project.file(path)
+        }
+
+        override fun output(path: Any) {
+            output = project.file(path)
+        }
+    }
+}
+
+fun packImages(cf: Action<in PackTextureSpec>): PackTextureSpec {
+    return PackTextureSpec.Impl(project).apply { cf.execute(this) }
 }
 
 open class ImageCopy : Copy() {
@@ -431,7 +455,12 @@ open class ImageCopy : Copy() {
     }
 
     fun CopySpec.filterResize(width: Int, height: Int) {
+//        println("filterResize w = $width, h = $height")
         filter(ResizeFilter::class, "width" to width, "height" to height)
+    }
+
+    fun CopySpec.filterMask(file: File) {
+        filter(MaskFilter::class, "mask" to file)
     }
 
     /**

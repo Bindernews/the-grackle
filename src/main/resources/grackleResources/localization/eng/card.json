@@ -1,59 +1,79 @@
 {
-  "grackle:Strike_GK": {
-    "NAME": "Strike",
+  "grackle:AerialAce": {
+    "NAME": "Aerial Ace",
     "DESCRIPTION": "Deal !D! damage."
   },
-  "grackle:Defend_GK": {
-    "NAME": "Defend",
-    "DESCRIPTION": "Gain !B! Block."
+  "grackle:AttackR": {
+    "NAME": "Attack Rare",
+    "DESCRIPTION": "Deal !D! damage."
   },
-  "grackle:PhoenixFeather": {
-    "NAME": "Phoenix Feather",
-    "DESCRIPTION": "At the end of combat, heal !M! HP."
+  "grackle:BufferInputs": {
+    "NAME": "Buffer Inputs",
+    "DESCRIPTION": "Gain !M! grackle:Peck . NL Exhaust .",
+    "FLAVOR": "Two full steps and one half-step will get me back on step-route. ~tinahacks"
   },
-  "grackle:Takeoff": {
-    "NAME": "Takeoff",
-    "DESCRIPTION": "Gain !B! Block. Enter grackle:Aloft."
-  },
-  "grackle:CrashLanding": {
-    "NAME": "Crash Landing",
-    "DESCRIPTION": "Must be grackle:Aloft. NL Deal !D! damage. Exit grackle:Aloft."
-  },
-  "grackle:HurricaneWind": {
-    "NAME": "Hurricane Wind",
-    "DESCRIPTION": "Deal !D! damage to ALL enemies X times."
+  "grackle:BurnCream": {
+    "NAME": "Burn Cream",
+    "DESCRIPTION": "Whenever you draw a Status card, draw !M! card."
   },
   "grackle:Cackle": {
     "NAME": "Cackle",
     "DESCRIPTION": "Apply !M! Vulnerable and !M! Weak."
   },
-  "grackle:AerialAce": {
-    "NAME": "Aerial Ace",
-    "DESCRIPTION": "Deal !D! damage."
+  "grackle:CrashLanding": {
+    "NAME": "Crash Landing",
+    "DESCRIPTION": "Must be grackle:Aloft. NL Deal !D! damage. Exit grackle:Aloft."
+  },
+  "grackle:Defend_GK": {
+    "NAME": "Defend",
+    "DESCRIPTION": "Gain !B! Block."
+  },
+  "grackle:Duck": {
+    "NAME": "Duck!",
+    "DESCRIPTION": "Gain !B! Block. NL Block is not removed at the start of your next turn. NL Quack."
   },
   "grackle:FightFire": {
     "NAME": "Fight Fire",
     "DESCRIPTION": "Exhaust each *Burn in your discard pile. NL Deals %s + !M! damage for each card exhausted NL (Deals !D! damage.)",
     "FLAVOR": "...with fire."
   },
-  "grackle:AttackR": {
-    "NAME": "Attack Rare",
-    "DESCRIPTION": "Deal !D! damage."
+  "grackle:FireTouch": {
+    "NAME": "Fire Touch",
+    "DESCRIPTION": "Apply !M! grackle:Burning."
   },
-  "grackle:SelfBurn": {
-    "NAME": "Self Burn",
-    "DESCRIPTION": "Draw !M! cards. NL Add a *Burn to your discard pile.",
-    "FLAVOR": "Do you want some burn cream for that?"
+  "grackle:FireWithin": {
+    "NAME": "Fire Within",
+    "DESCRIPTION": "At the start of your turn, gain !M! Fireheart."
   },
-  "grackle:TryThatAgain": {
-    "NAME": "Let's Try That Again",
-    "DESCRIPTION": "Discard your hand, NL then draw that many cards.",
-    "FLAVOR": "A Game Over is only temporary."
+  "grackle:FiredUpCard": {
+    "NAME": "Fired Up",
+    "DESCRIPTION": "Gain !M! grackle:Fired_Up."
   },
-  "grackle:BufferInputs": {
-    "NAME": "Buffer Inputs",
-    "DESCRIPTION": "Gain !M! grackle:Peck . NL Exhaust .",
-    "FLAVOR": "Two full steps and one half-step will get me back on step-route. ~tinahacks"
+  "grackle:Flock": {
+    "NAME": "Flock",
+    "DESCRIPTION": "Deal !D! damage !grackle:hits! times. NL Increase the hits of ALL Flock cards by !M! this combat."
+  },
+  "grackle:Grenenade": {
+    "NAME": "Grenenade",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times.",
+    "FLAVOR": "Nene's great grenades!",
+    "EXTENDED_DESCRIPTION": [
+      "Gre",
+      "ne",
+      "nade"
+    ]
+  },
+  "grackle:HenPeck": {
+    "NAME": "Hen Peck",
+    "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
+  },
+  "grackle:HurricaneWind": {
+    "NAME": "Hurricane Wind",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies X times."
+  },
+  "grackle:PhoenixFeather": {
+    "NAME": "Phoenix Feather",
+    "DESCRIPTION": "At the end of combat, heal !M! HP."
   },
   "grackle:PowerC": {
     "NAME": "Power Common",
@@ -63,45 +83,31 @@
     "NAME": "Power Uncommon",
     "DESCRIPTION": "Gain !B! Block."
   },
+  "grackle:SelfBurn": {
+    "NAME": "Self Burn",
+    "DESCRIPTION": "Draw !M! cards. NL Add a *Burn to your discard pile.",
+    "FLAVOR": "Do you want some burn cream for that?"
+  },
+  "grackle:Strike_GK": {
+    "NAME": "Strike",
+    "DESCRIPTION": "Deal !D! damage."
+  },
   "grackle:SummonEgrets": {
     "NAME": "Summon Egrets",
     "DESCRIPTION": "Deal !D! damage to ALL enemies X times.",
     "FLAVOR": "[grackle:MusicNoteIcon] And Some Egrets in a pear tree [grackle:MusicNoteIcon]"
   },
-  "grackle:FiredUpCard": {
-    "NAME": "Fired Up",
-    "DESCRIPTION": "Gain !M! grackle:Fired_Up."
-  },
-  "grackle:BurnCream": {
-    "NAME": "Burn Cream",
-    "DESCRIPTION": "Whenever you draw a Status card, draw !M! card."
-  },
-  "grackle:Duck": {
-    "NAME": "Duck!",
-    "DESCRIPTION": "Gain !B! Block. NL Block is not removed at the start of your next turn. NL Quack."
+  "grackle:Takeoff": {
+    "NAME": "Takeoff",
+    "DESCRIPTION": "Gain !B! Block. Enter grackle:Aloft."
   },
   "grackle:TargetingComputer": {
     "NAME": "Targeting Computer",
     "DESCRIPTION": "At the start of your turn, gain !M! Vigor."
   },
-  "grackle:FireWithin": {
-    "NAME": "Fire Within",
-    "DESCRIPTION": "At the start of your turn, gain !M! Fireheart."
-  },
-  "grackle:FireTouch": {
-    "NAME": "Fire Touch",
-    "DESCRIPTION": "Apply !M! grackle:Burning."
-  },
-  "grackle:HenPeck": {
-    "NAME": "Hen Peck",
-    "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
-  },
-  "grackle:Grenenade": {
-    "NAME": "Grenenade",
-    "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times.",
-    "FLAVOR": "Nene's great grenades!",
-    "EXTENDED_DESCRIPTION": [
-      "Gre", "ne", "nade"
-    ]
+  "grackle:TryThatAgain": {
+    "NAME": "Let's Try That Again",
+    "DESCRIPTION": "Discard your hand, NL then draw that many cards.",
+    "FLAVOR": "A Game Over is only temporary."
   }
 }
