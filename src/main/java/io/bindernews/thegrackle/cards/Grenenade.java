@@ -43,12 +43,17 @@ public class Grenenade extends BaseCard implements ExtraHitsVariable.Mixin {
     }
 
     @Override
+    public boolean canUpgrade() {
+        return true;
+    }
+
+    @Override
     public void upgrade() {
         upgradeName();
         // Odd upgrades (1st, 3rd, etc.) will upgrade hit count
         // Even upgrades will upgrade damage amount
         if (timesUpgraded % 2 == 0) {
-            upgradeDamage(1);
+            upgradeDamage(2);
         } else {
             ExtraHitsVariable.inst.upgrade(this, 1);
         }

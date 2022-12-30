@@ -1,14 +1,8 @@
 {
-  "grackle:FireheartPower": {
-    "NAME": "Fireheart",
+  "grackle:BurnCreamPower": {
+    "NAME": "Burn Cream",
     "DESCRIPTIONS": [
-      "At 10 Fireheat, enter Phoenix Stance"
-    ]
-  },
-  "grackle:FireWithinPower": {
-    "NAME": "Fire Within",
-    "DESCRIPTIONS": [
-      "Gain %d Fireheart at the start of each turn."
+      "Exhausts *Burn cards in hand at the end of your turn."
     ]
   },
   "grackle:CoolingPhoenixPower": {
@@ -17,14 +11,10 @@
       "Cannot enter Phoenix Stance."
     ]
   },
-  "grackle:PhoenixStancePower": {
-    "NAME": "Phoenix Stance",
-    "DESCRIPTIONS": [""]
-  },
-  "grackle:TargetingComputerPower": {
-    "NAME": "Targeting Computer",
+  "grackle:FireWithinPower": {
+    "NAME": "Fire Within",
     "DESCRIPTIONS": [
-      "Gain %d Vigor at the start of each turn."
+      "Gain %d Fireheart at the start of each turn."
     ]
   },
   "grackle:FiredUpPower": {
@@ -33,10 +23,28 @@
       "Gain %d Vigor whenever a Burn card is exhausted."
     ]
   },
+  "grackle:FireheartPower": {
+    "NAME": "Fireheart",
+    "DESCRIPTIONS": [
+      "At 10 Fireheat, enter Phoenix Stance"
+    ]
+  },
   "grackle:MultiHitPower": {
     "NAME": "Multi-Hit",
     "DESCRIPTIONS": [
       "The next multi-attack you play will hit %d extra times."
+    ]
+  },
+  "grackle:PhoenixStancePower": {
+    "NAME": "Phoenix Stance",
+    "DESCRIPTIONS": [
+      ""
+    ]
+  },
+  "grackle:TargetingComputerPower": {
+    "NAME": "Targeting Computer",
+    "DESCRIPTIONS": [
+      "Gain %d Vigor at the start of each turn."
     ]
   }
 }

@@ -59,4 +59,12 @@ public abstract class BaseCard extends CustomCard {
     public static TextureAtlas getCards() {
         return cards.get();
     }
+
+    /**
+     * Should be used in {@link BaseCard#apply} to indicate that the card is only applicable to players,
+     * not downfall enemy bosses.
+     */
+    public static void throwPlayerOnly() {
+        throw new UnsupportedOperationException("FightFire only works with AbstractPlayer");
+    }
 }

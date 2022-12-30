@@ -2,20 +2,19 @@ package io.bindernews.thegrackle.actions;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import io.bindernews.thegrackle.helper.BurnHelper;
 import lombok.val;
 
-import static io.bindernews.thegrackle.helper.BurnHelper.exhaustBurnsInGroup;
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
 public class FightFireAction extends AbstractGameAction {
-    private final AbstractPlayer player;
     private final int baseDmg;
 
-    public FightFireAction(AbstractPlayer player, AbstractCreature target, int baseDmg, int damageMultiplier) {
-        this.source = player;
-        this.player = player;
+    public FightFireAction(AbstractCreature source, AbstractCreature target, int baseDmg, int damageMultiplier) {
+        this.source = source;
         this.target = target;
         this.baseDmg = baseDmg;
         this.amount = damageMultiplier;
@@ -25,9 +24,11 @@ public class FightFireAction extends AbstractGameAction {
     @Override
     public void update() {
         isDone = true;
-        if (target != null && target.currentHealth > 0) {
-            val dmg = baseDmg + (exhaustBurnsInGroup(player.discardPile) * amount);
-            addToTop(new DamageAction(target, new DamageInfo(player, dmg, damageType), attackEffect));
+        val discardPile = iop().getCardsByType(source, CardGroup.CardGroupType.DISCARD_PILE)
+                .orElse(null);
+        if (target != null && target.currentHealth > 0 && discardPile != null) {
+            val dmg = baseDmg + (BurnHelper.exhaustBurnsInGroup(discardPile) * amount);
+            addToTop(new DamageAction(target, new DamageInfo(source, dmg, damageType), attackEffect));
         }
     }
 }

@@ -14,7 +14,11 @@
   },
   "grackle:BurnCream": {
     "NAME": "Burn Cream",
-    "DESCRIPTION": "Whenever you draw a Status card, draw !M! card."
+    "DESCRIPTION": "Exhausts *Burn cards in hand at the end of your turn.",
+    "EXTENDED_DESCRIPTION": [
+      "NL Whenever you draw a Status card, draw !M! card"
+    ],
+    "FLAVOR": "You want some burn cream for that?"
   },
   "grackle:Cackle": {
     "NAME": "Cackle",
@@ -55,7 +59,7 @@
   },
   "grackle:Grenenade": {
     "NAME": "Grenenade",
-    "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times.",
+    "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times. NL May be upgraded multiple times.",
     "FLAVOR": "Nene's great grenades!",
     "EXTENDED_DESCRIPTION": [
       "Gre",

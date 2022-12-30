@@ -3,7 +3,9 @@ import com.badlogic.gdx.tools.texturepacker.TexturePackerFileProcessor
 import groovy.util.Node
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.ReaderInputStream
+import java.awt.Dimension
 import java.awt.Image
+import java.awt.Rectangle
 import java.awt.image.BufferedImage
 import java.awt.image.ImageObserver
 import java.io.ByteArrayOutputStream
@@ -119,6 +121,12 @@ run {
             include("energy_orb.png")
             rename { _ -> "card_small_orb.png" }
             filterResize(22, 22)
+        }
+        // Make orb in top-left corner
+        from("$src/energy") {
+            include("energy_orb.png")
+            rename { _ -> "card_default_gray_orb.png" }
+            filter(MoveEnergyOrbFilter::class)
         }
         into("$resOut/images/512")
     }
@@ -374,6 +382,22 @@ class OutlineFilter(`in`: Reader) : ImageFilter(`in`) {
             }
         }
         return src
+    }
+}
+
+class MoveEnergyOrbFilter(`in`: Reader) : ImageFilter(`in`) {
+    var orbArea = Rectangle(82, 22, 82, 82)
+    var imgSize = Dimension(512, 512)
+
+    override fun processImage(src: BufferedImage): BufferedImage {
+        val dst = BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_INT_ARGB)
+        val g = dst.createGraphics()
+        try {
+            g.drawImage(src, orbArea.x, orbArea.y, orbArea.width, orbArea.height, null)
+        } finally {
+            g.dispose()
+        }
+        return dst
     }
 }
 
