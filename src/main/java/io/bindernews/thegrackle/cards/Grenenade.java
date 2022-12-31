@@ -32,13 +32,19 @@ public class Grenenade extends BaseCard implements ExtraHitsVariable.Mixin {
     @Override
     protected void upgradeName() {
         super.upgradeName();
-        val nameParts = C.getStrings().EXTENDED_DESCRIPTION;
+        int neCount = timesUpgraded;
+        if (neCount > 8) {
+            neCount = 1;
+        }
         val sb = new StringBuilder();
+        val nameParts = C.getStrings().EXTENDED_DESCRIPTION;
         sb.append(nameParts[0]);
-        for (int i = 0; i < timesUpgraded; i++) {
+        for (int i = 0; i < neCount; i++) {
             sb.append(nameParts[1]);
         }
         sb.append(nameParts[2]);
+        sb.append('+');
+        sb.append(timesUpgraded);
         name = sb.toString();
     }
 

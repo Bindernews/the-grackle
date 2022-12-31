@@ -86,6 +86,7 @@ tasks.getByName<Test>("test") {
 tasks.getByName<JavaCompile>("compileJava") {
     sourceCompatibility = "1.8"
     targetCompatibility = "1.8"
+    options.encoding = "UTF-8"
 }
 
 tasks.register<Copy>("copySteamLibs") {
@@ -226,7 +227,7 @@ tasks.register<IntellijRun>("genIntelliJRuns") {
         name = "Run MTS with Downfall"
         jar {
             jarPath(mtsJar)
-            parameters("--mods basemod,stslib,downfall,grackle")
+            parameters("--mods basemod,stslib,downfall,grackle --skip-intro")
             workingDirectory(stsHome)
             alternateJre(file("$stsHome/jre"))
             v2Options.add(V2Option.beforeLaunch("installJar"))
