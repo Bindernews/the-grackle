@@ -1,6 +1,7 @@
 package io.bindernews.thegrackle.stance;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.watcher.SkipEnemiesTurnAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -65,6 +66,11 @@ public class StancePhoenix extends AbstractStance {
         canExitStance = true;
         addToBot(new ApplyPowerAction(owner, owner, new CoolingPhoenixPower(owner, 1)));
         addToBot(iop().changeStance(owner, NeutralStance.STANCE_ID));
+    }
+
+    @Override
+    public void onEndOfTurn() {
+        addToBot(new SkipEnemiesTurnAction());
     }
 
     @Override

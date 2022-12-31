@@ -194,6 +194,7 @@ public class GrackleMod implements
                 new BufferInputs(),
                 new Strike_GK(),
                 new SummonEgrets(),
+                new Swoop(),
                 new Takeoff(),
                 new TargetingComputer(),
                 new TryThatAgain()

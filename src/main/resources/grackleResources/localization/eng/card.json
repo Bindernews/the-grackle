@@ -26,7 +26,7 @@
   },
   "grackle:CrashLanding": {
     "NAME": "Crash Landing",
-    "DESCRIPTION": "Must be grackle:Aloft. NL Deal !D! damage. Exit grackle:Aloft."
+    "DESCRIPTION": "Must be grackle:Aloft. NL Deal !D! damage. Exit grackle:Aloft ."
   },
   "grackle:Defend_GK": {
     "NAME": "Defend",
@@ -100,6 +100,11 @@
     "NAME": "Summon Egrets",
     "DESCRIPTION": "Deal !D! damage to ALL enemies X times.",
     "FLAVOR": "[grackle:MusicNoteIcon] And Some Egrets in a pear tree [grackle:MusicNoteIcon]"
+  },
+  "grackle:Swoop": {
+    "NAME": "Swoop",
+    "DESCRIPTION": "Exit grackle:Aloft. NL At the end of your turn, enter grackle:Aloft .",
+    "FLAVOR": "Wheeee!"
   },
   "grackle:Takeoff": {
     "NAME": "Takeoff",

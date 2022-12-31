@@ -82,7 +82,7 @@ public class CardNums {
         }
         hUpgradeName.invoke(card);
         if (costUpg != -1) {
-            hUpgradeCost.invoke(card, costUpg - cost);
+            hUpgradeCost.invoke(card, costUpg);
         }
         if (damageUpg != -1) {
             hUpgradeDamage.invoke(card, damageUpg - damage);
