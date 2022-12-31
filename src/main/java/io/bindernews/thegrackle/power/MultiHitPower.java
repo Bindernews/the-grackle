@@ -33,7 +33,7 @@ public class MultiHitPower extends BasePower {
 
     @Override
     public void onUseCard(AbstractCard card, UseCardAction action) {
-        if (card.type == AbstractCard.CardType.ATTACK) {
+        if (card.type == AbstractCard.CardType.ATTACK && card.hasTag(MultiHitManager.GK_MULTI_HIT)) {
             flash();
             addToBot(new RemoveSpecificPowerAction(this.owner, this.owner, POWER_ID));
         }
