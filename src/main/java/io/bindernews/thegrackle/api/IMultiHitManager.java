@@ -22,6 +22,7 @@ import io.bindernews.thegrackle.helper.MultiHitManager;
  *         Runnable r = ()->{
  *             multiHitManager = GrackleMod.multiHitManager;
  *         };
+ *         r.run();
  *     }
  * }
  * </pre>

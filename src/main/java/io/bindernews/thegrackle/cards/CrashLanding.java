@@ -1,26 +1,27 @@
 package io.bindernews.thegrackle.cards;
 
+import basemod.helpers.CardModifierManager;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.stance.StanceAloft;
+import io.bindernews.thegrackle.cardmods.RequireAloftMod;
 import lombok.val;
 
 public class CrashLanding extends BaseCard {
     public static final CardConfig CFG = new CardConfig("CrashLanding", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
-            .damage(12).damageUpg(20)
+            .damage(12).damageUpg(24)
             .build();
 
     public CrashLanding() {
         super(CFG, CardRarity.BASIC, CardTarget.ENEMY);
         NUM.init(this);
-        canUseTest = StanceAloft::checkPlay;
         damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
+        CardModifierManager.addModifier(this, new RequireAloftMod());
     }
 
     @Override

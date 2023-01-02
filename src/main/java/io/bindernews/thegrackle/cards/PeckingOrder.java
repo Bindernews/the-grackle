@@ -2,26 +2,24 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.stances.NeutralStance;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.power.SwoopPower;
+import io.bindernews.thegrackle.power.PeckingOrderPower;
 
-public class Swoop extends BaseCard {
-    public static final CardConfig C = new CardConfig("Swoop", CardType.SKILL);
+public class PeckingOrder extends BaseCard {
+    public static final CardConfig C = new CardConfig("PeckingOrder", CardType.SKILL);
     static final CardNums NUM = CardNums.builder()
-            .cost(2).costUpg(1)
-            .build();
+            .cost(1).magic(4).magicUpg(6).build();
 
-    public Swoop() {
-        super(C, CardRarity.RARE, CardTarget.SELF);
+    public PeckingOrder() {
+        super(C, CardRarity.UNCOMMON, CardTarget.SELF);
         NUM.init(this);
+        exhaust = true;
         initializeDescription();
     }
 
     @Override
     public void apply(AbstractCreature p, AbstractCreature m) {
-        addToBot(iop().changeStance(p, NeutralStance.STANCE_ID));
-        addToBot(new ApplyPowerAction(p, p, new SwoopPower(p)));
+        addToBot(new ApplyPowerAction(p, p, new PeckingOrderPower(p, magicNumber), magicNumber));
     }
 
     @Override

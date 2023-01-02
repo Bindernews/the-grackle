@@ -2,10 +2,11 @@ package io.bindernews.thegrackle.patches;
 
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.megacrit.cardcrawl.stances.AbstractStance;
 import io.bindernews.thegrackle.stance.StanceAloft;
 import io.bindernews.thegrackle.stance.StancePhoenix;
-import com.megacrit.cardcrawl.stances.AbstractStance;
 
+@SuppressWarnings("unused")
 @SpirePatch(clz = AbstractStance.class, method = "getStanceFromName")
 public class StancePatches {
     public static SpireReturn<AbstractStance> Prefix(String name) {

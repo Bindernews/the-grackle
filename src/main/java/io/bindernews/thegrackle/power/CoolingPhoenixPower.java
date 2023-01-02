@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.MiscUtil;
 import io.bindernews.thegrackle.stance.StancePhoenix;
 
 public class CoolingPhoenixPower extends BasePower {

@@ -4,8 +4,7 @@ import basemod.AutoAdd;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
 import lombok.val;
 
@@ -23,7 +22,7 @@ public class Strike_GK extends BaseCard {
     }
 
     @Override
-    public void use(AbstractPlayer p, AbstractMonster m) {
+    public void apply(AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.SLASH_HORIZONTAL;
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
     }

@@ -4,7 +4,9 @@ import basemod.abstracts.CustomRelic;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import io.bindernews.thegrackle.GrackleMod;
-import lombok.*;
+import lombok.SneakyThrows;
+import lombok.val;
+import lombok.var;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

@@ -31,7 +31,7 @@ public class Duck extends BaseCard {
         addToBot(new GainBlockAction(p, p, block));
         addToBot(new ApplyPowerAction(p, p, new BlurPower(p, magicNumber), magicNumber));
         if (playSound) {
-            addToBot(new SoundAction(GrackleMod.Sfx.QUACK));
+            addToBot(new SoundAction(GrackleMod.CO.SFX_QUACK));
         }
     }
 

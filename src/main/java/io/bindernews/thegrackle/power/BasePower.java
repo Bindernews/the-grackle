@@ -29,7 +29,6 @@ public abstract class BasePower extends AbstractPower implements CloneablePowerI
         this.amount = amount;
     }
 
-
     @Override
     protected void loadRegion(String fileName) {
         val k48 = "48/" + fileName;
@@ -54,5 +53,14 @@ public abstract class BasePower extends AbstractPower implements CloneablePowerI
      */
     public String formatDesc(int index, Object... args) {
         return String.format(strings.DESCRIPTIONS[index], args);
+    }
+
+    @Override
+    public AbstractPower makeCopy() {
+        try {
+            return getClass().getConstructor(AbstractCreature.class, int.class).newInstance(owner, amount);
+        } catch (Exception ex) {
+            throw new UnsupportedOperationException("cannot automatically clone power");
+        }
     }
 }

@@ -1,10 +1,10 @@
 package io.bindernews.thegrackle.actions;
 
-import io.bindernews.thegrackle.stance.StancePhoenix;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import io.bindernews.thegrackle.stance.StancePhoenix;
 
 public class PhoenixStanceAction extends AbstractGameAction {
 

@@ -1,12 +1,19 @@
 package io.bindernews.thegrackle.helper;
 
 import basemod.BaseMod;
+import charbosses.actions.common.EnemyGainEnergyAction;
+import charbosses.actions.common.EnemyMakeTempCardInDiscardAction;
 import charbosses.actions.unique.EnemyChangeStanceAction;
 import charbosses.bosses.AbstractCharBoss;
+import charbosses.powers.general.EnemyDrawCardNextTurnPower;
+import charbosses.powers.general.EnemyVigorPower;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
+import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
+import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -20,6 +27,7 @@ import lombok.val;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -89,6 +97,31 @@ public class ModInterop {
         return null;
     }
 
+
+    public AbstractPower createPower(String powerId, AbstractCreature owner, int amount) {
+        val clz = getPowerClass(owner, powerId);
+        if (clz == null) {
+            return null;
+        } else {
+            return instantiatePower(clz, owner, amount);
+        }
+    }
+
+
+    public AbstractGameAction actionMakeTempCardInDiscard(AbstractCreature c, AbstractCard card, int amount) {
+        if (c instanceof AbstractPlayer) {
+            return new MakeTempCardInDiscardAction(card, amount);
+        }
+        return null;
+    }
+
+    public AbstractGameAction actionGainEnergy(AbstractCreature c, int amount) {
+        if (c instanceof AbstractPlayer) {
+            return new GainEnergyAction(amount);
+        }
+        return null;
+    }
+
     public static ModInterop get() {
         return inst.get();
     }
@@ -128,6 +161,14 @@ public class ModInterop {
     }
 
     public static class DownfallInterop extends ModInterop {
+
+        private final HashMap<String, Class<?>> powerReplacements = new HashMap<>();
+
+        public DownfallInterop() {
+            initPowerReplacements();
+        }
+
+
         @Override
         public AbstractStance getStance(AbstractCreature c) {
             if (c instanceof AbstractCharBoss) {
@@ -145,11 +186,37 @@ public class ModInterop {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public Class<? extends AbstractPower> getPowerClass(AbstractCreature c, String powerId) {
-//            if (c instanceof AbstractCharBoss) {
-                // TODO return downfall boss power
-//            }
+            if (c instanceof AbstractCharBoss) {
+                val altClz = powerReplacements.get(powerId);
+                if (altClz != null) {
+                    return (Class<? extends AbstractPower>) altClz;
+                }
+            }
             return next.getPowerClass(c, powerId);
+        }
+
+        @Override
+        public AbstractGameAction actionMakeTempCardInDiscard(AbstractCreature c, AbstractCard card, int amount) {
+            if (c instanceof AbstractCharBoss) {
+                return new EnemyMakeTempCardInDiscardAction(card, amount);
+            }
+            return next.actionMakeTempCardInDiscard(c, card, amount);
+        }
+
+        @Override
+        public AbstractGameAction actionGainEnergy(AbstractCreature c, int amount) {
+            if (c instanceof AbstractCharBoss) {
+                return new EnemyGainEnergyAction((AbstractCharBoss) c, amount);
+            }
+            return next.actionGainEnergy(c, amount);
+        }
+
+        private void initPowerReplacements() {
+            val m = powerReplacements;
+            m.put("Draw Card", EnemyDrawCardNextTurnPower.class);
+            m.put("Vigor", EnemyVigorPower.class);
         }
     }
 }

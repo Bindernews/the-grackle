@@ -2,6 +2,7 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.RepairPower;
 import io.bindernews.bnsts.CardNums;
@@ -25,6 +26,11 @@ public class PhoenixFeather extends BaseCard {
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
         addToBot(new ApplyPowerAction(p, p, new RepairPower(p, magicNumber), magicNumber));
+    }
+
+    @Override
+    public void apply(AbstractCreature p, AbstractCreature m) {
+        BaseCard.throwPlayerOnly();
     }
 
     @Override

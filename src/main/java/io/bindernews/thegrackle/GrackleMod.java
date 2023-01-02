@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
@@ -24,7 +25,10 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
@@ -42,6 +46,15 @@ public class GrackleMod implements
     /** Cache of loaded textures */
     private static final HashMap<String, Texture> textureCache = new HashMap<>();
 
+    /**
+     * Map of miscellaneous UI strings
+     */
+    public static final Lazy<Map<String, String>> miscUI = Lazy.of(() ->
+            CardCrawlGame.languagePack.getUIString("grackle:misc").TEXT_DICT);
+
+    /**
+     * Various constants
+     */
     public interface CO {
         /** Root path for image resources */
         String RES_IMAGES = MOD_RES + "/images";
@@ -52,14 +65,11 @@ public class GrackleMod implements
         String REG_START = "begin registering {}";
 
         String REG_END = "done registering {}";
+
+        /** Sound effect ID */
+        String SFX_QUACK = makeId("DUCK");
     }
 
-    /**
-     * Sound effect IDs
-     */
-    public interface Sfx {
-        String QUACK = makeId("DUCK");
-    }
 
 
     /**
@@ -158,7 +168,7 @@ public class GrackleMod implements
     @Override
     public void receiveAddAudio() {
         val sfxPath = MOD_RES + "/audio/";
-        BaseMod.addAudio(Sfx.QUACK, sfxPath + "duck_quack.ogg");
+        BaseMod.addAudio(CO.SFX_QUACK, sfxPath + "duck_quack.ogg");
     }
 
     @Override
@@ -174,7 +184,8 @@ public class GrackleMod implements
         val list = new ArrayList<AbstractCard>();
         Collections.addAll(list,
                 new AerialAce(),
-                new AttackR(),
+                new AerialAdvantage(),
+                new BombingRun(),
                 new BurnCream(),
                 new Cackle(),
                 new CrashLanding(),
@@ -188,8 +199,11 @@ public class GrackleMod implements
                 new Flock(),
                 new Grenenade(),
                 new HenPeck(),
+                new Parachute(),
+                new PeckingOrder(),
                 new PhoenixFeather(),
                 new PhoenixForm(),
+                new RocketGrackle(),
                 new SelfBurn(),
                 new BufferInputs(),
                 new Strike_GK(),

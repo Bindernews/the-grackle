@@ -1,11 +1,16 @@
 {
+  "grackle:AerialAdvantage": {
+    "NAME": "Aerial Advantage",
+    "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw %s cards NL Exhaust",
+    "FLAVOR": "It's over Nob! I have the high ground!"
+  },
   "grackle:AerialAce": {
     "NAME": "Aerial Ace",
     "DESCRIPTION": "Deal !D! damage."
   },
-  "grackle:AttackR": {
-    "NAME": "Attack Rare",
-    "DESCRIPTION": "Deal !D! damage."
+  "grackle:BombingRun": {
+    "NAME": "Bombing Run",
+    "DESCRIPTION": "TODO - damage all enemies"
   },
   "grackle:BufferInputs": {
     "NAME": "Buffer Inputs",
@@ -26,7 +31,7 @@
   },
   "grackle:CrashLanding": {
     "NAME": "Crash Landing",
-    "DESCRIPTION": "Must be grackle:Aloft. NL Deal !D! damage. Exit grackle:Aloft ."
+    "DESCRIPTION": "Deal !D! damage, exit Stance"
   },
   "grackle:Defend_GK": {
     "NAME": "Defend",
@@ -71,21 +76,21 @@
     "NAME": "Hen Peck",
     "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
   },
-  "grackle:HurricaneWind": {
-    "NAME": "Hurricane Wind",
-    "DESCRIPTION": "Deal !D! damage to ALL enemies X times."
+  "grackle:Parachute": {
+    "NAME": "Parachute",
+    "DESCRIPTION": "Gain !B! Block. NL Exit your #yStance."
+  },
+  "grackle:PeckingOrder": {
+    "NAME": "Pecking Order",
+    "DESCRIPTION": "TODO"
   },
   "grackle:PhoenixFeather": {
     "NAME": "Phoenix Feather",
     "DESCRIPTION": "At the end of combat, heal !M! HP."
   },
-  "grackle:PowerC": {
-    "NAME": "Power Common",
-    "DESCRIPTION": "Gain !B! Block."
-  },
-  "grackle:PowerU": {
-    "NAME": "Power Uncommon",
-    "DESCRIPTION": "Gain !B! Block."
+  "grackle:RocketGrackle": {
+    "NAME": "Rocket Propelled Grackle",
+    "DESCRIPTION": "Deal !D! damage. NL Apply !M! Vulnerable ."
   },
   "grackle:SelfBurn": {
     "NAME": "Self Burn",

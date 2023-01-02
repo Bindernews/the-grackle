@@ -56,6 +56,20 @@ public class ExtraHitsVariable extends DynamicVariable {
         setBaseValue(card, baseValue(card) + amount);
     }
 
+    /**
+     * Callback for {@link AbstractCard#applyPowers()}
+     */
+    public void applyPowers(AbstractCard card) {
+        if (baseValue(card) != -1) {
+            val extra = GrackleMod.multiHitManager.getExtraHitsPlayer(card, 0);
+            setValue(card, value(card) + extra);
+        }
+    }
+
+    public void resetAttributes(AbstractCard card) {
+        setValue(card, baseValue(card));
+    }
+
     @SpirePatch(clz = AbstractCard.class, method = SpirePatch.CLASS)
     public static class Fields {
         public static SpireField<Integer> extraHits = new SpireField<>(() -> -1);
@@ -63,24 +77,7 @@ public class ExtraHitsVariable extends DynamicVariable {
         public static SpireField<Boolean> extraHitsUpgraded = new SpireField<>(() -> false);
     }
 
-    @SuppressWarnings("unused")
-    @SpirePatch(clz = AbstractCard.class, method = "applyPowers")
-    static class patchApplyPowers {
-        public static void Postfix(AbstractCard __instance) {
-            if (inst.baseValue(__instance) != -1) {
-                val extra = GrackleMod.multiHitManager.getExtraHitsPlayer(__instance, 0);
-                inst.setValue(__instance, inst.baseValue(__instance) + extra);
-            }
-        }
-    }
 
-    @SuppressWarnings("unused")
-    @SpirePatch(clz = AbstractCard.class, method = "resetAttributes")
-    static class patchResetAttributes {
-        public static void Postfix(AbstractCard __instance) {
-            inst.setValue(__instance, inst.baseValue(__instance));
-        }
-    }
 
     public interface Mixin {
         default int getExtraHits() {

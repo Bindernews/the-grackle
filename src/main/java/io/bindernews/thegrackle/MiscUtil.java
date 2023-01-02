@@ -7,8 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.evacipated.cardcrawl.mod.stslib.Keyword;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
-import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -46,29 +44,21 @@ public class MiscUtil {
     }
 
     /**
-     * Returns either a {@link RemoveSpecificPowerAction} or {@link ReducePowerAction}
-     * depending on the current amount of the power.
-     *
-     * @param p Power instance to decrease
-     * @param amount Amount to decrease by
-     */
-    public static AbstractGameAction getLowerPowerAction(AbstractPower p, int amount) {
-        if (p.amount < amount) {
-            return new RemoveSpecificPowerAction(p.owner, p.owner, p.ID);
-        } else {
-            return new ReducePowerAction(p.owner, p.owner, p.ID, amount);
-        }
-    }
-
-    /**
      * Add an action to the bottom of the stack, convenience function.
      */
     public static void addToBot(AbstractGameAction a) {
         AbstractDungeon.actionManager.addToBottom(a);
     }
 
+    /**
+     * Add an action to the top of the stack, convenient static import.
+     */
     public static void addToTop(AbstractGameAction a) {
         AbstractDungeon.actionManager.addToTop(a);
+    }
+
+    public static int getPowerAmount(AbstractCreature c, String powerId, int defaultAmount) {
+        return Optional.ofNullable(c.getPower(powerId)).map(p -> p.amount).orElse(defaultAmount);
     }
 
 

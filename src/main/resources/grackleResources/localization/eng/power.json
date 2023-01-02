@@ -35,6 +35,12 @@
       "The next multi-attack you play will hit %d extra times."
     ]
   },
+  "grackle:PeckingOrderPower": {
+    "NAME": "Pecking Order",
+    "DESCRIPTIONS": [
+      "Multi-hit attacks will hit %d extra time(s)."
+    ]
+  },
   "grackle:PhoenixStancePower": {
     "NAME": "Phoenix Stance",
     "DESCRIPTIONS": [
