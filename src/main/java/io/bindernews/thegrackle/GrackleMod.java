@@ -5,17 +5,21 @@ import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.evacipated.cardcrawl.mod.stslib.icons.AbstractCustomIcon;
+import com.evacipated.cardcrawl.mod.stslib.icons.CustomIconHelper;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.bnsts.Lazy;
+import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
-import io.bindernews.thegrackle.helper.MultiHitManager;
-import io.bindernews.thegrackle.icons.IconHelper;
+import io.bindernews.thegrackle.icons.MusicNoteIcon;
+import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
@@ -25,10 +29,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 
@@ -66,18 +67,17 @@ public class GrackleMod implements
 
         String REG_END = "done registering {}";
 
+        /** Metrics upload url */
+        String METRICS_URL = "https://stats.grackle.bindernews.net";
+
         /** Sound effect ID */
         String SFX_QUACK = makeId("DUCK");
     }
-
-
 
     /**
      * Is the downfall mod installed?
      */
     public static boolean interopDownfall;
-
-    public static MultiHitManager multiHitManager;
 
     private static boolean hasInit = false;
 
@@ -87,14 +87,20 @@ public class GrackleMod implements
         log.debug("registering color GRACKLE_BLACK");
         Grackle.Co.registerColor();
         log.debug("done registering colors");
+
+        MetricsPatches.onMetricsRun.on(metrics -> {
+            if (metrics.type == Metrics.MetricRequestType.UPLOAD_METRICS && Grackle.isPlaying()) {
+                MetricsPatches.sendPost(metrics, CO.METRICS_URL);
+            }
+        });
     }
 
     @SuppressWarnings("unused")
     public static void initialize() {
         if (!hasInit) {
             GrackleMod mod = new GrackleMod();
+            ExtraHitsVariable.inst = new ExtraHitsVariable();
             hasInit = true;
-            multiHitManager = new MultiHitManager();
         }
     }
 
@@ -120,12 +126,8 @@ public class GrackleMod implements
 
     @Override
     public void receiveEditCards() {
-        log.debug(CO.REG_START, "icons");
-        IconHelper.registerAll();
-        log.debug(CO.REG_END, "icons");
-        log.debug(CO.REG_START, "dynamic variables");
-        BaseMod.addDynamicVariable(new ExtraHitsVariable());
-        log.debug(CO.REG_END, "dynamic variables");
+        registerIcons();
+        registerDynamicVariables();
         log.debug(CO.REG_START, "cards");
         AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(BaseCard.class);
@@ -147,6 +149,23 @@ public class GrackleMod implements
             MiscUtil.registerPower(c);
         }
         log.debug("done registering powers");
+    }
+
+    private void registerDynamicVariables() {
+        log.debug(CO.REG_START, "dynamic variables");
+        BaseMod.addDynamicVariable(ExtraHitsVariable.inst);
+        log.debug(CO.REG_END, "dynamic variables");
+    }
+
+    private void registerIcons() {
+        log.debug(CO.REG_START, "icons");
+        val list = new AbstractCustomIcon[] {
+                MusicNoteIcon.getInst()
+        };
+        for (val icon : list) {
+            CustomIconHelper.addCustomIcon(icon);
+        }
+        log.debug(CO.REG_END, "icons");
     }
 
     @Override
@@ -191,6 +210,7 @@ public class GrackleMod implements
                 new CrashLanding(),
                 new Defend_GK(),
                 new Duck(),
+//                new EvasiveManeuvers(),
                 new FightFire(),
                 new FireWithin(),
                 new FiredUpCard(),
@@ -241,6 +261,10 @@ public class GrackleMod implements
      */
     public static Lazy<TextureAtlas> lazyAtlas(String subPath) {
         return Lazy.of(() -> new TextureAtlas(CO.RES_IMAGES + subPath));
+    }
+
+    public static IMultiHitManager getMultiHitManager() {
+        return ExtraHitsVariable.inst;
     }
 
     /**

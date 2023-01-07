@@ -62,8 +62,6 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     compileOnly("org.jetbrains:annotations:16.0.2")
     implementation(files(
         // Add the patched version if it exists, so we can get better IDE help.

@@ -34,7 +34,7 @@ public class MultiHitPatches {
     }
 
     public static IMultiHitManager manager() {
-        return GrackleMod.multiHitManager;
+        return GrackleMod.getMultiHitManager();
     }
 
     @SpirePatch2(clz = WhirlwindAction.class, method = "update")
@@ -50,7 +50,7 @@ public class MultiHitPatches {
     public static class patchBlizzard {
         @SpireInsertPatch(rloc = 49 - 47, localvars = {"frostCount"})
         public static void Insert(Blizzard __instance, @ByRef int[] frostCount) {
-            frostCount[0] += manager().getExtraHitsPlayer(__instance, frostCount[0]);
+            frostCount[0] += manager().getExtraHitsCard(__instance, frostCount[0]);
         }
     }
 
@@ -58,7 +58,7 @@ public class MultiHitPatches {
     public static class patchThunderStrikeUse {
         @SpireInsertPatch(rloc = 37 - 36)
         public static void Insert(ThunderStrike __instance) {
-            __instance.baseMagicNumber += manager().getExtraHitsPlayer(__instance, 0);
+            __instance.baseMagicNumber += manager().getExtraHitsCard(__instance, __instance.baseMagicNumber);
         }
     }
 
@@ -69,7 +69,7 @@ public class MultiHitPatches {
     })
     public static class TagMultiHitInternal {
         public static void Postfix(AbstractCard __instance) {
-            manager().tagMultiHit(__instance);
+            manager().makeMultiHit(__instance);
         }
     }
 
@@ -79,7 +79,7 @@ public class MultiHitPatches {
     })
     public static class TagMultiHitExternal {
         public static void Postfix(AbstractCard __instance) {
-            manager().tagMultiHit(__instance);
+            manager().makeMultiHit(__instance);
             DamageModifierManager.addModifier(__instance, hitModifers.get(__instance.getClass()));
         }
     }

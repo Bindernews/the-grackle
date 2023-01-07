@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.GrackleMod;
 import io.bindernews.thegrackle.actions.AddHitsAction;
+import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
@@ -21,8 +21,8 @@ public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
 
     public Flock() {
         super(C, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        GrackleMod.multiHitManager.tagMultiHit(this);
         NUM.init(this);
+        ExtraHitsMod.applyTo(this);
         initializeDescription();
     }
 

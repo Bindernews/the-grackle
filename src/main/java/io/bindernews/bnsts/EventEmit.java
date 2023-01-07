@@ -4,48 +4,70 @@ import lombok.Data;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Consumer;
 
+/**
+ * <p>
+ * Somewhat similar to NodeJS EventEmitter, each instance of {@link EventEmit} only has
+ * one type of event, for simplicity’s sake.
+ * </p>
+ * <br/>
+ * <p>
+ * Some event types are "read-only", but others may be mutable (e.g. events which can be cancelled).
+ * To accommodate this, handlers may be added with a priority. Handlers are called from lowest to
+ * highest priority (e.g. a handler with -5 priority will be called before a handler at 0, or 1).
+ * <br/>
+ * Handlers with the same priority will be called in effectively random order.
+ * </p>
+ * <p>
+ * Recommended usage is to register handlers up-front once. Adding a large number of handlers,
+ * or frequently adding and removing handlers, may degrade performance.
+ * </p>
+ *
+ * @param <T> The event type
+ */
 public class EventEmit<T> {
-    public static final int DEFAULT_PRIORITY = 5;
+    public static final int DEFAULT_PRIORITY = 0;
 
-    private final TreeSet<ListenerEntry<T>> handlers = new TreeSet<>();
+    private final ArrayList<ListenerEntry<T>> handlers = new ArrayList<>();
 
-    public void listen(Consumer<T> handler) {
-        listen(handler, DEFAULT_PRIORITY);
+    /**
+     * Add a handler with the default priority.
+     * @param handler Event handler
+     */
+    public void on(Consumer<T> handler) {
+        on(DEFAULT_PRIORITY, handler);
     }
 
-    public void listen(Consumer<T> handler, int priority) {
-        handlers.add(new ListenerEntry<>(handler, priority));
+    /**
+     * Add a handler with a specific priority.
+     *
+     * @param priority Priority, lower values are called earlier
+     * @param handler  Event handler
+     */
+    public void on(int priority, Consumer<T> handler) {
+        val entry = new ListenerEntry<>(handler, priority);
+        int pos = Collections.binarySearch(handlers, entry);
+        if (pos < 0) {
+            handlers.add(-(pos + 1), entry);
+        }
     }
 
-    public void unlisten(Consumer<T> handler) {
+    /**
+     * Remove the handler, does nothing if the handler is not registered.
+     *
+     * @param handler Event handler
+     */
+    public void off(Consumer<T> handler) {
         handlers.removeIf(x -> x.handler == handler);
     }
 
-    public void publish(T event) {
+    public void emit(T event) {
         for (val h : handlers) {
             h.handler.accept(event);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> Class<T> reify(Consumer<T> handler) {
-        val inters = handler.getClass().getGenericInterfaces();
-        for (val inter : inters) {
-            if (inter instanceof ParameterizedType) {
-                val pt = (ParameterizedType) inter;
-                if (pt.getRawType() == Consumer.class) {
-                    val type0 = pt.getActualTypeArguments()[0];
-                    if (type0 instanceof Class<?>) {
-                        return (Class<T>) type0;
-                    }
-                }
-            }
-        }
-        throw new RuntimeException("unable to reify " + handler);
     }
 
     @Data
@@ -59,7 +81,7 @@ public class EventEmit<T> {
             if (d != 0) {
                 return d;
             }
-            d = System.identityHashCode(this) - System.identityHashCode(o);
+            d = System.identityHashCode(handler) - System.identityHashCode(o.handler);
             return d;
         }
     }

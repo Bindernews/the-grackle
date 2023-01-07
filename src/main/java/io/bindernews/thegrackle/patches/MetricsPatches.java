@@ -4,7 +4,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.screens.GameOverScreen;
-import io.bindernews.thegrackle.Grackle;
+import io.bindernews.bnsts.EventEmit;
 import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,30 +13,36 @@ import java.lang.reflect.Method;
 @Log4j2
 @SuppressWarnings("unused")
 public class MetricsPatches {
-    static String URL = "https://stats.grackle.bindernews.net";
+
+    /** Event emitter, called at the end of {@link Metrics#run}. */
+    public static final EventEmit<Metrics> onMetricsRun = new EventEmit<>();
 
     @SpirePatch(clz = Metrics.class, method = "run")
     public static class RunPatch {
         public static void Postfix(Metrics metrics) {
-            if (metrics.type == Metrics.MetricRequestType.UPLOAD_METRICS && Grackle.isPlaying()) {
-                try {
-                    Method m = Metrics.class.getDeclaredMethod("sendPost", String.class, String.class);
-                    m.setAccessible(true);
-                    m.invoke(metrics, URL, null);
-                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException var2) {
-                    log.error("Exception while sending metrics", var2);
-                }
-            }
+            onMetricsRun.emit(metrics);
+        }
+    }
+
+    /**
+     * Upload the metrics to the passed url in JSON format.
+     * @param metrics Metrics data to upload
+     * @param url URL to upload data to
+     */
+    public static void sendPost(Metrics metrics, String url) {
+        try {
+            Method m = Metrics.class.getDeclaredMethod("sendPost", String.class, String.class);
+            m.setAccessible(true);
+            m.invoke(metrics, url, null);
+        } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException var2) {
+            log.error("Exception while sending metrics to " + url, var2);
         }
     }
 
     @SpirePatch(clz = GameOverScreen.class, method = "shouldUploadMetricData")
     public static class ShouldUploadMetricData {
         public static boolean Postfix(boolean returnValue) {
-            if (Grackle.isPlaying()) {
-                returnValue = Settings.UPLOAD_DATA;
-            }
-            return returnValue;
+            return Settings.UPLOAD_DATA;
         }
     }
 }

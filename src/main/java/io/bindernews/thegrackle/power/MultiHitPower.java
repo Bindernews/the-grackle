@@ -6,13 +6,13 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.helper.MultiHitManager;
+import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 
 public class MultiHitPower extends BasePower {
     public static final String POWER_ID = GrackleMod.makeId(MultiHitPower.class);
 
     static {
-        MultiHitManager.hitCountEvents.listen(MultiHitManager.addPowerAmount(POWER_ID), 0);
+        ExtraHitsVariable.getOnApplyPowers().on(-5, ExtraHitsVariable.addPowerAmount(POWER_ID));
     }
 
     public MultiHitPower(AbstractCreature owner, int amount) {
@@ -29,7 +29,7 @@ public class MultiHitPower extends BasePower {
 
     @Override
     public void onUseCard(AbstractCard card, UseCardAction action) {
-        if (card.type == AbstractCard.CardType.ATTACK && card.hasTag(MultiHitManager.GK_MULTI_HIT)) {
+        if (card.type == AbstractCard.CardType.ATTACK && card.hasTag(ExtraHitsVariable.GK_MULTI_HIT)) {
             flash();
             addToBot(new RemoveSpecificPowerAction(this.owner, this.owner, POWER_ID));
         }

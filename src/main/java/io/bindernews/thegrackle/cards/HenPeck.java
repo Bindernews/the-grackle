@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.helper.MultiHitManager;
+import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
@@ -18,7 +18,7 @@ public class HenPeck extends BaseCard implements ExtraHitsVariable.Mixin {
     public HenPeck() {
         super(C, CardRarity.COMMON, CardTarget.ENEMY);
         NUM.init(this);
-        tags.add(MultiHitManager.GK_MULTI_HIT);
+        ExtraHitsMod.applyTo(this);
         initializeDescription();
     }
 

@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.helper.MultiHitManager;
+import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
@@ -16,7 +16,7 @@ public class Grenenade extends BaseCard implements ExtraHitsVariable.Mixin {
         super(C, CardRarity.RARE, CardTarget.ALL_ENEMY);
         NUM.init(this);
         isMultiDamage = true;
-        tags.add(MultiHitManager.GK_MULTI_HIT);
+        ExtraHitsMod.applyTo(this);
         initializeDescription();
     }
 

@@ -2,15 +2,13 @@ package io.bindernews.thegrackle.helper;
 
 import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
-import com.megacrit.cardcrawl.actions.common.AttackDamageRandomEnemyAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.DaggerSprayEffect;
-import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
@@ -55,7 +53,7 @@ public abstract class ExtraHitModifier extends AbstractDamageModifier {
         public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCreature target, AbstractCard card) {
             this.card = card;
             this.applied = false;
-            this.extraHits = GrackleMod.multiHitManager.getExtraHitsPlayer(card, 4);
+            this.extraHits = ExtraHitsVariable.inst.getExtraHitsCard(card, 4);
             return damage;
         }
 
@@ -80,7 +78,7 @@ public abstract class ExtraHitModifier extends AbstractDamageModifier {
         @Override
         public float atDamageFinalGive(float damage, DamageInfo.DamageType type, AbstractCreature target, AbstractCard card) {
             val flipVfx = AbstractDungeon.getMonsters().shouldFlipVfx();
-            val extraHits = GrackleMod.multiHitManager.getExtraHitsPlayer(card, 0);
+            val extraHits = ExtraHitsVariable.inst.getExtraHitsCard(card, 0);
             val p = AbstractDungeon.player;
             for (int i = 0; i < extraHits; i++) {
                 addToBot(new VFXAction(new DaggerSprayEffect(flipVfx), 0.0F));

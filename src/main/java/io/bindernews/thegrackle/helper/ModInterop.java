@@ -5,6 +5,7 @@ import charbosses.actions.common.EnemyGainEnergyAction;
 import charbosses.actions.common.EnemyMakeTempCardInDiscardAction;
 import charbosses.actions.unique.EnemyChangeStanceAction;
 import charbosses.bosses.AbstractCharBoss;
+import charbosses.cards.AbstractBossCard;
 import charbosses.powers.general.EnemyDrawCardNextTurnPower;
 import charbosses.powers.general.EnemyVigorPower;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -87,6 +88,15 @@ public class ModInterop {
 
     public Optional<CardGroup> getCardsByType(AbstractCreature c, CardGroup.CardGroupType type) {
         return Arrays.stream(getCards(c)).filter(g -> g.type == type).findFirst();
+    }
+
+    /**
+     * Returns the owner of the card, normally the player.
+     * @param card Card to check
+     * @return Card owner
+     */
+    public AbstractCreature getCardOwner(AbstractCard card) {
+        return AbstractDungeon.player;
     }
 
     @Nullable
@@ -195,6 +205,14 @@ public class ModInterop {
                 }
             }
             return next.getPowerClass(c, powerId);
+        }
+
+        @Override
+        public AbstractCreature getCardOwner(AbstractCard card) {
+            if (card instanceof AbstractBossCard) {
+                return ((AbstractBossCard) card).owner;
+            }
+            return next.getCardOwner(card);
         }
 
         @Override

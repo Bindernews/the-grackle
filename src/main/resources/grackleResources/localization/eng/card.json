@@ -41,6 +41,10 @@
     "NAME": "Duck!",
     "DESCRIPTION": "Gain !B! Block. NL Block is not removed at the start of your next turn. NL Quack."
   },
+  "grackle:EvasiveManeuvers": {
+    "NAME": "Evasive Maneuvers",
+    "DESCRIPTION": "Gain !B! Block. NL Scry !M!."
+  },
   "grackle:FightFire": {
     "NAME": "Fight Fire",
     "DESCRIPTION": "Exhaust each *Burn in your discard pile. NL Deals %s + !M! damage for each card exhausted NL (Deals !D! damage.)",

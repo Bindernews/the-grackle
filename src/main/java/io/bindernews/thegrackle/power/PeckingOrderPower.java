@@ -3,13 +3,13 @@ package io.bindernews.thegrackle.power;
 import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.helper.MultiHitManager;
+import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 
 public class PeckingOrderPower extends BasePower {
     public static final String POWER_ID = GrackleMod.makeId(PeckingOrderPower.class);
 
     static {
-        MultiHitManager.hitCountEvents.listen(MultiHitManager.addPowerAmount(POWER_ID), 0);
+        ExtraHitsVariable.getOnApplyPowers().on(-5, ExtraHitsVariable.addPowerAmount(POWER_ID));
     }
 
     public PeckingOrderPower(AbstractCreature owner, int amount) {

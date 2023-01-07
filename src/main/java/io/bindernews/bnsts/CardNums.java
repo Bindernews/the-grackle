@@ -41,6 +41,23 @@ public class CardNums {
         }
     }
 
+    public static final IVariable vDamage = new IVariable() {
+        @Override
+        public int value(AbstractCard card) { return card.damage; }
+        @Override
+        public int baseValue(AbstractCard card) { return card.baseDamage; }
+        @Override
+        public boolean upgraded(AbstractCard card) { return card.upgradedDamage; }
+        @Override
+        public boolean isModified(AbstractCard card) { return card.damage != card.baseDamage; }
+        @Override
+        public void setValue(AbstractCard card, int amount) { card.damage = amount; }
+        @Override
+        public void setBaseValue(AbstractCard card, int amount) { card.baseDamage = amount; }
+        @Override @SneakyThrows
+        public void upgrade(AbstractCard card, int amount) { hUpgradeDamage.invoke(card, amount); }
+    };
+
     @Builder.Default public final int cost = 0;
     @Builder.Default public final int costUpg = -1;
     @Builder.Default public final int damage = -1;
