@@ -84,6 +84,10 @@
     "NAME": "Parachute",
     "DESCRIPTION": "Gain !B! Block. NL Exit your #yStance."
   },
+  "grackle:Paratrooper": {
+    "NAME": "Paratrooper",
+    "DESCRIPTION": "Exit stance. NL Deal !D! damage !grackle:hits! times."
+  },
   "grackle:PeckingOrder": {
     "NAME": "Pecking Order",
     "DESCRIPTION": "TODO"
@@ -121,7 +125,12 @@
   },
   "grackle:TargetingComputer": {
     "NAME": "Targeting Computer",
-    "DESCRIPTION": "At the start of your turn, gain !M! Vigor."
+    "DESCRIPTION": "Gain !M! Vigor."
+  },
+  "grackle:ThisWillHurt": {
+    "NAME": "This Will Hurt",
+    "DESCRIPTION": "Apply !M! Vulnerable to EVERYONE. NL Gain !B! Block.",
+    "UPGRADE_DESCRIPTION": "Apply !M! Vulnerable to ALL enemies. NL Gain !B! Block."
   },
   "grackle:TryThatAgain": {
     "NAME": "Let's Try That Again",

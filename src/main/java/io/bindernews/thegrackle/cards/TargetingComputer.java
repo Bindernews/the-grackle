@@ -2,22 +2,22 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import io.bindernews.bnsts.CardNums;
-import io.bindernews.thegrackle.power.TargetingComputerPower;
 
 public class TargetingComputer extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("TargetingComputer", CardType.POWER);
+    public static final CardConfig C = new CardConfig("TargetingComputer", CardType.POWER);
     public static final CardNums NUM = CardNums.builder()
-            .cost(1).magic(6).magicUpg(10).build();
+            .cost(1).magic(4).magicUpg(8).build();
 
     public TargetingComputer() {
-        super(CFG, CardRarity.COMMON, CardTarget.SELF);
+        super(C, CardRarity.COMMON, CardTarget.SELF);
         NUM.init(this);
     }
 
     @Override
     public void apply(AbstractCreature p, AbstractCreature m) {
-        addToBot(new ApplyPowerAction(p, p, new TargetingComputerPower(p, magicNumber)));
+        addToBot(new ApplyPowerAction(p, p, new VigorPower(p, magicNumber), magicNumber));
     }
 
     @Override

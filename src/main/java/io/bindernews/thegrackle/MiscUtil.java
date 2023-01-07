@@ -17,6 +17,7 @@ import lombok.SneakyThrows;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -31,6 +32,16 @@ import java.util.*;
 public class MiscUtil {
     static final Logger log = LogManager.getLogger(MiscUtil.class.getPackage().getName());
     private static final Gson gson = new Gson();
+
+    @Nullable @SneakyThrows
+    public static <T> T nullCast(Class<T> clz, Object o) {
+        if (clz.isInstance(o)) {
+            return clz.cast(o);
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * Returns a new array list containing the given elements. This function exists in later versions

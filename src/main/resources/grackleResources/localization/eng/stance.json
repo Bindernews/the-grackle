@@ -2,7 +2,8 @@
   "grackle:StanceAloft": {
     "NAME": "Aloft",
     "DESCRIPTION": [
-      "Your Attacks deal half damage and you take half damage from attacks."
+      "Your Attacks deal half damage and you take half damage from attacks.",
+      "Card may only be played while aloft"
     ]
   },
   "grackle:StancePhoenix": {

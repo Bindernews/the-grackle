@@ -14,7 +14,7 @@ public class CrashLanding extends BaseCard {
     public static final CardConfig CFG = new CardConfig("CrashLanding", CardType.ATTACK);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
-            .damage(12).damageUpg(24)
+            .damage(12).damageUpg(20)
             .build();
 
     public CrashLanding() {

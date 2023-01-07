@@ -9,14 +9,9 @@ import charbosses.cards.AbstractBossCard;
 import charbosses.powers.general.EnemyDrawCardNextTurnPower;
 import charbosses.powers.general.EnemyVigorPower;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
-import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
-import com.megacrit.cardcrawl.actions.common.MakeTempCardInDiscardAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.cards.*;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -25,12 +20,12 @@ import com.megacrit.cardcrawl.stances.AbstractStance;
 import io.bindernews.bnsts.Lazy;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 import static com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
@@ -99,12 +94,29 @@ public class ModInterop {
         return AbstractDungeon.player;
     }
 
+    /**
+     * Returns a stream of all creatures that are "friendly" with {@code c}.
+     */
+    public Stream<? extends AbstractCreature> getFriends(@NotNull AbstractCreature c) {
+        if (c instanceof AbstractPlayer) {
+            return Stream.of(c);
+        } else {
+            return AbstractDungeon.getMonsters().monsters.stream();
+        }
+    }
+
+    public Stream<? extends AbstractCreature> getEnemies(@NotNull AbstractCreature c) {
+        if (c instanceof AbstractPlayer) {
+            return AbstractDungeon.getMonsters().monsters.stream();
+        } else {
+            return Stream.of(AbstractDungeon.player);
+        }
+    }
+
+
     @Nullable
     public Class<? extends AbstractPower> getPowerClass(AbstractCreature c, String powerId) {
-        if (c instanceof AbstractPlayer) {
-            return BaseMod.getPowerClass(powerId);
-        }
-        return null;
+        return BaseMod.getPowerClass(powerId);
     }
 
 

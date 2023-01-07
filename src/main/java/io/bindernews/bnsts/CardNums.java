@@ -3,11 +3,9 @@ package io.bindernews.bnsts;
 import basemod.abstracts.CustomCard;
 import com.evacipated.cardcrawl.mod.stslib.variables.ExhaustiveVariable;
 import com.evacipated.cardcrawl.mod.stslib.variables.RefundVariable;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
-import lombok.*;
-
-import java.lang.invoke.*;
+import lombok.Builder;
+import lombok.SneakyThrows;
 
 /**
  * Holds commonly configured numbers for cards, and has a builder to make it easy to keep
@@ -15,49 +13,6 @@ import java.lang.invoke.*;
  */
 @Builder
 public class CardNums {
-    private static MethodHandle hUpgradeDamage;
-    private static MethodHandle hUpgradeBlock;
-    private static MethodHandle hUpgradeMagic;
-    private static MethodHandle hUpgradeName;
-    private static MethodHandle hUpgradeCost;
-
-    static {
-        val mtypeInt = MethodType.methodType(void.class, int.class);
-        val mtypeNone = MethodType.methodType(void.class);
-        hUpgradeDamage = findCardMethod("upgradeDamage", mtypeInt);
-        hUpgradeBlock = findCardMethod("upgradeBlock", mtypeInt);
-        hUpgradeMagic = findCardMethod("upgradeMagicNumber", mtypeInt);
-        hUpgradeCost = findCardMethod("upgradeBaseCost", mtypeInt);
-        hUpgradeName = findCardMethod("upgradeName", mtypeNone);
-    }
-
-    private static MethodHandle findCardMethod(String name, MethodType args) {
-        try {
-             val m = AbstractCard.class.getDeclaredMethod(name, args.parameterArray());
-             m.setAccessible(true);
-             return MethodHandles.lookup().unreflect(m);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public static final IVariable vDamage = new IVariable() {
-        @Override
-        public int value(AbstractCard card) { return card.damage; }
-        @Override
-        public int baseValue(AbstractCard card) { return card.baseDamage; }
-        @Override
-        public boolean upgraded(AbstractCard card) { return card.upgradedDamage; }
-        @Override
-        public boolean isModified(AbstractCard card) { return card.damage != card.baseDamage; }
-        @Override
-        public void setValue(AbstractCard card, int amount) { card.damage = amount; }
-        @Override
-        public void setBaseValue(AbstractCard card, int amount) { card.baseDamage = amount; }
-        @Override @SneakyThrows
-        public void upgrade(AbstractCard card, int amount) { hUpgradeDamage.invoke(card, amount); }
-    };
-
     @Builder.Default public final int cost = 0;
     @Builder.Default public final int costUpg = -1;
     @Builder.Default public final int damage = -1;
@@ -97,18 +52,18 @@ public class CardNums {
         if (card.upgraded && !allowMulti) {
             return;
         }
-        hUpgradeName.invoke(card);
+        CardVariables.upgradeName(card);
         if (costUpg != -1) {
-            hUpgradeCost.invoke(card, costUpg);
+            CardVariables.vCost.upgrade(card, costUpg - cost);
         }
         if (damageUpg != -1) {
-            hUpgradeDamage.invoke(card, damageUpg - damage);
+            CardVariables.vDamage.upgrade(card, damageUpg - damage);
         }
         if (blockUpg != -1) {
-            hUpgradeBlock.invoke(card, blockUpg - block);
+            CardVariables.vBlock.upgrade(card, blockUpg - block);
         }
         if (magicUpg != -1) {
-            hUpgradeMagic.invoke(card, magicUpg - magic);
+            CardVariables.vMagic.upgrade(card, magicUpg - magic);
         }
         if (exhaustiveUpg != -1) {
             ExhaustiveVariable.upgrade(card, exhaustiveUpg - exhaustive);

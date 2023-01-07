@@ -53,6 +53,8 @@ public class GrackleMod implements
     public static final Lazy<Map<String, String>> miscUI = Lazy.of(() ->
             CardCrawlGame.languagePack.getUIString("grackle:misc").TEXT_DICT);
 
+    // Neat trick: fields in an interface are automatically 'public static final'
+    // making it a convenient way to declare constants.
     /**
      * Various constants
      */
@@ -210,7 +212,7 @@ public class GrackleMod implements
                 new CrashLanding(),
                 new Defend_GK(),
                 new Duck(),
-//                new EvasiveManeuvers(),
+                new EvasiveManeuvers(),
                 new FightFire(),
                 new FireWithin(),
                 new FiredUpCard(),
@@ -220,6 +222,7 @@ public class GrackleMod implements
                 new Grenenade(),
                 new HenPeck(),
                 new Parachute(),
+                new Paratrooper(),
                 new PeckingOrder(),
                 new PhoenixFeather(),
                 new PhoenixForm(),
@@ -231,6 +234,7 @@ public class GrackleMod implements
                 new Swoop(),
                 new Takeoff(),
                 new TargetingComputer(),
+                new ThisWillHurt(),
                 new TryThatAgain()
         );
         return list;
