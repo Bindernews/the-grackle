@@ -19,6 +19,8 @@ import java.util.concurrent.CountDownLatch
 import javax.imageio.ImageIO
 
 val modName = "TheGrackle"
+group = "io.bindernews.thegrackle"
+version = "0.2-SNAPSHOT"
 
 buildscript {
     repositories {
@@ -54,14 +56,12 @@ val mtsJar = findMod("ModTheSpire.jar")
 
 val RES_DIR = "grackleResources"
 
-group = "io.bindernews.thegrackle"
-version = "0.1-beta-1"
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     compileOnly("org.jetbrains:annotations:16.0.2")
     implementation(files(
         // Add the patched version if it exists, so we can get better IDE help.

@@ -4,6 +4,7 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.mod.stslib.icons.AbstractCustomIcon;
 import com.evacipated.cardcrawl.mod.stslib.icons.CustomIconHelper;
@@ -15,6 +16,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import io.bindernews.bnsts.EventEmit;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
@@ -22,6 +24,7 @@ import io.bindernews.thegrackle.icons.MusicNoteIcon;
 import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
+import io.bindernews.thegrackle.ui.CardClickableLink;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
@@ -80,6 +83,9 @@ public class GrackleMod implements
      * Is the downfall mod installed?
      */
     public static boolean interopDownfall;
+
+    /** Listeners for popup rendering. */
+    public static final EventEmit<SpriteBatch> onPopupRender = new EventEmit<>();
 
     private static boolean hasInit = false;
 
@@ -140,6 +146,7 @@ public class GrackleMod implements
     @Override
     public void receivePostInitialize() {
         registerPowers();
+        val ignore1 = CardClickableLink.getInst();
     }
 
 
@@ -219,8 +226,10 @@ public class GrackleMod implements
                 new FireTouch(),
                 new FireWithin(),
                 new Flock(),
+                new FOOF(),
                 new Grenenade(),
                 new HenPeck(),
+                new InFlightService(),
                 new Parachute(),
                 new Paratrooper(),
                 new PeckingOrder(),
@@ -253,6 +262,7 @@ public class GrackleMod implements
                 tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
                 return tex;
             } catch (Exception e) {
+                log.warn(e);
                 return null;
             }
         });

@@ -66,6 +66,10 @@
     "NAME": "Flock",
     "DESCRIPTION": "Deal !D! damage !grackle:hits! times. NL Increase the hits of ALL Flock cards by !M! this combat."
   },
+  "grackle:FOOF": {
+    "NAME": "FOOF",
+    "DESCRIPTION": "Apply !M! grackle:Burning to ALL enemies and half that to yourself. NL Exhaust."
+  },
   "grackle:Grenenade": {
     "NAME": "Grenenade",
     "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times. NL May be upgraded multiple times.",
@@ -79,6 +83,10 @@
   "grackle:HenPeck": {
     "NAME": "Hen Peck",
     "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
+  },
+  "grackle:InFlightService": {
+    "NAME": "In-Flight Service",
+    "DESCRIPTION": "Obtain a Regen Potion. NL Exhaust."
   },
   "grackle:Parachute": {
     "NAME": "Parachute",

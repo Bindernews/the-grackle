@@ -6,16 +6,15 @@ import io.bindernews.bnsts.CardNums;
 import io.bindernews.thegrackle.power.MultiHitPower;
 
 public class BufferInputs extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("BufferInputs", CardType.SKILL);
+    public static final CardConfig C = new CardConfig("BufferInputs", CardType.SKILL);
     public static final CardNums NUM = CardNums.builder()
             .cost(1)
-            .magic(3).magicUpg(6)
+            .magic(2).magicUpg(4)
             .build();
 
     public BufferInputs() {
-        super(CFG, CardRarity.RARE, CardTarget.SELF);
+        super(C, CardRarity.RARE, CardTarget.SELF);
         NUM.init(this);
-        exhaust = true;
     }
 
     @Override
