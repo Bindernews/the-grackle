@@ -18,14 +18,17 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.bnsts.EventEmit;
 import io.bindernews.bnsts.Lazy;
+import io.bindernews.bnsts.eventbus.EventBus;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
 import io.bindernews.thegrackle.icons.MusicNoteIcon;
+import io.bindernews.thegrackle.interfaces.OnScvChangeCard;
 import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
+import lombok.Getter;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -84,8 +87,12 @@ public class GrackleMod implements
      */
     public static boolean interopDownfall;
 
-    /** Listeners for popup rendering. */
+    /** Listeners for popup rendering. This uses {@link EventEmit} for performance. */
     public static final EventEmit<SpriteBatch> onPopupRender = new EventEmit<>();
+
+    /** Global event bus. */
+    @Getter
+    private static final EventBus eventBus = new EventBus();
 
     private static boolean hasInit = false;
 
@@ -108,6 +115,9 @@ public class GrackleMod implements
         if (!hasInit) {
             GrackleMod mod = new GrackleMod();
             ExtraHitsVariable.inst = new ExtraHitsVariable();
+            // Setup event bus
+            getEventBus().register(OnScvChangeCard.class, "accept");
+            // Done
             hasInit = true;
         }
     }
