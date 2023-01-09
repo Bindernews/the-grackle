@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.variables;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.EventEmit;
+import io.bindernews.bnsts.eventbus.EventEmit;
 import io.bindernews.thegrackle.GrackleMod;
 import io.bindernews.thegrackle.MiscUtil;
 import io.bindernews.thegrackle.api.IMultiHitManager;

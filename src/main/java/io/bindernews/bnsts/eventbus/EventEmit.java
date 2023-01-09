@@ -1,11 +1,10 @@
-package io.bindernews.bnsts;
+package io.bindernews.bnsts.eventbus;
 
 import lombok.Data;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.function.Consumer;
 
 /**
@@ -28,10 +27,10 @@ import java.util.function.Consumer;
  *
  * @param <T> The event type
  */
-public class EventEmit<T> {
+public class EventEmit<T> implements IEventEmit<T> {
     public static final int DEFAULT_PRIORITY = 0;
 
-    private final ArrayList<ListenerEntry<T>> handlers = new ArrayList<>();
+    private final ArrayList<Entry<T>> handlers = new ArrayList<>();
 
     /**
      * Add a handler with the default priority.
@@ -48,11 +47,8 @@ public class EventEmit<T> {
      * @param handler  Event handler
      */
     public void on(int priority, Consumer<T> handler) {
-        val entry = new ListenerEntry<>(handler, priority);
-        int pos = Collections.binarySearch(handlers, entry);
-        if (pos < 0) {
-            handlers.add(-(pos + 1), entry);
-        }
+        val entry = new Entry<>(handler, priority);
+        EventBus.addOrdered(handlers, entry);
     }
 
     /**
@@ -64,6 +60,7 @@ public class EventEmit<T> {
         handlers.removeIf(x -> x.handler == handler);
     }
 
+    @Override
     public void emit(T event) {
         for (val h : handlers) {
             h.handler.accept(event);
@@ -71,12 +68,12 @@ public class EventEmit<T> {
     }
 
     @Data
-    protected static class ListenerEntry<T> implements Comparable<ListenerEntry<T>> {
+    protected static class Entry<T> implements Comparable<Entry<T>> {
         final Consumer<T> handler;
         final int priority;
 
         @Override
-        public int compareTo(@NotNull EventEmit.ListenerEntry o) {
+        public int compareTo(@NotNull EventEmit.Entry o) {
             int d = priority - o.priority;
             if (d != 0) {
                 return d;

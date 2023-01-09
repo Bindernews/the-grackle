@@ -4,7 +4,6 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.mod.stslib.icons.AbstractCustomIcon;
 import com.evacipated.cardcrawl.mod.stslib.icons.CustomIconHelper;
@@ -16,7 +15,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import io.bindernews.bnsts.EventEmit;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
@@ -84,9 +82,6 @@ public class GrackleMod implements
      */
     public static boolean interopDownfall;
 
-    /** Listeners for popup rendering. */
-    public static final EventEmit<SpriteBatch> onPopupRender = new EventEmit<>();
-
     private static boolean hasInit = false;
 
     public GrackleMod() {
@@ -96,7 +91,7 @@ public class GrackleMod implements
         Grackle.Co.registerColor();
         log.debug("done registering colors");
 
-        MetricsPatches.onMetricsRun.on(metrics -> {
+        Events.metricsRun().on(metrics -> {
             if (metrics.type == Metrics.MetricRequestType.UPLOAD_METRICS && Grackle.isPlaying()) {
                 MetricsPatches.sendPost(metrics, CO.METRICS_URL);
             }
@@ -108,6 +103,7 @@ public class GrackleMod implements
         if (!hasInit) {
             GrackleMod mod = new GrackleMod();
             ExtraHitsVariable.inst = new ExtraHitsVariable();
+            // Done
             hasInit = true;
         }
     }

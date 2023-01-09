@@ -3,5 +3,10 @@
     "TEXT_DICT": {
       "must_be": "Must be "
     }
+  },
+  "grackle:CardClickableLink": {
+    "TEXT": [
+      "Open URL?"
+    ]
   }
 }

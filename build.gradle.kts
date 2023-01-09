@@ -61,7 +61,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     compileOnly("org.jetbrains:annotations:16.0.2")
     implementation(files(
         // Add the patched version if it exists, so we can get better IDE help.

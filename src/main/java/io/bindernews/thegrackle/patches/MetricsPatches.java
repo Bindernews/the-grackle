@@ -4,7 +4,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.screens.GameOverScreen;
-import io.bindernews.bnsts.EventEmit;
+import io.bindernews.thegrackle.Events;
 import lombok.extern.log4j.Log4j2;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,13 +14,10 @@ import java.lang.reflect.Method;
 @SuppressWarnings("unused")
 public class MetricsPatches {
 
-    /** Event emitter, called at the end of {@link Metrics#run}. */
-    public static final EventEmit<Metrics> onMetricsRun = new EventEmit<>();
-
     @SpirePatch(clz = Metrics.class, method = "run")
     public static class RunPatch {
         public static void Postfix(Metrics metrics) {
-            onMetricsRun.emit(metrics);
+            Events.metricsRun().emit(metrics);
         }
     }
 

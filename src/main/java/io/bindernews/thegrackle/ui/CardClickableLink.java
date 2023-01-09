@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.localization.UIStrings;
+import io.bindernews.thegrackle.Events;
 import io.bindernews.thegrackle.GrackleMod;
 import lombok.Getter;
 import lombok.val;
@@ -20,6 +22,11 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
+    public static final String UI_ID = GrackleMod.makeId(CardClickableLink.class);
+
+    @Getter(lazy = true)
+    private static final UIStrings strings = CardCrawlGame.languagePack.getUIString(UI_ID);
+
     @Getter(lazy = true)
     private static final CardClickableLink inst = new CardClickableLink();
 
@@ -35,17 +42,23 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
     public static Color BUTTON_COLOR = new Color(0xd93030ff);
     public static Color BRIGHTEN = new Color(1f, 1f, 1f, 0.3f);
 
-    Hitbox urlHb = new Hitbox(1.f, 1.f);
+    final MyConfirmPopup confirmPopup = new MyConfirmPopup(getStrings().TEXT[0], "");
+    final Hitbox urlHb = new Hitbox(1.f, 1.f);
+    final BitmapFont font;
     boolean enabled = false;
     String title;
     URI url;
-    BitmapFont font;
     float textH = 0.f;
 
     private CardClickableLink() {
         BaseMod.subscribe(this);
-        GrackleMod.onPopupRender.on(this::render);
+        Events.popupRender().on(this::render);
         font = FontHelper.tipBodyFont;
+        confirmPopup.getOnAction().on(a -> {
+            if (a == MyConfirmPopup.Action.YES) {
+                openBrowser();
+            }
+        });
     }
 
     public void open(String title, String url) {
@@ -64,6 +77,7 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
         val nh = textH + padding.top + padding.bottom;
         urlHb.resize(nw, nh);
         urlHb.move(cardHb.cX, cardHb.y + cardHb.height + (nh * 2.f));
+        confirmPopup.desc = url;
     }
 
     public void close() {
@@ -72,10 +86,28 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
         url = null;
     }
 
+    /**
+     * Calls {@link #open} or {@link #close()} depending on the value of {@code isOpen}.
+     * @param title Passed to {@code open()}
+     * @param url Passed to {@code open()}
+     */
+    public void openOrClose(String title, String url, boolean isOpen) {
+        if (isOpen) {
+            open(title, url);
+        } else {
+            close();
+        }
+    }
+
     public void render(SpriteBatch sb) {
         if (!enabled) {
             return;
         }
+        renderSelf(sb);
+        confirmPopup.render(sb);
+    }
+
+    private void renderSelf(SpriteBatch sb) {
         sb.setColor(BUTTON_COLOR);
         val tbox = getTooltipBox();
         val realW = tbox.getTotalWidth();
@@ -102,6 +134,7 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
             return;
         }
         urlHb.encapsulatedUpdate(this);
+        confirmPopup.update();
     }
 
     @Override
@@ -117,11 +150,15 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
     @Override
     public void clicked(Hitbox hitbox) {
         if (hitbox == urlHb) {
-            try {
-                Desktop.getDesktop().browse(url);
-            } catch (IOException e) {
-                GrackleMod.log.warn("unable to open browser", e);
-            }
+            confirmPopup.show();
+        }
+    }
+
+    public void openBrowser() {
+        try {
+            Desktop.getDesktop().browse(url);
+        } catch (IOException e) {
+            GrackleMod.log.warn("unable to open browser", e);
         }
     }
 }
