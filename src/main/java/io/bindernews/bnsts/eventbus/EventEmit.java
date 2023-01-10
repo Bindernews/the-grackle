@@ -32,45 +32,51 @@ public class EventEmit<T> implements IEventEmit<T> {
 
     private final ArrayList<Entry<T>> handlers = new ArrayList<>();
 
-    /**
-     * Add a handler with the default priority.
-     * @param handler Event handler
-     */
+    /** {@inheritDoc} */
+    @Override
     public void on(Consumer<T> handler) {
         on(DEFAULT_PRIORITY, handler);
     }
 
-    /**
-     * Add a handler with a specific priority.
-     *
-     * @param priority Priority, lower values are called earlier
-     * @param handler  Event handler
-     */
+    /** {@inheritDoc} */
+    @Override
     public void on(int priority, Consumer<T> handler) {
         val entry = new Entry<>(handler, priority);
         EventBus.addOrdered(handlers, entry);
     }
 
-    /**
-     * Remove the handler, does nothing if the handler is not registered.
-     *
-     * @param handler Event handler
-     */
+    /** {@inheritDoc} */
+    @Override
     public void off(Consumer<T> handler) {
         handlers.removeIf(x -> x.handler == handler);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void emit(T event) {
+        boolean anyOnce = false;
         for (val h : handlers) {
             h.handler.accept(event);
+            anyOnce = anyOnce || h.once;
         }
+        if (anyOnce) {
+            handlers.removeIf(h -> h.once);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void once(Consumer<T> handler) {
+        val entry = new Entry<>(handler, 9999);
+        entry.once = true;
+        EventBus.addOrdered(handlers, entry);
     }
 
     @Data
     protected static class Entry<T> implements Comparable<Entry<T>> {
         final Consumer<T> handler;
         final int priority;
+        boolean once = false;
 
         @Override
         public int compareTo(@NotNull EventEmit.Entry o) {

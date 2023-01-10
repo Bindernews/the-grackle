@@ -19,19 +19,33 @@ public class HandlerList<H> implements IHandlerList<H> {
         this(EventBus.findHandle(clz, methodName));
     }
 
+    @Override
     public void on(int priority, H handler) {
         val entry = new Entry(handler, priority, hAccept.bindTo(handler));
         EventBus.addOrdered(handlers, entry);
     }
 
-    public void off(Object handler) {
+    @Override
+    public void off(H handler) {
         handlers.removeIf(e -> e.handler == handler);
+    }
+
+    @Override
+    public void once(H handler) {
+        val entry = new Entry(handler, 9999, hAccept.bindTo(handler));
+        entry.once = true;
+        EventBus.addOrdered(handlers, entry);
     }
 
     @SneakyThrows
     public void emit(Object... args) {
-        for (val e : handlers) {
-            e.hBound.invokeWithArguments(args);
+        boolean anyOnce = false;
+        for (val h : handlers) {
+            h.hBound.invokeWithArguments(args);
+            anyOnce = anyOnce || h.once;
+        }
+        if (anyOnce) {
+            handlers.removeIf(h -> h.once);
         }
     }
 
@@ -41,6 +55,7 @@ public class HandlerList<H> implements IHandlerList<H> {
         final int priority;
         /** Method handle bound with this object as the handler. */
         final MethodHandle hBound;
+        protected boolean once = false;
 
         @Override
         public int compareTo(@NotNull Entry o) {

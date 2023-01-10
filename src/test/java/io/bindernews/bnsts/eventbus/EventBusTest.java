@@ -37,9 +37,7 @@ class EventBusTest {
     void reifyOnGood() {
         assertDoesNotThrow(() -> {
             val bus = makeTestBus();
-            bus.<Handler1>on((a, b) -> {
-                System.out.println(a + b);
-            });
+            bus.<Handler1>on((a, b) -> System.out.println(a + b));
         });
     }
 
@@ -63,9 +61,23 @@ class EventBusTest {
     @Test
     void off() {
         val bus = makeTestBus();
-        Handler2 h = s -> {};
+        int[] out = new int[]{5};
+        Handler2 h = s -> out[0] += 2;
         bus.on(h);
+        bus.emitEvent("a");
         bus.off(h);
+        bus.emitEvent("a");
+        assertEquals(7, out[0]);
+    }
+
+    @Test
+    void once() {
+        val bus = makeTestBus();
+        int[] out = new int[]{5};
+        bus.<Handler2>once(s -> out[0] += 2);
+        bus.emitEvent("a");
+        bus.emitEvent("a");
+        assertEquals(7, out[0]);
     }
 
     @Test
@@ -81,12 +93,8 @@ class EventBusTest {
     void emit1() {
         val bus = makeTestBus();
         val out = new int[2];
-        bus.<Handler1>on((a, b) -> {
-            out[0] = a + b;
-        });
-        bus.<Handler1>on((a, b) -> {
-            out[1] = a * b;
-        });
+        bus.<Handler1>on((a, b) -> out[0] = a + b);
+        bus.<Handler1>on((a, b) -> out[1] = a * b);
         bus.emit(Handler1.class, 2, 3);
         assertArrayEquals(new int[]{5, 6}, out);
     }

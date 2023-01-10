@@ -80,6 +80,8 @@ public class EventBus {
         get(reify(handler)).off(handler);
     }
 
+    public <T> void once(T handler) { get(reify(handler)).once(handler); }
+
     public <T> void emit(Class<T> handlerType, Object... args) {
         get(handlerType).emit(args);
     }
