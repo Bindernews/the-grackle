@@ -2,28 +2,33 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
-public class Grenenade extends BaseCard implements ExtraHitsVariable.Mixin {
-    public static final CardConfig C = new CardConfig("Grenenade", CardType.ATTACK);
-    public static final CardNums NUM = CardNums.builder()
-            .cost(2).damage(4).extraHits(1).build();
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
+public class Grenenade extends BaseCard {
+    public static final CardConfig C =
+            new CardConfig("Grenenade", CardType.ATTACK, CardRarity.RARE, CardTarget.ALL_ENEMY);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(2);
+        c.damage(4, -1);
+        c.add(ExtraHitsVariable.inst, 1, -1);
+        c.addModifier(ExtraHitsMod::new);
+    });
 
     public Grenenade() {
-        super(C, CardRarity.RARE, CardTarget.ALL_ENEMY);
-        NUM.init(this);
+        super(C);
         isMultiDamage = true;
-        ExtraHitsMod.applyTo(this);
-        initializeDescription();
+        VARS.init(this);
     }
 
     @Override
     public void apply(AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.FIRE;
-        val hits = getExtraHits();
+        val hits = ExtraHitsVariable.inst.value(this);
         for (int i = 0; i < hits; i++) {
             addToBot(iop().damageAllEnemies(p, multiDamage, damageTypeForTurn, fx));
         }

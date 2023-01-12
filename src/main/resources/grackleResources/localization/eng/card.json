@@ -1,7 +1,7 @@
 {
   "grackle:AerialAdvantage": {
     "NAME": "Aerial Advantage",
-    "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw %s cards NL Exhaust",
+    "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw !grackle:magic2! cards NL Exhaust",
     "FLAVOR": "It's over Nob! I have the high ground!"
   },
   "grackle:AerialAce": {

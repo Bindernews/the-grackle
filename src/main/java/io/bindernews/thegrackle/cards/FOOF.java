@@ -8,11 +8,15 @@ import io.bindernews.thegrackle.power.BurningPower;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import lombok.val;
 
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
 public class FOOF extends BaseCard {
-    public static final CardConfig C = new CardConfig("FOOF", CardType.SKILL);
+    public static final CardConfig C =
+            new CardConfig("FOOF", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.ALL);
     static final CardVariables VARS = CardVariables.config(c -> {
         c.cost(1, -1);
         c.magic(10, 16);
+        c.exhaust(true, true);
     });
 
     static final String ABOUT_TITLE = "Things I Won't Work With: Dioxygen Difluoride";
@@ -26,9 +30,7 @@ public class FOOF extends BaseCard {
     }
 
     public FOOF() {
-        super(C, CardRarity.UNCOMMON, CardTarget.ALL);
-        exhaust = true;
-        VARS.init(this);
+        super(C, VARS);
     }
 
     @Override
@@ -38,10 +40,5 @@ public class FOOF extends BaseCard {
                 addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, 0), myAmt)));
         iop().getEnemies(p).forEach(cr ->
                 addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, 0), magicNumber)));
-    }
-
-    @Override
-    public void upgrade() {
-        VARS.upgrade(this);
     }
 }

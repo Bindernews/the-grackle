@@ -2,6 +2,7 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import io.bindernews.bnsts.CardVariables;
@@ -10,17 +11,20 @@ import lombok.var;
 
 import java.util.stream.Stream;
 
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
 public class ThisWillHurt extends BaseCard {
-    public static final CardConfig C = new CardConfig("ThisWillHurt", CardType.SKILL);
+    public static final CardConfig C =
+            new CardConfig("ThisWillHurt", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
     static final CardVariables VARS = CardVariables.config(c -> {
         c.cost(1, 0);
         c.magic(1, -1);
         c.block(4, -1);
+        c.onUpgrade(AbstractCard::initializeDescription);
     });
 
     public ThisWillHurt() {
-        super(C, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY);
-        VARS.init(this);
+        super(C, VARS);
     }
 
     @Override
@@ -40,11 +44,5 @@ public class ThisWillHurt extends BaseCard {
     public void initializeDescription() {
         rawDescription = upgraded ? C.getStrings().UPGRADE_DESCRIPTION : C.getStrings().DESCRIPTION;
         super.initializeDescription();
-    }
-
-    @Override
-    public void upgrade() {
-        VARS.upgrade(this);
-        initializeDescription();
     }
 }

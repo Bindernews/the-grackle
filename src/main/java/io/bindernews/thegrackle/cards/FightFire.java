@@ -1,33 +1,33 @@
 package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.actions.FightFireAction;
 import io.bindernews.thegrackle.helper.BurnHelper;
 import lombok.val;
 
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
 public class FightFire extends BaseCard {
-    public static final CardConfig C = new CardConfig("FightFire", CardType.ATTACK);
-    public static final CardNums NUM = CardNums.builder()
-            .cost(1)
-            .damage(4)
-            .magic(4).magicUpg(6)
-            .build();
+    public static final CardConfig C =
+            new CardConfig("FightFire", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
+    static final int DAMAGE = 4;
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(1, -1);
+        c.damage(DAMAGE, -1);
+        c.magic(4, 6);
+    });
 
     /** The owning creature, default is the player. */
-    public AbstractCreature owner;
+    public AbstractCreature owner = AbstractDungeon.player;
 
     public FightFire() {
-        super(C, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        NUM.init(this);
-        damageType = DamageInfo.DamageType.NORMAL;
-        rawDescription = String.format(rawDescription, NUM.damage);
-        owner = AbstractDungeon.player;
+        super(C, VARS);
+        rawDescription = String.format(rawDescription, DAMAGE);
         initializeDescription();
     }
 
@@ -51,21 +51,16 @@ public class FightFire extends BaseCard {
         if (discard.isPresent()) {
             burnCount = BurnHelper.countBurns(discard.get());
         }
-        baseDamage = NUM.damage + (burnCount * magicNumber);
+        baseDamage = DAMAGE + (burnCount * magicNumber);
     }
 
     @Override
     public void use(AbstractPlayer p, AbstractMonster m) {
-        addToBot(new FightFireAction(p, m, NUM.damage, magicNumber));
+        addToBot(new FightFireAction(p, m, DAMAGE, magicNumber));
     }
 
     @Override
     public void apply(AbstractCreature p, AbstractCreature m) {
         BaseCard.throwPlayerOnly();
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

@@ -2,23 +2,24 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.stance.StanceAloft;
+import io.bindernews.thegrackle.variables.Magic2Var;
+
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
 public class AerialAdvantage extends BaseCard {
-    public static final CardConfig C = new CardConfig("AerialAdvantage", CardType.SKILL);
-    public static final CardNums NUM = CardNums.builder()
-            .cost(0)
-            .magic(2).magicUpg(3)
-            .build();
-    public static int CARDS_TO_DRAW = 4;
+    public static final CardConfig C =
+            new CardConfig("AerialAdvantage", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(0);
+        c.magic(2, 3);
+        c.add(Magic2Var.inst, 4, -1);
+        c.exhaust(true, true);
+    });
 
     public AerialAdvantage() {
-        super(C, CardRarity.UNCOMMON, CardTarget.SELF);
-        rawDescription = String.format(rawDescription, CARDS_TO_DRAW);
-        exhaust = true;
-        NUM.init(this);
-        initializeDescription();
+        super(C, VARS);
     }
 
     @Override
@@ -26,11 +27,6 @@ public class AerialAdvantage extends BaseCard {
         // N.B Not applicable for charboss
         addToBot(iop().changeStance(p, StanceAloft.STANCE_ID));
         addToBot(iop().actionGainEnergy(p, magicNumber));
-        addToBot(new DrawCardAction(p, CARDS_TO_DRAW));
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
+        addToBot(new DrawCardAction(p, Magic2Var.inst.value(this)));
     }
 }

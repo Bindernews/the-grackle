@@ -5,22 +5,21 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.stance.StanceAloft;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
 public class AerialAce extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("AerialAce", CardType.ATTACK);
-    public static final CardNums NUM = CardNums.builder()
-            .cost(1)
-            .damage(8).damageUpg(12)
-            .build();
+    public static final CardConfig C =
+            new CardConfig("AerialAce", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(1);
+        c.damage(8, 12);
+    });
 
     public AerialAce() {
-        super(CFG, CardRarity.COMMON, CardTarget.ENEMY);
-        NUM.init(this);
-        damageType = damageTypeForTurn = DamageInfo.DamageType.NORMAL;
+        super(C, VARS);
     }
 
     @Override
@@ -34,10 +33,5 @@ public class AerialAce extends BaseCard {
     @Override
     public void apply(AbstractCreature p, AbstractCreature m) {
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), AttackEffect.SLASH_DIAGONAL));
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

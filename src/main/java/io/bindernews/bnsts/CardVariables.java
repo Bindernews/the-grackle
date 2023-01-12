@@ -1,15 +1,17 @@
 package io.bindernews.bnsts;
 
+import basemod.abstracts.AbstractCardModifier;
 import basemod.abstracts.DynamicVariable;
+import basemod.helpers.CardModifierManager;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
 import com.evacipated.cardcrawl.mod.stslib.variables.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.*;
 import java.util.ArrayList;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 /**
  * A utility for easily configuring an {@link AbstractCard}'s values.
@@ -18,14 +20,16 @@ import java.util.function.Consumer;
  * set values. StSLib's {@link DynamicVariable}s are supported, as well as anything
  * implementing {@link IVariable}, allowing user expansion.
  *
- * @author Binder News
+ * @author bindernews
  */
-public class CardVariables {
+public class CardVariables implements ICardInitializer {
 
     private final ArrayList<VariableSetting> settings = new ArrayList<>();
+    private final ArrayList<ICardInitializer> children = new ArrayList<>();
 
     public CardVariables() {}
 
+    @NotNull
     public static CardVariables config(Consumer<CardVariables> c) {
         val cv = new CardVariables();
         c.accept(cv);
@@ -36,10 +40,19 @@ public class CardVariables {
         settings.add(new VariableSetting(variable, value, valueUpg));
     }
 
+    public void child(ICardInitializer initializer) {
+        children.add(initializer);
+    }
+
+    public void addModifier(Supplier<AbstractCardModifier> ctor) {
+        child(new CardModifierSetup(ctor));
+    }
+
     public void block(int base, int upg) {
         add(vBlock, base, upg);
     }
 
+    public void cost(int base) { cost(base, -1); }
     public void cost(int base, int upg) {
         add(vCost, base, upg);
     }
@@ -52,13 +65,46 @@ public class CardVariables {
         add(vMagic, base, upg);
     }
 
+    public void multiDamage(boolean base, boolean upg) {
+        child(new ICardInitializer() {
+            @Override @SneakyThrows public void init(AbstractCard card) {
+                hMultiDamage[1].invoke(card, base);
+            }
+            @Override @SneakyThrows public void upgrade(AbstractCard card) {
+                hMultiDamage[1].invoke(card, upg);
+            }
+        });
+    }
+
+    public void exhaust(boolean base) {
+        exhaust(base, base);
+    }
+
+    public void exhaust(boolean base, boolean upg) {
+        child(new LambdaCardInit(
+                card -> card.exhaust = base,
+                card -> card.exhaust = upg
+        ));
+    }
+
+    public void onUpgrade(Consumer<AbstractCard> action) {
+        child(new LambdaCardInit(x -> {}, action));
+    }
+
+    public void onInit(Consumer<AbstractCard> action) {
+        child(new LambdaCardInit(action, x -> {}));
+    }
+
+    @Override
     public void init(AbstractCard card) {
         for (val s : settings) {
             s.variable.setBaseValue(card, s.value);
         }
+        children.forEach(a -> a.init(card));
         card.initializeDescription();
     }
 
+    @Override
     public void upgrade(AbstractCard card) {
         if (!card.upgraded) {
             upgradeName(card);
@@ -72,6 +118,7 @@ public class CardVariables {
                 s.variable.upgrade(card, s.valueUpg - s.value);
             }
         }
+        children.forEach(a -> a.upgrade(card));
     }
 
     @Data
@@ -81,12 +128,26 @@ public class CardVariables {
         final int valueUpg;
     }
 
+    @Data
+    public static class CardModifierSetup implements ICardInitializer {
+        final Supplier<AbstractCardModifier> ctor;
+
+        @Override
+        public void init(AbstractCard card) {
+            CardModifierManager.addModifier(card, ctor.get());
+        }
+
+        @Override
+        public void upgrade(AbstractCard card) {}
+    }
+
 
     private static final MethodHandle hUpgradeDamage;
     private static final MethodHandle hUpgradeBlock;
     private static final MethodHandle hUpgradeMagic;
     private static final MethodHandle hUpgradeName;
     private static final MethodHandle hUpgradeCost;
+    private static final MethodHandle[] hMultiDamage;
 
     static {
         val mtypeInt = MethodType.methodType(void.class, int.class);
@@ -96,6 +157,7 @@ public class CardVariables {
         hUpgradeMagic = findCardMethod("upgradeMagicNumber", mtypeInt);
         hUpgradeCost = findCardMethod("upgradeBaseCost", mtypeInt);
         hUpgradeName = findCardMethod("upgradeName", mtypeNone);
+        hMultiDamage = unreflectField(AbstractCard.class, "multiDamage");
     }
 
     private static MethodHandle findCardMethod(String name, MethodType args) {
@@ -103,6 +165,20 @@ public class CardVariables {
             val m = AbstractCard.class.getDeclaredMethod(name, args.parameterArray());
             m.setAccessible(true);
             return MethodHandles.lookup().unreflect(m);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private static MethodHandle[] unreflectField(Class<?> clz, String name) {
+        try {
+            val lookup = MethodHandles.lookup();
+            val m = clz.getDeclaredField(name);
+            m.setAccessible(true);
+            return new MethodHandle[] {
+                    lookup.unreflectGetter(m),
+                    lookup.unreflectSetter(m),
+            };
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

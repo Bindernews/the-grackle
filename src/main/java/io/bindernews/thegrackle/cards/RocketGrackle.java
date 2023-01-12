@@ -7,21 +7,20 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import lombok.val;
 
 public class RocketGrackle extends BaseCard {
-    public static final CardConfig C = new CardConfig("RocketGrackle", CardType.ATTACK);
-    static final CardNums NUM = CardNums.builder()
-            .cost(1)
-            .damage(8).damageUpg(12)
-            .magic(1).magicUpg(2)
-            .build();
+    public static final CardConfig C =
+            new CardConfig("RocketGrackle", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(1, -1);
+        c.damage(8, 12);
+        c.magic(1, 2);
+    });
 
     public RocketGrackle() {
-        super(C, CardRarity.COMMON, CardTarget.ENEMY);
-        NUM.init(this);
-        initializeDescription();
+        super(C, VARS);
     }
 
     @Override
@@ -30,10 +29,5 @@ public class RocketGrackle extends BaseCard {
         val isMonster = p instanceof AbstractMonster;
         addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
         addToBot(new ApplyPowerAction(m, p, new VulnerablePower(m, magicNumber, isMonster), magicNumber));
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

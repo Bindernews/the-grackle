@@ -1,0 +1,23 @@
+package io.bindernews.thegrackle.cards
+
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.core.AbstractCreature
+import io.bindernews.bnsts.CardVariables
+import java.util.function.Consumer
+
+class AAA : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.SLASH_VERTICAL
+        addToBot(DamageAction(m, DamageInfo(p, damage, damageType), fx))
+    }
+
+    companion object {
+        @JvmStatic val C = CardConfig("AAA", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        val VARS = CardVariables.config(Consumer { c: CardVariables ->
+            c.cost(2)
+            c.damage(14, 20)
+        })
+    }
+}

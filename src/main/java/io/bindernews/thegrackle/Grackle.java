@@ -102,9 +102,9 @@ public class Grackle extends CustomPlayer {
     @Override
     public ArrayList<String> getStartingDeck() {
         return arrayListOf(
-                Strike_GK.CFG.ID, Strike_GK.CFG.ID, Strike_GK.CFG.ID, Strike_GK.CFG.ID,
+                Strike_GK.C.ID, Strike_GK.C.ID, Strike_GK.C.ID, Strike_GK.C.ID,
                 Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID,
-                Takeoff.CFG.ID, CrashLanding.CFG.ID, FiredUpCard.C.ID, SelfBurn.C.ID
+                Takeoff.C.ID, CrashLanding.C.ID, FiredUpCard.C.ID, SelfBurn.C.ID
         );
     }
 

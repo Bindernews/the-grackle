@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import io.bindernews.bnsts.CardPredicate;
-import io.bindernews.bnsts.Lazy;
+import io.bindernews.bnsts.*;
 import io.bindernews.thegrackle.Grackle;
 import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.helper.ModInterop;
 
 @AutoAdd.Ignore
 public abstract class BaseCard extends CustomCard {
@@ -23,9 +21,17 @@ public abstract class BaseCard extends CustomCard {
      */
     protected CardPredicate<BaseCard> canUseTest = (c,p,m) -> true;
 
-    public BaseCard(CardConfig opts, CardRarity rarity, CardTarget target) {
+    protected ICardInitializer cardInitializer;
+
+    public BaseCard(CardConfig opts, ICardInitializer initializer) {
+        this(opts);
+        this.cardInitializer = initializer;
+        this.cardInitializer.init(this);
+    }
+
+    public BaseCard(CardConfig opts) {
         super(opts.ID, opts.getStrings().NAME, new RegionName(""), 1, opts.getStrings().DESCRIPTION,
-                opts.type, Grackle.En.COLOR_BLACK, rarity, target);
+                opts.type, Grackle.En.COLOR_BLACK, opts.rarity, opts.target);
         opts.loadImages(getCards());
         portrait = opts.getPortrait();
         jokePortrait = opts.getBetaPortrait();
@@ -41,6 +47,13 @@ public abstract class BaseCard extends CustomCard {
         apply(abstractPlayer, abstractMonster);
     }
 
+    @Override
+    public void upgrade() {
+        if (cardInitializer != null) {
+            cardInitializer.upgrade(this);
+        }
+    }
+
     /**
      * A more generic version of {@link BaseCard#use} which will be useful
      * when integrating with the Downfall mod.
@@ -48,13 +61,6 @@ public abstract class BaseCard extends CustomCard {
      * @param m Monster or Player target
      */
     public void apply(AbstractCreature p, AbstractCreature m) {}
-
-    /**
-     * Convenience method to get the {@link ModInterop} instance.
-     */
-    public ModInterop iop() {
-        return ModInterop.get();
-    }
 
     public static TextureAtlas getCards() {
         return cards.get();

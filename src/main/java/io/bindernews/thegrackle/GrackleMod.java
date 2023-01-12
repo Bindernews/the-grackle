@@ -24,6 +24,7 @@ import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
+import io.bindernews.thegrackle.variables.Magic2Var;
 import lombok.val;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -159,6 +160,7 @@ public class GrackleMod implements
     private void registerDynamicVariables() {
         log.debug(CO.REG_START, "dynamic variables");
         BaseMod.addDynamicVariable(ExtraHitsVariable.inst);
+        BaseMod.addDynamicVariable(Magic2Var.inst);
         log.debug(CO.REG_END, "dynamic variables");
     }
 
@@ -207,8 +209,11 @@ public class GrackleMod implements
     private static ArrayList<AbstractCard> makeCardList() {
         val list = new ArrayList<AbstractCard>();
         Collections.addAll(list,
+                new AAA(),
                 new AerialAce(),
                 new AerialAdvantage(),
+                new AirToGroundMissiles(),
+                new BePrepared(),
                 new BombingRun(),
                 new BurnCream(),
                 new Cackle(),
@@ -224,6 +229,7 @@ public class GrackleMod implements
                 new Flock(),
                 new FOOF(),
                 new Grenenade(),
+                new HangarMaintenance(),
                 new HenPeck(),
                 new InFlightService(),
                 new Parachute(),
@@ -232,11 +238,13 @@ public class GrackleMod implements
                 new PhoenixFeather(),
                 new PhoenixForm(),
                 new RocketGrackle(),
+                new Scratch(),
                 new SelfBurn(),
                 new BufferInputs(),
                 new Strike_GK(),
                 new SummonEgrets(),
                 new Swoop(),
+                new Tailwind(),
                 new Takeoff(),
                 new TargetingComputer(),
                 new ThisWillHurt(),
@@ -304,5 +312,4 @@ public class GrackleMod implements
             return id;
         }
     }
-
 }

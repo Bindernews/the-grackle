@@ -68,7 +68,7 @@ public abstract class AbstractSimpleVariable extends DynamicVariable implements 
     }
 
     /**
-     * Returns the extraHits field of the card, initializing it if it's null.
+     * Returns the io.bindernews.thegrackle.helper.getExtraHits field of the card, initializing it if it's null.
      */
     private VariableInst initField(AbstractCard card) {
         var f = field.get(card);

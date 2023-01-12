@@ -17,13 +17,22 @@ public class CardConfig {
     public final String name;
     public final String ID;
     public final AbstractCard.CardType type;
+    public final AbstractCard.CardRarity rarity;
+    public final AbstractCard.CardTarget target;
     private final Lazy<CardStrings> strings;
     @Getter private TextureAtlas.AtlasRegion portrait;
     @Getter private TextureAtlas.AtlasRegion betaPortrait;
 
-    public CardConfig(String name, AbstractCard.CardType type) {
+    public CardConfig(
+            String name,
+            AbstractCard.CardType type,
+            AbstractCard.CardRarity rarity,
+            AbstractCard.CardTarget target
+    ) {
         this.name = name;
         this.type = type;
+        this.rarity = rarity;
+        this.target = target;
         ID = GrackleMod.MOD_ID + ":" + name;
         strings = Lazy.of(() -> CardCrawlGame.languagePack.getCardStrings(ID));
     }

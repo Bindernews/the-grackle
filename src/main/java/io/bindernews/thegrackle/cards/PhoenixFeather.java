@@ -5,21 +5,21 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.RepairPower;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 
 /**
  * It's Self-Repair.
  */
 public class PhoenixFeather extends BaseCard {
-    public static final CardConfig CFG = new CardConfig("PhoenixFeather", CardType.POWER);
-    public static final CardNums NUM = CardNums.builder()
-            .cost(1)
-            .magic(7).magicUpg(10)
-            .build();
+    public static final CardConfig C =
+            new CardConfig("PhoenixFeather", CardType.POWER, CardRarity.UNCOMMON, CardTarget.SELF);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(1, -1);
+        c.magic(7, 10);
+    });
 
     public PhoenixFeather() {
-        super(CFG, CardRarity.UNCOMMON, CardTarget.SELF);
-        NUM.init(this);
+        super(C, VARS);
         tags.add(CardTags.HEALING);
     }
 
@@ -31,10 +31,5 @@ public class PhoenixFeather extends BaseCard {
     @Override
     public void apply(AbstractCreature p, AbstractCreature m) {
         BaseCard.throwPlayerOnly();
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

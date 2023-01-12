@@ -3,6 +3,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePackerFileProcessor
 import groovy.util.Node
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.ReaderInputStream
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.awt.Dimension
 import java.awt.Image
 import java.awt.Rectangle
@@ -35,6 +36,7 @@ plugins {
     id("java")
     id("co.uzzu.dotenv.gradle") version "2.0.0"
     id("io.freefair.lombok") version "6.6"
+    kotlin("jvm") version "1.4.10"
 }
 
 // Constants
@@ -85,6 +87,12 @@ tasks.getByName<JavaCompile>("compileJava") {
     sourceCompatibility = "1.8"
     targetCompatibility = "1.8"
     options.encoding = "UTF-8"
+}
+
+tasks.getByName<KotlinCompile>("compileKotlin") {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+    kotlinOptions.freeCompilerArgs += "-Xno-param-assertions"
 }
 
 tasks.register<Copy>("copySteamLibs") {

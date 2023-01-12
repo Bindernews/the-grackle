@@ -4,26 +4,25 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.actions.AddHitsAction;
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
 public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
-    public static final CardConfig C = new CardConfig("Flock", CardType.ATTACK);
-    static final CardNums NUM = CardNums.builder()
-            .cost(1)
-            .damage(2).damageUpg(4)
-            .extraHits(1).extraHitsUpg(2)
-            .magic(1)
-            .build();
+    public static final CardConfig C =
+            new CardConfig("Flock", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(1, -1);
+        c.damage(2, 4);
+        c.magic(1, -1);
+        c.add(ExtraHitsVariable.inst, 1, 2);
+        c.addModifier(ExtraHitsMod::new);
+    });
 
     public Flock() {
-        super(C, CardRarity.UNCOMMON, CardTarget.ENEMY);
-        NUM.init(this);
-        ExtraHitsMod.applyTo(this);
-        initializeDescription();
+        super(C, VARS);
     }
 
     @Override
@@ -34,10 +33,5 @@ public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
             addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
         }
         addToBot(new AddHitsAction(this, magicNumber, AddHitsAction.getPlayerCardGroups()));
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

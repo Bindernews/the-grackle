@@ -2,22 +2,26 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
 
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
 public class BombingRun extends BaseCard {
-    public static final CardConfig C = new CardConfig("BombingRun", CardType.ATTACK);
-    static final CardNums NUM = CardNums.builder()
-            .cost(1).damage(6).damageUpg(10).extraHits(1).build();
+    public static final CardConfig C =
+            new CardConfig("BombingRun", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(1);
+        c.damage(6, 10);
+        c.add(ExtraHitsVariable.inst, 1, -1);
+        c.addModifier(ExtraHitsMod::new);
+        c.multiDamage(true, true);
+    });
 
     public BombingRun() {
-        super(C, CardRarity.COMMON, CardTarget.ALL_ENEMY);
-        NUM.init(this);
-        isMultiDamage = true;
-        ExtraHitsMod.applyTo(this);
-        initializeDescription();
+        super(C, VARS);
     }
 
     @Override
@@ -27,10 +31,5 @@ public class BombingRun extends BaseCard {
         for (int i = 0; i < hits; i++) {
             addToBot(iop().damageAllEnemies(p, multiDamage, damageTypeForTurn, fx));
         }
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

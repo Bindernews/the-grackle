@@ -4,13 +4,19 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.cards.status.Burn;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardNums;
+import io.bindernews.bnsts.CardVariables;
 import lombok.val;
 
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
 public class SelfBurn extends BaseCard {
-    public static final CardConfig C = new CardConfig("SelfBurn", CardType.SKILL);
-    public static final CardNums NUM = CardNums.builder()
-            .cost(0).magic(1).magicUpg(2).build();
+    public static final CardConfig C =
+            new CardConfig("SelfBurn", CardType.SKILL, CardRarity.COMMON, CardTarget.NONE);
+    static final CardVariables VARS = CardVariables.config(c -> {
+        c.cost(0);
+        c.magic(1, 2);
+    });
+
     static final int BURN_COUNT = 1;
 
     /**
@@ -20,8 +26,7 @@ public class SelfBurn extends BaseCard {
     public boolean drawNow = true;
 
     public SelfBurn() {
-        super(C, CardRarity.COMMON, CardTarget.NONE);
-        NUM.init(this);
+        super(C, VARS);
     }
 
     @Override
@@ -33,10 +38,5 @@ public class SelfBurn extends BaseCard {
             addToBot(new ApplyPowerAction(p, p, power, magicNumber));
         }
         addToBot(iop().actionMakeTempCardInDiscard(p, new Burn(), BURN_COUNT));
-    }
-
-    @Override
-    public void upgrade() {
-        NUM.upgrade(this, false);
     }
 }

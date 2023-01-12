@@ -9,17 +9,19 @@ import com.megacrit.cardcrawl.powers.RegenPower;
 import io.bindernews.bnsts.CardVariables;
 import lombok.val;
 
+import static io.bindernews.thegrackle.helper.ModInterop.iop;
+
 public class InFlightService extends BaseCard {
-    public static final CardConfig C = new CardConfig("InFlightService", CardType.SKILL);
+    public static final CardConfig C =
+            new CardConfig("InFlightService", CardType.SKILL, CardRarity.RARE, CardTarget.SELF);
     static final CardVariables VARS = CardVariables.config(c -> {
         c.cost(2, 1);
         c.magic(5, -1);
+        c.exhaust(true, true);
     });
 
     public InFlightService() {
-        super(C, CardRarity.RARE, CardTarget.SELF);
-        exhaust = true;
-        VARS.init(this);
+        super(C, VARS);
     }
 
     @Override
@@ -30,10 +32,5 @@ public class InFlightService extends BaseCard {
             val power = iop().createPower(RegenPower.POWER_ID, p, magicNumber);
             addToBot(new ApplyPowerAction(p, p, power, magicNumber));
         }
-    }
-
-    @Override
-    public void upgrade() {
-        VARS.upgrade(this);
     }
 }

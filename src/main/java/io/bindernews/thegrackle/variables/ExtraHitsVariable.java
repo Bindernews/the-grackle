@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
 public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiHitManager {
-    public static final String KEY = GrackleMod.makeId("hits");
+    public static final String KEY = GrackleMod.makeId("io.bindernews.thegrackle.helper.hits");
 
     /**
      * Indicates that the card supports multi-hit.
@@ -42,11 +42,11 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
     }
 
     /**
-     * Returns the number of extra hits for a creature. This MAY be the same
+     * Returns the number of extra io.bindernews.thegrackle.helper.hits for a creature. This MAY be the same
      * value as calculated by {@link #applyPowers}, but not always.
      * @param source Creature emitting the event
      * @param initial Initial hit amount
-     * @return number of extra hits
+     * @return number of extra io.bindernews.thegrackle.helper.hits
      */
     @Override
     public int getExtraHits(AbstractCreature source, int initial) {
@@ -91,7 +91,7 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
     }
 
     /**
-     * Utility function to create a listener that will add hits based on
+     * Utility function to create a listener that will add io.bindernews.thegrackle.helper.hits based on
      * how much of a certain power the source creature has.
      * @param powerId Power ID to use
      * @return Event handler
