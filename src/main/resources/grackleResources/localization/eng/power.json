@@ -5,16 +5,24 @@
       "Exhausts *Burn cards in hand at the end of your turn."
     ]
   },
+  "grackle:BurningPower": {
+    "NAME": "Burning",
+    "DESCRIPTIONS": [
+      "At the start of your turn, take #b",
+      "At the start of its turn, takes #b",
+      " damage, then reduce #yBurning by #b2."
+    ]
+  },
   "grackle:CoolingPhoenixPower": {
     "NAME": "Cooling Phoenix",
     "DESCRIPTIONS": [
       "Cannot enter Phoenix Stance."
     ]
   },
-  "grackle:FireWithinPower": {
-    "NAME": "Fire Within",
+  "grackle:EmbodyFirePower": {
+    "NAME": "Embody Fire",
     "DESCRIPTIONS": [
-      "Gain %d Fireheart at the start of each turn."
+      "Damage from grackle:Burning and NL Burn cards heals instead."
     ]
   },
   "grackle:FiredUpPower": {
@@ -29,6 +37,12 @@
       "At 10 Fireheat, enter Phoenix Stance"
     ]
   },
+  "grackle:FireWithinPower": {
+    "NAME": "Fire Within",
+    "DESCRIPTIONS": [
+      "Gain %d Fireheart at the start of each turn."
+    ]
+  },
   "grackle:MultiHitPower": {
     "NAME": "Multi-Hit",
     "DESCRIPTIONS": [
@@ -41,16 +55,34 @@
       "Multi-hit attacks will hit %d extra time(s)."
     ]
   },
-  "grackle:PhoenixStancePower": {
-    "NAME": "Phoenix Stance",
+  "grackle:PlaguePower": {
+    "NAME": "Plague",
     "DESCRIPTIONS": [
-      ""
+      "Gain %s grackle:Peck at the start of each turn."
+    ]
+  },
+  "grackle:ResearchAndDevPower": {
+    "NAME": "Research and Development",
+    "DESCRIPTIONS": [
+      "Upgrade a random card at the end of combat. NL Removed if you lose HP."
+    ]
+  },
+  "grackle:SwoopPower": {
+    "NAME": "Swoop",
+    "DESCRIPTIONS": [
+      "At the end of your turn enter grackle:Aloft ."
     ]
   },
   "grackle:TargetingComputerPower": {
     "NAME": "Targeting Computer",
     "DESCRIPTIONS": [
       "Gain %d Vigor at the start of each turn."
+    ]
+  },
+  "grackle:TempThornsPower": {
+    "NAME": "Temporary Thorns",
+    "DESCRIPTIONS": [
+      "When attacked, deals #b%d damage back. NL Removed at end of turn."
     ]
   }
 }

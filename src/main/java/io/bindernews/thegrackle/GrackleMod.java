@@ -103,7 +103,6 @@ public class GrackleMod implements
     public static void initialize() {
         if (!hasInit) {
             GrackleMod mod = new GrackleMod();
-            ExtraHitsVariable.inst = new ExtraHitsVariable();
             // Done
             hasInit = true;
         }
@@ -203,44 +202,50 @@ public class GrackleMod implements
     }
 
     /**
-     * Exists so that all cards are "used"
+     * Exists so that all cards are "used", and so we have an easily-sorted list of cards.
      */
     @SuppressWarnings("unused")
-    private static ArrayList<AbstractCard> makeCardList() {
-        val list = new ArrayList<AbstractCard>();
-        Collections.addAll(list,
+    private static AbstractCard[] makeCardList() {
+        return new AbstractCard[] {
                 new AAA(),
                 new AerialAce(),
                 new AerialAdvantage(),
                 new AirToGroundMissiles(),
                 new BePrepared(),
                 new BombingRun(),
+                new BufferInputs(),
                 new BurnCream(),
                 new Cackle(),
+                new CorvusConundrum(),
                 new CrashLanding(),
+                new Death(),
                 new Defend_GK(),
                 new Duck(),
+                new EmbodyFire(),
                 new EvasiveManeuvers(),
+                new FOOF(),
+                new Forage(),
                 new FightFire(),
-                new FireWithin(),
-                new FiredUpCard(),
                 new FireTouch(),
                 new FireWithin(),
+                new FiredUpCard(),
                 new Flock(),
-                new FOOF(),
                 new Grenenade(),
                 new HangarMaintenance(),
                 new HenPeck(),
                 new InFlightService(),
+                new Murder(),
                 new Parachute(),
                 new Paratrooper(),
                 new PeckingOrder(),
                 new PhoenixFeather(),
                 new PhoenixForm(),
+                new Plague(),
+                new ResearchAndDev(),
                 new RocketGrackle(),
                 new Scratch(),
                 new SelfBurn(),
-                new BufferInputs(),
+                new SnapGracklePop(),
                 new Strike_GK(),
                 new SummonEgrets(),
                 new Swoop(),
@@ -248,9 +253,10 @@ public class GrackleMod implements
                 new Takeoff(),
                 new TargetingComputer(),
                 new ThisWillHurt(),
-                new TryThatAgain()
-        );
-        return list;
+                new TryThatAgain(),
+                new WildFire(),
+                new WindowPain()
+        };
     }
 
     /**

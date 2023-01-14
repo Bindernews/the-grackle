@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.bnsts.CardVariables
-import java.util.function.Consumer
 
 class AAA : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature) {
@@ -15,9 +14,9 @@ class AAA : BaseCard(C, VARS) {
 
     companion object {
         @JvmStatic val C = CardConfig("AAA", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
-        val VARS = CardVariables.config(Consumer { c: CardVariables ->
-            c.cost(2)
-            c.damage(14, 20)
-        })
+        val VARS = CardVariables().apply {
+            cost(2)
+            damage(14, 20)
+        }
     }
 }

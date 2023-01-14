@@ -13,7 +13,7 @@ public class SummonEgrets extends BaseCard {
     static final CardVariables VARS = CardVariables.config(c -> {
         c.cost(-1);
         c.damage(5, 8);
-        c.addModifier(ExtraHitsMod::new);
+        c.addModifier(new ExtraHitsMod());
         c.multiDamage(true, true);
     });
 

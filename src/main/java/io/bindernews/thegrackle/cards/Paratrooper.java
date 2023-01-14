@@ -13,6 +13,7 @@ import io.bindernews.thegrackle.cardmods.RequireAloftMod;
 import io.bindernews.thegrackle.stance.StanceAloft;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
@@ -26,8 +27,8 @@ public class Paratrooper extends BaseCard {
         c.cost(1, -1);
         c.damage(7, 12);
         c.add(ExtraHitsVariable.inst, 1, -1);
-        c.addModifier(ExtraHitsMod::new);
-        c.addModifier(RequireAloftMod::new);
+        c.addModifier(new ExtraHitsMod());
+        c.addModifier(new RequireAloftMod());
     });
 
     /** For damage display calculation */
@@ -46,7 +47,7 @@ public class Paratrooper extends BaseCard {
     }
 
     @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.SLASH_DIAGONAL;
         val hits = ExtraHitsVariable.inst.value(this);
         addToBot(iop().changeStance(p, NeutralStance.STANCE_ID));

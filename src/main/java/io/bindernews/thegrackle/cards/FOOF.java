@@ -7,6 +7,7 @@ import io.bindernews.thegrackle.Events;
 import io.bindernews.thegrackle.power.BurningPower;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
@@ -14,9 +15,9 @@ public class FOOF extends BaseCard {
     public static final CardConfig C =
             new CardConfig("FOOF", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.ALL);
     static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1, -1);
+        c.cost(1);
         c.magic(10, 16);
-        c.exhaust(true, true);
+        c.exhaust(true);
     });
 
     static final String ABOUT_TITLE = "Things I Won't Work With: Dioxygen Difluoride";
@@ -34,11 +35,11 @@ public class FOOF extends BaseCard {
     }
 
     @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
         val myAmt = magicNumber / 2;
         iop().getFriends(p).forEach(cr ->
-                addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, 0), myAmt)));
+                addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, myAmt), myAmt)));
         iop().getEnemies(p).forEach(cr ->
-                addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, 0), magicNumber)));
+                addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, magicNumber), magicNumber)));
     }
 }

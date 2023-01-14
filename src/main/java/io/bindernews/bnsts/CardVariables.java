@@ -6,6 +6,7 @@ import basemod.helpers.CardModifierManager;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
 import com.evacipated.cardcrawl.mod.stslib.variables.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,8 +45,8 @@ public class CardVariables implements ICardInitializer {
         children.add(initializer);
     }
 
-    public void addModifier(Supplier<AbstractCardModifier> ctor) {
-        child(new CardModifierSetup(ctor));
+    public void addModifier(AbstractCardModifier modifier) {
+        child(new CardModifierSetup(modifier));
     }
 
     public void block(int base, int upg) {
@@ -67,12 +68,8 @@ public class CardVariables implements ICardInitializer {
 
     public void multiDamage(boolean base, boolean upg) {
         child(new ICardInitializer() {
-            @Override @SneakyThrows public void init(AbstractCard card) {
-                hMultiDamage[1].invoke(card, base);
-            }
-            @Override @SneakyThrows public void upgrade(AbstractCard card) {
-                hMultiDamage[1].invoke(card, upg);
-            }
+            @Override public void init(AbstractCard card) { fIsMultiDamage.set(card, base); }
+            @Override public void upgrade(AbstractCard card) { fIsMultiDamage.set(card, upg); }
         });
     }
 
@@ -130,11 +127,11 @@ public class CardVariables implements ICardInitializer {
 
     @Data
     public static class CardModifierSetup implements ICardInitializer {
-        final Supplier<AbstractCardModifier> ctor;
+        final AbstractCardModifier modifier;
 
         @Override
         public void init(AbstractCard card) {
-            CardModifierManager.addModifier(card, ctor.get());
+            CardModifierManager.addModifier(card, modifier.makeCopy());
         }
 
         @Override
@@ -147,7 +144,11 @@ public class CardVariables implements ICardInitializer {
     private static final MethodHandle hUpgradeMagic;
     private static final MethodHandle hUpgradeName;
     private static final MethodHandle hUpgradeCost;
-    private static final MethodHandle[] hMultiDamage;
+
+    public static final IField<AbstractCard, Boolean> fIsMultiDamage =
+            IField.unreflect(AbstractCard.class, "isMultiDamage");
+    public static final IField<AbstractCard, DamageInfo.DamageType> fDamageType =
+            IField.unreflect(AbstractCard.class, "damageType");
 
     static {
         val mtypeInt = MethodType.methodType(void.class, int.class);
@@ -157,7 +158,6 @@ public class CardVariables implements ICardInitializer {
         hUpgradeMagic = findCardMethod("upgradeMagicNumber", mtypeInt);
         hUpgradeCost = findCardMethod("upgradeBaseCost", mtypeInt);
         hUpgradeName = findCardMethod("upgradeName", mtypeNone);
-        hMultiDamage = unreflectField(AbstractCard.class, "multiDamage");
     }
 
     private static MethodHandle findCardMethod(String name, MethodType args) {
@@ -165,20 +165,6 @@ public class CardVariables implements ICardInitializer {
             val m = AbstractCard.class.getDeclaredMethod(name, args.parameterArray());
             m.setAccessible(true);
             return MethodHandles.lookup().unreflect(m);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    private static MethodHandle[] unreflectField(Class<?> clz, String name) {
-        try {
-            val lookup = MethodHandles.lookup();
-            val m = clz.getDeclaredField(name);
-            m.setAccessible(true);
-            return new MethodHandle[] {
-                    lookup.unreflectGetter(m),
-                    lookup.unreflectSetter(m),
-            };
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

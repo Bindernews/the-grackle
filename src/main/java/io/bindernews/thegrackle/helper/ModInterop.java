@@ -144,6 +144,15 @@ public class ModInterop {
         return null;
     }
 
+    public AbstractGameAction actionApplyPower(
+            AbstractCreature source,
+            AbstractCreature target,
+            String powerId,
+            int amount
+    ) {
+        return new ApplyPowerAction(target, source, createPower(powerId, target, amount), amount);
+    }
+
     public static ModInterop get() {
         return inst.get();
     }

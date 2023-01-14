@@ -1,7 +1,9 @@
 package io.bindernews.thegrackle.power;
 
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
+import com.evacipated.cardcrawl.mod.stslib.damagemods.BindingHelper;
+import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModContainer;
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -9,21 +11,33 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.cardmods.EmbodyFireMod;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
 public class BurningPower extends BasePower {
     public static final String POWER_ID = GrackleMod.makeId(BurningPower.class);
+
     /** How much this is reduced by each turn. */
     static int REDUCE_PER_TURN = 2;
 
+    @NotNull
+    public final DamageModContainer damageMods;
 
     public AbstractCreature source;
+
+    @SuppressWarnings("unused")
+    public BurningPower(AbstractCreature owner, int amount) {
+        this(owner, null, amount);
+    }
 
     public BurningPower(AbstractCreature owner, AbstractCreature source, int amount) {
         super(POWER_ID);
         setOwnerAmount(owner, amount);
+        this.source = source;
+        damageMods = new DamageModContainer(this, new EmbodyFireMod());
         isTurnBased = true;
         type = PowerType.DEBUFF;
         if (this.amount >= 9999) {
@@ -31,6 +45,12 @@ public class BurningPower extends BasePower {
         }
         updateDescription();
         loadRegion("flameBarrier");
+    }
+
+    public static AbstractGameAction makeAction(
+            AbstractCreature source, AbstractCreature target, int amount
+    ) {
+        return new ApplyPowerAction(target, source, new BurningPower(target, source, amount), amount);
     }
 
     @Override
@@ -54,9 +74,18 @@ public class BurningPower extends BasePower {
     }
 
     private void applyDamage(AbstractCreature target, int dmg) {
-//        addToBot(new LoseHPAction(target, source, dmg, AttackEffect.FIRE));
-        val info = new DamageInfo(source, dmg, DamageInfo.DamageType.THORNS);
+        val info = BindingHelper.makeInfo(damageMods, owner, dmg, DamageInfo.DamageType.THORNS);
         addToBot(new DamageAction(target, info, AttackEffect.FIRE));
+    }
+
+    @Override
+    public void updateDescription() {
+        if (owner instanceof AbstractPlayer) {
+            description = strings.DESCRIPTIONS[0];
+        } else {
+            description = strings.DESCRIPTIONS[1];
+        }
+        description += amount + strings.DESCRIPTIONS[2];
     }
 
     @Override

@@ -6,6 +6,7 @@ import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 import static io.bindernews.thegrackle.helper.ModInterop.iop;
 
@@ -16,7 +17,7 @@ public class BombingRun extends BaseCard {
         c.cost(1);
         c.damage(6, 10);
         c.add(ExtraHitsVariable.inst, 1, -1);
-        c.addModifier(ExtraHitsMod::new);
+        c.addModifier(new ExtraHitsMod());
         c.multiDamage(true, true);
     });
 
@@ -25,7 +26,7 @@ public class BombingRun extends BaseCard {
     }
 
     @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.BLUNT_HEAVY;
         val hits = ExtraHitsVariable.inst.value(this);
         for (int i = 0; i < hits; i++) {

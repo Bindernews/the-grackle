@@ -11,6 +11,7 @@ import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.cardmods.RequireAloftMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 public class AirToGroundMissiles extends BaseCard {
     public static final CardConfig C =
@@ -20,8 +21,8 @@ public class AirToGroundMissiles extends BaseCard {
         c.damage(16, 20);
         c.add(ExtraHitsVariable.inst, 1, -1);
         c.multiDamage(true, true);
-        c.addModifier(ExtraHitsMod::new);
-        c.addModifier(RequireAloftMod::new);
+        c.addModifier(new ExtraHitsMod());
+        c.addModifier(new RequireAloftMod());
     });
 
     public AirToGroundMissiles() {
@@ -29,7 +30,7 @@ public class AirToGroundMissiles extends BaseCard {
     }
 
     @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.SLASH_HORIZONTAL;
         val hits = ExtraHitsVariable.inst.value(this);
         for (int i = 0; i < hits; i++) {

@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.*;
 import io.bindernews.thegrackle.Grackle;
 import io.bindernews.thegrackle.GrackleMod;
+import org.jetbrains.annotations.NotNull;
 
 @AutoAdd.Ignore
 public abstract class BaseCard extends CustomCard {
@@ -38,6 +39,12 @@ public abstract class BaseCard extends CustomCard {
     }
 
     @Override
+    public void applyPowers() {
+        magicNumber = baseMagicNumber;
+        super.applyPowers();
+    }
+
+    @Override
     public boolean canUse(AbstractPlayer p, AbstractMonster m) {
         return super.canUse(p, m) && canUseTest.test(this, p, m);
     }
@@ -60,7 +67,8 @@ public abstract class BaseCard extends CustomCard {
      * @param p Player or CharBoss
      * @param m Monster or Player target
      */
-    public void apply(AbstractCreature p, AbstractCreature m) {}
+    @SuppressWarnings("NullableProblems")
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {}
 
     public static TextureAtlas getCards() {
         return cards.get();

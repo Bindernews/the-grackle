@@ -1,12 +1,27 @@
 {
+  "grackle:AAA": {
+    "NAME": "AAA",
+    "DESCRIPTION": "Deal !D! damage.",
+    "FLAVOR": "Anti-Aircraft Artillery"
+  },
+  "grackle:AerialAce": {
+    "NAME": "Aerial Ace",
+    "DESCRIPTION": "Deal !D! damage."
+  },
   "grackle:AerialAdvantage": {
     "NAME": "Aerial Advantage",
     "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw !grackle:magic2! cards NL Exhaust",
     "FLAVOR": "It's over Nob! I have the high ground!"
   },
-  "grackle:AerialAce": {
-    "NAME": "Aerial Ace",
-    "DESCRIPTION": "Deal !D! damage."
+  "grackle:AirToGroundMissiles": {
+    "NAME": "Air to Ground Missiles",
+    "DESCRIPTION": "Deal !D! damage !grackle:hits! times.",
+    "FLAVOR": "They're not bombs, they're missiles."
+  },
+  "grackle:BePrepared": {
+    "NAME": "Be Prepared",
+    "DESCRIPTION": "Gain !M! grackle:Peck .",
+    "FLAVOR": "FOOLS! I will be king."
   },
   "grackle:BombingRun": {
     "NAME": "Bombing Run",
@@ -29,9 +44,22 @@
     "NAME": "Cackle",
     "DESCRIPTION": "Apply !M! Vulnerable and !M! Weak."
   },
+  "grackle:CorvusConundrum": {
+    "NAME": "Corvus Conundrum",
+    "DESCRIPTION": "TODO",
+    "FLAVOR": "Grackles aren't corvids, but you'd think they are. ~corndan"
+  },
   "grackle:CrashLanding": {
     "NAME": "Crash Landing",
     "DESCRIPTION": "Deal !D! damage, exit Stance"
+  },
+  "grackle:Death": {
+    "NAME": "Death",
+    "DESCRIPTION": "If the enemy has !M! or less HP, set their NL HP to 0.",
+    "EXTENDED_DESCRIPTION": [
+      "DEATH"
+    ],
+    "FLAVOR": "...from above!"
   },
   "grackle:Defend_GK": {
     "NAME": "Defend",
@@ -41,9 +69,21 @@
     "NAME": "Duck!",
     "DESCRIPTION": "Gain !B! Block. NL Block is not removed at the start of your next turn. NL Quack."
   },
+  "grackle:EmbodyFire": {
+    "NAME": "Embody Fire",
+    "DESCRIPTION": "Damage from grackle:Burning and NL Burn cards heals instead."
+  },
   "grackle:EvasiveManeuvers": {
     "NAME": "Evasive Maneuvers",
     "DESCRIPTION": "Gain !B! Block. NL Scry !M!."
+  },
+  "grackle:FOOF": {
+    "NAME": "FOOF",
+    "DESCRIPTION": "Apply !M! grackle:Burning to ALL enemies and half that to yourself. NL Exhaust."
+  },
+  "grackle:Forage": {
+    "NAME": "Forage",
+    "DESCRIPTION": "Gain !M! [E]."
   },
   "grackle:FightFire": {
     "NAME": "Fight Fire",
@@ -66,10 +106,6 @@
     "NAME": "Flock",
     "DESCRIPTION": "Deal !D! damage !grackle:hits! times. NL Increase the hits of ALL Flock cards by !M! this combat."
   },
-  "grackle:FOOF": {
-    "NAME": "FOOF",
-    "DESCRIPTION": "Apply !M! grackle:Burning to ALL enemies and half that to yourself. NL Exhaust."
-  },
   "grackle:Grenenade": {
     "NAME": "Grenenade",
     "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times. NL May be upgraded multiple times.",
@@ -80,6 +116,10 @@
       "nade"
     ]
   },
+  "grackle:HangarMaintenance": {
+    "NAME": "Hangar Maintenance",
+    "DESCRIPTION": "Gain !M! Regen ."
+  },
   "grackle:HenPeck": {
     "NAME": "Hen Peck",
     "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
@@ -87,6 +127,11 @@
   "grackle:InFlightService": {
     "NAME": "In-Flight Service",
     "DESCRIPTION": "Obtain a Regen Potion. NL Exhaust."
+  },
+  "grackle:Murder": {
+    "NAME": "Murder",
+    "DESCRIPTION": "Innate. NL Deal !D! damage. NL Exhaust.",
+    "FLAVOR": "...of crows"
   },
   "grackle:Parachute": {
     "NAME": "Parachute",
@@ -104,14 +149,33 @@
     "NAME": "Phoenix Feather",
     "DESCRIPTION": "At the end of combat, heal !M! HP."
   },
+  "grackle:Plague": {
+    "NAME": "Plague",
+    "DESCRIPTION": "At the start of your turn, gain !M! grackle:Peck.",
+    "FLAVOR": "A group of grackles is called a \"plague\" for obvious reasons."
+  },
+  "grackle:ResearchAndDev": {
+    "NAME": "Research and Development",
+    "DESCRIPTION": "Upgrade a random card at the end of combat. NL Lost if you lose health.",
+    "FLAVOR": "I just need some time to think..."
+  },
   "grackle:RocketGrackle": {
     "NAME": "Rocket Propelled Grackle",
     "DESCRIPTION": "Deal !D! damage. NL Apply !M! Vulnerable ."
+  },
+  "grackle:Scratch": {
+    "NAME": "Scratch",
+    "DESCRIPTION": "Deal !D! damage."
   },
   "grackle:SelfBurn": {
     "NAME": "Self Burn",
     "DESCRIPTION": "Draw !M! cards. NL Add a *Burn to your discard pile.",
     "FLAVOR": "Do you want some burn cream for that?"
+  },
+  "grackle:SnapGracklePop": {
+    "NAME": "Snap, Grackle, Pop",
+    "DESCRIPTION": "Apply !M! Vulnerable NL and !grackle:magic2! Weak.",
+    "FLAVOR": "Did you know grackles like rice krispies? ~corndan"
   },
   "grackle:Strike_GK": {
     "NAME": "Strike",
@@ -126,6 +190,10 @@
     "NAME": "Swoop",
     "DESCRIPTION": "Exit grackle:Aloft. NL At the end of your turn, enter grackle:Aloft .",
     "FLAVOR": "Wheeee!"
+  },
+  "grackle:Tailwind": {
+    "NAME": "Tailwind",
+    "DESCRIPTION": "At the start of your turn, draw !M! additional card."
   },
   "grackle:Takeoff": {
     "NAME": "Takeoff",
@@ -144,5 +212,14 @@
     "NAME": "Let's Try That Again",
     "DESCRIPTION": "Discard your hand, NL then draw that many cards.",
     "FLAVOR": "A Game Over is only temporary."
+  },
+  "grackle:WildFire": {
+    "NAME": "Wild Fire",
+    "DESCRIPTION": "Apply !M! grackle:Burning to EVERYONE."
+  },
+  "grackle:WindowPain": {
+    "NAME": "Window Pain",
+    "DESCRIPTION": "Gain !B! Block. NL Gain !M! temporary Thorns.",
+    "FLAVOR": "Hahahaha you fell for it!"
   }
 }

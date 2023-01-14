@@ -36,7 +36,9 @@ plugins {
     id("java")
     id("co.uzzu.dotenv.gradle") version "2.0.0"
     id("io.freefair.lombok") version "6.6"
-    kotlin("jvm") version "1.4.10"
+    // MTS ships kotlin 1.4.10, but as long as we don't use any newer stdlib
+    // features, we can get the compiler improvements of 1.5
+    kotlin("jvm") version "1.5.32"
 }
 
 // Constants
@@ -90,8 +92,7 @@ tasks.getByName<JavaCompile>("compileJava") {
 }
 
 tasks.getByName<KotlinCompile>("compileKotlin") {
-    sourceCompatibility = "1.8"
-    targetCompatibility = "1.8"
+    kotlinOptions.jvmTarget = "1.8"
     kotlinOptions.freeCompilerArgs += "-Xno-param-assertions"
 }
 

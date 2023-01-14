@@ -9,6 +9,7 @@ import io.bindernews.thegrackle.actions.AddHitsAction;
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
     public static final CardConfig C =
@@ -18,7 +19,7 @@ public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
         c.damage(2, 4);
         c.magic(1, -1);
         c.add(ExtraHitsVariable.inst, 1, 2);
-        c.addModifier(ExtraHitsMod::new);
+        c.addModifier(new ExtraHitsMod());
     });
 
     public Flock() {
@@ -26,7 +27,7 @@ public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
     }
 
     @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.BLUNT_LIGHT;
         val hits = getExtraHits();
         for (int i = 0; i < hits; i++) {
