@@ -1,10 +1,13 @@
 package io.bindernews.bnsts.eventbus;
 
-import lombok.*;
+import lombok.Data;
+import lombok.SneakyThrows;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class HandlerList<H> implements IHandlerList<H> {
     protected final MethodHandle hAccept;
@@ -35,6 +38,12 @@ public class HandlerList<H> implements IHandlerList<H> {
         val entry = new Entry(handler, 9999, hAccept.bindTo(handler));
         entry.once = true;
         EventBus.addOrdered(handlers, entry);
+    }
+
+    /** {@inheritDoc} */
+    @Override @SuppressWarnings("unchecked")
+    public @NotNull Stream<H> getHandlers() {
+        return handlers.stream().map(e -> (H) e.handler);
     }
 
     @SneakyThrows

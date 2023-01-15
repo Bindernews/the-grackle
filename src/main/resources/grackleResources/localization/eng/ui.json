@@ -9,5 +9,11 @@
     "TEXT": [
       "Open URL?"
     ]
+  },
+  "grackle:MainMenuMetricsRequest": {
+    "TEXT": [
+      "Please enable metrics",
+      "Please help us develop The Grackle by uploading run metrics."
+    ]
   }
 }

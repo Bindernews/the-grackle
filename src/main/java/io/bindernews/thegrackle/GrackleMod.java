@@ -4,6 +4,7 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.mod.stslib.icons.AbstractCustomIcon;
 import com.evacipated.cardcrawl.mod.stslib.icons.CustomIconHelper;
@@ -23,6 +24,7 @@ import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
 import io.bindernews.thegrackle.ui.CardClickableLink;
+import io.bindernews.thegrackle.ui.MainMenuMetricsRequest;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
 import io.bindernews.thegrackle.variables.Magic2Var;
 import lombok.val;
@@ -31,14 +33,15 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
 @SpireInitializer
 public class GrackleMod implements
         AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
-        EditKeywordsSubscriber, PostInitializeSubscriber, OnStartBattleSubscriber
+        EditKeywordsSubscriber, PostInitializeSubscriber, OnStartBattleSubscriber, PreUpdateSubscriber
 {
     public static final Logger log = LogManager.getLogger(GrackleMod.class);
 
@@ -101,6 +104,8 @@ public class GrackleMod implements
                 MetricsPatches.sendPost(metrics, CO.METRICS_URL);
             }
         });
+
+        Events.popupRender().on(this::onPopupRender);
     }
 
     @SuppressWarnings("unused")
@@ -146,9 +151,22 @@ public class GrackleMod implements
     @Override
     public void receivePostInitialize() {
         registerPowers();
-        val ignore1 = CardClickableLink.getInst();
+        Events.popups().on(CardClickableLink.getInst());
+        Events.popups().on(MainMenuMetricsRequest.getInst());
     }
 
+    @Override
+    public void receivePreUpdate() {
+        Events.popups().getHandlers().forEach(p -> {
+            if (p.isEnabled()) p.update();
+        });
+    }
+
+    public void onPopupRender(SpriteBatch sb) {
+        Events.popups().getHandlers().forEach(p -> {
+            if (p.isEnabled()) p.render(sb);
+        });
+    }
 
     private void registerPowers() {
         log.debug("registering powers");

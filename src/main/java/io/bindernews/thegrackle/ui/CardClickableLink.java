@@ -1,17 +1,19 @@
 package io.bindernews.thegrackle.ui;
 
-import basemod.BaseMod;
 import basemod.ReflectionHacks;
-import basemod.interfaces.PreUpdateSubscriber;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.helpers.*;
+import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.Hitbox;
+import com.megacrit.cardcrawl.helpers.HitboxListener;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.UIStrings;
-import io.bindernews.thegrackle.Events;
 import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.api.IPopup;
 import lombok.Getter;
 import lombok.val;
 
@@ -21,7 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
+public class CardClickableLink implements IPopup, HitboxListener {
     public static final String UI_ID = GrackleMod.makeId(CardClickableLink.class);
 
     @Getter(lazy = true)
@@ -51,8 +53,6 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
     float textH = 0.f;
 
     private CardClickableLink() {
-        BaseMod.subscribe(this);
-        Events.popupRender().on(this::render);
         font = FontHelper.tipBodyFont;
         confirmPopup.getOnAction().on(a -> {
             if (a == MyConfirmPopup.Action.YES) {
@@ -99,10 +99,8 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
         }
     }
 
+    @Override
     public void render(SpriteBatch sb) {
-        if (!enabled) {
-            return;
-        }
         renderSelf(sb);
         confirmPopup.render(sb);
     }
@@ -126,15 +124,17 @@ public class CardClickableLink implements PreUpdateSubscriber, HitboxListener {
     }
 
     @Override
-    public void receivePreUpdate() {
+    public void update() {
+        urlHb.encapsulatedUpdate(this);
+        confirmPopup.update();
+    }
+
+    @Override
+    public boolean isEnabled() {
         if (!CardCrawlGame.cardPopup.isOpen) {
             enabled = false;
         }
-        if (!enabled) {
-            return;
-        }
-        urlHb.encapsulatedUpdate(this);
-        confirmPopup.update();
+        return enabled;
     }
 
     @Override

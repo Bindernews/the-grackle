@@ -1,5 +1,9 @@
 package io.bindernews.bnsts.eventbus;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.stream.Stream;
+
 /**
  * The handler list for a specific type of event handler.
  *
@@ -36,6 +40,11 @@ public interface IHandlerList<T> {
      * @param handler Event handler
      */
     void once(T handler);
+
+    /**
+     * Returns a stream over the handlers, in order.
+     */
+    @NotNull Stream<T> getHandlers();
 
     void emit(Object... args);
 }

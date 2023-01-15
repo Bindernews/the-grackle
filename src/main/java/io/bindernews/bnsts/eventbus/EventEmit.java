@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -49,6 +50,12 @@ public class EventEmit<T> implements IEventEmit<T> {
     @Override
     public void off(Consumer<T> handler) {
         handlers.removeIf(x -> x.handler == handler);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public @NotNull Stream<Consumer<T>> getHandlers() {
+        return handlers.stream().map(e -> e.handler);
     }
 
     /** {@inheritDoc} */
