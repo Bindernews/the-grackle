@@ -17,11 +17,6 @@ public abstract class BaseCard extends CustomCard {
     private static final Lazy<TextureAtlas> cards = Lazy.of(() ->
             new TextureAtlas(Gdx.files.classpath(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas")));
 
-    /**
-     * Used in {@link BaseCard#canUse} as a simple way for subclasses to customize canUse behaviour.
-     */
-    protected CardPredicate<BaseCard> canUseTest = (c,p,m) -> true;
-
     protected ICardInitializer cardInitializer;
 
     public BaseCard(CardConfig opts, ICardInitializer initializer) {
@@ -42,11 +37,6 @@ public abstract class BaseCard extends CustomCard {
     public void applyPowers() {
         magicNumber = baseMagicNumber;
         super.applyPowers();
-    }
-
-    @Override
-    public boolean canUse(AbstractPlayer p, AbstractMonster m) {
-        return super.canUse(p, m) && canUseTest.test(this, p, m);
     }
 
     @Override

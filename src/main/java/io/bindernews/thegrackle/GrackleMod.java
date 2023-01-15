@@ -76,6 +76,10 @@ public class GrackleMod implements
 
         /** Sound effect ID */
         String SFX_QUACK = makeId("DUCK");
+
+
+        /** The "Aloft" keyword */
+        String KW_ALOFT = makeId("Aloft");
     }
 
     /**

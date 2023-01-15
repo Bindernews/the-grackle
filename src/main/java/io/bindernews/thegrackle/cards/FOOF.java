@@ -1,6 +1,5 @@
 package io.bindernews.thegrackle.cards;
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import io.bindernews.bnsts.CardVariables;
 import io.bindernews.thegrackle.Events;
@@ -36,10 +35,8 @@ public class FOOF extends BaseCard {
 
     @Override
     public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
-        val myAmt = magicNumber / 2;
-        iop().getFriends(p).forEach(cr ->
-                addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, myAmt), myAmt)));
-        iop().getEnemies(p).forEach(cr ->
-                addToBot(new ApplyPowerAction(cr, p, new BurningPower(cr, p, magicNumber), magicNumber)));
+        val amt = magicNumber;
+        iop().getFriends(p).forEach(cr -> addToBot(BurningPower.makeAction(p, cr, amt)));
+        iop().getEnemies(p).forEach(cr -> addToBot(BurningPower.makeAction(p, cr, amt)));
     }
 }

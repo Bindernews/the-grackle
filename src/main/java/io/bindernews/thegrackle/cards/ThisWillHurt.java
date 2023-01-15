@@ -2,12 +2,14 @@ package io.bindernews.thegrackle.cards;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import io.bindernews.bnsts.CardVariables;
 import lombok.val;
 import lombok.var;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.Stream;
 
@@ -28,7 +30,7 @@ public class ThisWillHurt extends BaseCard {
     }
 
     @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
+    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
         val fx = AbstractGameAction.AttackEffect.NONE;
         var targets = iop().getEnemies(p);
         if (!upgraded) {
@@ -38,6 +40,7 @@ public class ThisWillHurt extends BaseCard {
             val power = iop().createPower(VulnerablePower.POWER_ID, cr, magicNumber);
             addToBot(new ApplyPowerAction(cr, p, power, magicNumber, true, fx));
         });
+        addToBot(new GainBlockAction(p, p, block));
     }
 
     @Override

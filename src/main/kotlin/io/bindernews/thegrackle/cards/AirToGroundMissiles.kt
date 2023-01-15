@@ -1,44 +1,40 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardVariables;
-import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
-import io.bindernews.thegrackle.cardmods.RequireAloftMod;
-import io.bindernews.thegrackle.variables.ExtraHitsVariable;
-import lombok.val;
-import org.jetbrains.annotations.NotNull;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.characters.AbstractPlayer
+import com.megacrit.cardcrawl.core.AbstractCreature
+import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.cardmods.DoubleAloftDamageMod
+import io.bindernews.thegrackle.cardmods.ExtraHitsMod
+import io.bindernews.thegrackle.cardmods.RequireAloftMod
+import io.bindernews.thegrackle.variables.ExtraHitsVariable
 
-public class AirToGroundMissiles extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("AirToGroundMissiles", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(2);
-        c.damage(16, 20);
-        c.add(ExtraHitsVariable.inst, 1, -1);
-        c.multiDamage(true, true);
-        c.addModifier(new ExtraHitsMod());
-        c.addModifier(new RequireAloftMod());
-    });
-
-    public AirToGroundMissiles() {
-        super(C, VARS);
+class AirToGroundMissiles : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.SLASH_HORIZONTAL
+        val hits = ExtraHitsVariable.inst.value(this)
+        for (i in 0 until hits) {
+            if (p is AbstractPlayer) {
+                addToBot(DamageAllEnemiesAction(p, multiDamage, damageType, fx))
+            } else {
+                addToBot(DamageAction(m, DamageInfo(p, damage, damageType), fx))
+            }
+        }
     }
 
-    @Override
-    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
-        val fx = AbstractGameAction.AttackEffect.SLASH_HORIZONTAL;
-        val hits = ExtraHitsVariable.inst.value(this);
-        for (int i = 0; i < hits; i++) {
-            if (p instanceof AbstractPlayer) {
-                addToBot(new DamageAllEnemiesAction(p, multiDamage, damageType, fx));
-            } else {
-                addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), fx));
-            }
+    companion object {
+        @JvmStatic val C = CardConfig("AirToGroundMissiles", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY)
+        val VARS = CardVariables.config { c ->
+            c.cost(2)
+            c.damage(16, 20)
+            c.add(ExtraHitsVariable.inst, 1, -1)
+            c.multiDamage(true, true)
+            c.addModifier(ExtraHitsMod())
+            c.addModifier(RequireAloftMod())
+            c.addModifier(DoubleAloftDamageMod())
         }
     }
 }

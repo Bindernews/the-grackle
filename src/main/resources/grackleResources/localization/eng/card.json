@@ -15,7 +15,7 @@
   },
   "grackle:AirToGroundMissiles": {
     "NAME": "Air to Ground Missiles",
-    "DESCRIPTION": "Deal !D! damage !grackle:hits! times.",
+    "DESCRIPTION": "Deal !D! damage !grackle:hits! times to ALL enemies.",
     "FLAVOR": "They're not bombs, they're missiles."
   },
   "grackle:BePrepared": {
@@ -29,7 +29,7 @@
   },
   "grackle:BufferInputs": {
     "NAME": "Buffer Inputs",
-    "DESCRIPTION": "Gain !M! grackle:Peck . NL Exhaust .",
+    "DESCRIPTION": "Gain !M! grackle:Peck .",
     "FLAVOR": "Two full steps and one half-step will get me back on step-route. ~tinahacks"
   },
   "grackle:BurnCream": {
@@ -215,7 +215,7 @@
   },
   "grackle:WildFire": {
     "NAME": "Wild Fire",
-    "DESCRIPTION": "Apply !M! grackle:Burning to EVERYONE."
+    "DESCRIPTION": "Apply !M! grackle:Burning to ALL enemies. NL Add !grackle:magic2! *Burns to your discard pile."
   },
   "grackle:WindowPain": {
     "NAME": "Window Pain",

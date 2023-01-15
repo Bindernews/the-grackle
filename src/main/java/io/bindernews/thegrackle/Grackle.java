@@ -104,7 +104,7 @@ public class Grackle extends CustomPlayer {
         return arrayListOf(
                 Strike_GK.C.ID, Strike_GK.C.ID, Strike_GK.C.ID, Strike_GK.C.ID,
                 Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID, Defend_GK.C.ID,
-                Takeoff.C.ID, CrashLanding.C.ID, FiredUpCard.C.ID, SelfBurn.C.ID
+                Takeoff.C.ID, CrashLanding.C.ID
         );
     }
 
@@ -136,11 +136,11 @@ public class Grackle extends CustomPlayer {
     }
 
     /**
-     * Match and keep event cards?
+     * Match and keep event card
      */
     @Override
     public AbstractCard getStartCardForEvent() {
-        return null; // TODO
+        return new Flock();
     }
 
     @Override

@@ -50,6 +50,7 @@ public class MiscUtil {
     @SafeVarargs
     public static <E> ArrayList<E> arrayListOf(E ...elements) {
         ArrayList<E> lst = new ArrayList<>();
+        lst.ensureCapacity(elements.length);
         Collections.addAll(lst, elements);
         return lst;
     }
@@ -179,19 +180,4 @@ public class MiscUtil {
         return lst;
     }
 
-    /**
-     * Returns {@code desc[0] + args[0] + desc[1] + args[1] + desc[2]},
-     * repeating the pattern until {@code args} is empty.
-     * @param desc Array of description strings
-     * @param args Values to put between each description string
-     * @return Concatenated description string
-     */
-    public static String concatDescriptions(String[] desc, Object... args) {
-        val sb = new StringBuilder(desc[0]);
-        for (int i = 0; i < args.length; i += 1) {
-            sb.append(args[i]);
-            sb.append(desc[i + 1]);
-        }
-        return sb.toString();
-    }
 }

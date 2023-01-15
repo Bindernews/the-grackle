@@ -11,17 +11,15 @@ import io.bindernews.thegrackle.stance.StanceAloft;
  * if the user is in {@link StanceAloft}.
  */
 public class RequireAloftMod extends AbstractCardModifier {
-    public static final String ID = GrackleMod.makeId("Aloft");
-
     @Override
     public boolean canPlayCard(AbstractCard card) {
         return StanceAloft.checkPlay(card, AbstractDungeon.player, null);
     }
-    
+
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
         String mustBe = GrackleMod.miscUI.get().get("must_be");
-        return String.format("%s %s NL %s", mustBe, ID, rawDescription);
+        return String.format("%s %s NL %s", mustBe, GrackleMod.CO.KW_ALOFT, rawDescription);
     }
 
     @Override

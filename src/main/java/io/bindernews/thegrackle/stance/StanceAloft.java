@@ -80,8 +80,13 @@ public class StanceAloft extends AbstractStance {
         return b;
     }
 
-    public static boolean isAloft(AbstractPlayer p) {
-        return isAloft(p.stance);
+    public static boolean isAloft(AbstractCreature p) {
+        AbstractStance st = iop().getStance(p);
+        if (st == null) {
+            return false;
+        } else {
+            return isAloft(st);
+        }
     }
 
     public static boolean isAloft(AbstractStance s) {

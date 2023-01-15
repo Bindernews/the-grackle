@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.*;
 
 /**
@@ -84,6 +85,10 @@ public class CardVariables implements ICardInitializer {
         ));
     }
 
+    public void tags(final AbstractCard.CardTags ...tags) {
+        onInit(card -> Collections.addAll(card.tags, tags));
+    }
+
     public void onUpgrade(Consumer<AbstractCard> action) {
         child(new LambdaCardInit(x -> {}, action));
     }
@@ -96,6 +101,7 @@ public class CardVariables implements ICardInitializer {
     public void init(AbstractCard card) {
         for (val s : settings) {
             s.variable.setBaseValue(card, s.value);
+            s.variable.setValue(card, s.value);
         }
         children.forEach(a -> a.init(card));
         card.initializeDescription();
@@ -147,6 +153,7 @@ public class CardVariables implements ICardInitializer {
 
     public static final IField<AbstractCard, Boolean> fIsMultiDamage =
             IField.unreflect(AbstractCard.class, "isMultiDamage");
+
     public static final IField<AbstractCard, DamageInfo.DamageType> fDamageType =
             IField.unreflect(AbstractCard.class, "damageType");
 

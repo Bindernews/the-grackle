@@ -15,11 +15,11 @@ public class PhoenixForm extends BaseCard {
     static final CardVariables VARS = CardVariables.config(c -> {
         c.cost(3, 2);
         c.magic(6, -1);
+        c.tags(BaseModCardTags.FORM);
     });
 
     public PhoenixForm() {
         super(C, VARS);
-        tags.add(BaseModCardTags.FORM);
     }
 
     @Override

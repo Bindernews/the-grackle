@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Flock extends BaseCard implements ExtraHitsVariable.Mixin {
     public static final CardConfig C =
-            new CardConfig("Flock", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
+            new CardConfig("Flock", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
     static final CardVariables VARS = CardVariables.config(c -> {
         c.cost(1, -1);
         c.damage(2, 4);

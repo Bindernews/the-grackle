@@ -17,12 +17,13 @@ public class Grenenade extends BaseCard {
         c.cost(2);
         c.damage(4, -1);
         c.add(ExtraHitsVariable.inst, 1, -1);
+        c.multiDamage(true, true);
         c.addModifier(new ExtraHitsMod());
     });
 
     public Grenenade() {
         super(C);
-        isMultiDamage = true;
+        // Custom upgrade mechanics, so we only need VARS for init
         VARS.init(this);
     }
 

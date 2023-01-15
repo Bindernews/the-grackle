@@ -1,37 +1,23 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import io.bindernews.bnsts.CardVariables;
-import io.bindernews.thegrackle.stance.StanceAloft;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.core.AbstractCreature
+import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.cardmods.DoubleAloftDamageMod
 
-import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
-
-public class AerialAce extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("AerialAce", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1);
-        c.damage(8, 12);
-    });
-
-    public AerialAce() {
-        super(C, VARS);
+class AerialAce : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        addToBot(DamageAction(m, DamageInfo(p, damage, damageType), AttackEffect.SLASH_DIAGONAL))
     }
 
-    @Override
-    public float calculateModifiedCardDamage(AbstractPlayer player, AbstractMonster mo, float tmp) {
-        if (StanceAloft.isAloft(player.stance)) {
-            tmp *= 2.f;
+    companion object {
+        @JvmStatic val C = CardConfig("AerialAce", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        val VARS = CardVariables().apply {
+            cost(1)
+            damage(8, 12)
+            addModifier(DoubleAloftDamageMod())
         }
-        return tmp;
-    }
-
-    @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
-        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), AttackEffect.SLASH_DIAGONAL));
     }
 }
