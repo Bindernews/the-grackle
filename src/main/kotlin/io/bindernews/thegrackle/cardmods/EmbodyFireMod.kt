@@ -1,22 +1,28 @@
 package io.bindernews.thegrackle.cardmods
 
 import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier
-import com.megacrit.cardcrawl.cards.AbstractCard
+import com.megacrit.cardcrawl.actions.common.HealAction
+import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
 import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.thegrackle.power.EmbodyFirePower
 
 class EmbodyFireMod : AbstractDamageModifier() {
-    override fun atDamageFinalGive(
-        damage: Float,
-        type: DamageType,
-        target: AbstractCreature?,
-        card: AbstractCard?
-    ): Float {
-        if (target == null) {
-            return damage
+    override fun onAttackToChangeDamage(info: DamageInfo, damageAmount: Int, target: AbstractCreature): Int {
+        return if (target.hasPower(EmbodyFirePower.POWER_ID)) {
+            addToBot(HealAction(target, target, damageAmount))
+            0
+        } else {
+            damageAmount
         }
-        return if (target.hasPower(EmbodyFirePower.POWER_ID)) { -damage } else { damage }
+    }
+
+    override fun ignoresBlock(target: AbstractCreature): Boolean {
+        return target.hasPower(EmbodyFirePower.POWER_ID)
+    }
+
+    override fun affectsDamageType(type: DamageType): Boolean {
+        return (type == DamageType.THORNS)
     }
 
     override fun makeCopy(): AbstractDamageModifier = EmbodyFireMod()

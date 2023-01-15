@@ -3,8 +3,10 @@ package io.bindernews.thegrackle.power;
 import com.evacipated.cardcrawl.mod.stslib.damagemods.BindingHelper;
 import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModContainer;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.*;
-import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
+import com.megacrit.cardcrawl.actions.common.DamageAction;
+import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
+import com.megacrit.cardcrawl.cards.DamageInfo.DamageType;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -56,25 +58,38 @@ public class BurningPower extends BasePower {
     @Override
     public void atStartOfTurn() {
         if (AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.getMonsters().areMonstersBasicallyDead()) {
-            flashWithoutSound();
-            // Damage the owner
-            applyDamage(owner, amount);
-            // If the owner is a monster, damage all monsters
             if (!(owner instanceof AbstractPlayer)) {
-                int aoeDamage = amount / 2;
-                for (val monster : AbstractDungeon.getMonsters().monsters) {
-                    if (monster != owner) {
-                        applyDamage(monster, aoeDamage);
-                    }
-                }
+                dealGroupDamage();
             }
-            // Reduce power
-            addToBot(new ReducePowerAction(owner, owner, POWER_ID, REDUCE_PER_TURN));
         }
     }
 
+    @Override
+    public void atEndOfTurn(boolean isPlayer) {
+        if (owner instanceof AbstractPlayer && isPlayer) {
+            dealGroupDamage();
+        }
+    }
+
+    private void dealGroupDamage() {
+        flashWithoutSound();
+        // Damage the owner
+        applyDamage(owner, amount);
+        // If the owner is a monster, damage all monsters
+        if (!(owner instanceof AbstractPlayer)) {
+            int aoeDamage = amount / 2;
+            for (val monster : AbstractDungeon.getMonsters().monsters) {
+                if (monster != owner) {
+                    applyDamage(monster, aoeDamage);
+                }
+            }
+        }
+        // Reduce power
+        addToBot(new ReducePowerAction(owner, owner, POWER_ID, REDUCE_PER_TURN));
+    }
+
     private void applyDamage(AbstractCreature target, int dmg) {
-        val info = BindingHelper.makeInfo(damageMods, owner, dmg, DamageInfo.DamageType.THORNS);
+        val info = BindingHelper.makeInfo(damageMods, owner, dmg, DamageType.THORNS);
         addToBot(new DamageAction(target, info, AttackEffect.FIRE));
     }
 
