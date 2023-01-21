@@ -1,5 +1,7 @@
 package io.bindernews.thegrackle.cards
 
+import basemod.cardmods.RetainMod
+import basemod.helpers.CardModifierManager.addModifier
 import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.bnsts.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop.iop
@@ -15,7 +17,7 @@ class ResearchAndDev : BaseCard(C, VARS) {
         @JvmStatic val VARS = CardVariables().apply {
             cost(2)
             magic(1, -1)
-            onUpgrade { it.retain = true }
+            onUpgrade { addModifier(it, RetainMod()) }
         }
     }
 }

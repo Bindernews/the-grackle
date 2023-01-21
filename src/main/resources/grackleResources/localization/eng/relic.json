@@ -1,4 +1,11 @@
 {
+  "grackle:BersekerTotem": {
+    "NAME": "Berserker Totem",
+    "FLAVOR": "If violence wasn't your last resort, you didn't resort to enough of it.",
+    "DESCRIPTIONS": [
+      "All multi-hit attacks deal one extra hit."
+    ]
+  },
   "grackle:PhoenixIdol": {
     "NAME": "Phoenix Idol",
     "FLAVOR": "A small carving of a phoenix, slightly charred.",

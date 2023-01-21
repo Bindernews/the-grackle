@@ -10,7 +10,7 @@
   },
   "grackle:AerialAdvantage": {
     "NAME": "Aerial Advantage",
-    "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw !grackle:magic2! cards NL Exhaust",
+    "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw !grackle:magic2! cards.",
     "FLAVOR": "It's over Nob! I have the high ground!"
   },
   "grackle:AirToGroundMissiles": {
@@ -25,7 +25,7 @@
   },
   "grackle:BombingRun": {
     "NAME": "Bombing Run",
-    "DESCRIPTION": "TODO - damage all enemies"
+    "DESCRIPTION": "Deal !D! damage !grackle:hits! times NL to ALL enemies."
   },
   "grackle:BufferInputs": {
     "NAME": "Buffer Inputs",
@@ -44,8 +44,8 @@
     "NAME": "Cackle",
     "DESCRIPTION": "Apply !M! Vulnerable and !M! Weak."
   },
-  "grackle:CorvusConundrum": {
-    "NAME": "Corvus Conundrum",
+  "grackle:CopyCrow": {
+    "NAME": "Copy Crow",
     "DESCRIPTION": "TODO",
     "FLAVOR": "Grackles aren't corvids, but you'd think they are. ~corndan"
   },
@@ -69,6 +69,10 @@
     "NAME": "Duck!",
     "DESCRIPTION": "Gain !B! Block. NL Block is not removed at the start of your next turn. NL Quack."
   },
+  "grackle:EagleEye": {
+    "NAME": "Eagle Eye",
+    "DESCRIPTION": "Gain !B! Block. NL Scry !M!."
+  },
   "grackle:EmbodyFire": {
     "NAME": "Embody Fire",
     "DESCRIPTION": "Damage from grackle:Burning and NL Burn cards heals instead."
@@ -79,7 +83,7 @@
   },
   "grackle:FOOF": {
     "NAME": "FOOF",
-    "DESCRIPTION": "Apply !M! grackle:Burning to ALL enemies and half that to yourself. NL Exhaust."
+    "DESCRIPTION": "Apply !M! grackle:Burning to EVERYONE."
   },
   "grackle:Forage": {
     "NAME": "Forage",
@@ -106,6 +110,10 @@
     "NAME": "Flock",
     "DESCRIPTION": "Deal !D! damage !grackle:hits! times. NL Increase the hits of ALL Flock cards by !M! this combat."
   },
+  "grackle:GentleLanding": {
+    "NAME": "Gentle Landing",
+    "DESCRIPTION": "Exit your stance."
+  },
   "grackle:Grenenade": {
     "NAME": "Grenenade",
     "DESCRIPTION": "Deal !D! damage to ALL enemies !grackle:hits! times. NL May be upgraded multiple times.",
@@ -122,11 +130,15 @@
   },
   "grackle:HenPeck": {
     "NAME": "Hen Peck",
-    "DESCRIPTION": "grackle:Peck NL Deal !D! damage !grackle:hits! times."
+    "DESCRIPTION": "Deal !D! damage !grackle:hits! times."
   },
   "grackle:InFlightService": {
     "NAME": "In-Flight Service",
-    "DESCRIPTION": "Obtain a Regen Potion. NL Exhaust."
+    "DESCRIPTION": "Obtain a Regen Potion."
+  },
+  "grackle:MidairRefuel": {
+    "NAME": "Midair Refuel",
+    "DESCRIPTION": "Gain !M! [E]."
   },
   "grackle:Murder": {
     "NAME": "Murder",

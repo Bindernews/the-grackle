@@ -23,6 +23,16 @@ public class CardConfig {
     @Getter private TextureAtlas.AtlasRegion portrait;
     @Getter private TextureAtlas.AtlasRegion betaPortrait;
 
+
+    public CardConfig(
+            Object companion,
+            AbstractCard.CardType type,
+            AbstractCard.CardRarity rarity,
+            AbstractCard.CardTarget target
+    ) {
+        this(nameFromCompanion(companion), type, rarity, target);
+    }
+
     public CardConfig(
             String name,
             AbstractCard.CardType type,
@@ -35,6 +45,22 @@ public class CardConfig {
         this.target = target;
         ID = GrackleMod.MOD_ID + ":" + name;
         strings = Lazy.of(() -> CardCrawlGame.languagePack.getCardStrings(ID));
+    }
+
+    private static String nameFromCompanion(Object companion) {
+        if (companion instanceof Class<?>) {
+            val clz = (Class<?>) companion;
+            if (BaseCard.class.isAssignableFrom(clz)) {
+                return clz.getSimpleName();
+            }
+            val outerClass = clz.getEnclosingClass();
+            if (outerClass != null) {
+                return nameFromCompanion(outerClass);
+            }
+            throw new RuntimeException("unable to determine class name from " + clz.getName());
+        } else {
+            return nameFromCompanion(companion.getClass());
+        }
     }
 
     public void loadImages(TextureAtlas atlas) {

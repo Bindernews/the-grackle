@@ -16,11 +16,11 @@ version = "0.2-SNAPSHOT"
 
 plugins {
     id("java")
-    id("co.uzzu.dotenv.gradle") version "2.0.0"
-    id("io.freefair.lombok") version "6.6"
     // MTS ships kotlin 1.4.10, but as long as we don't use any newer stdlib
     // features, we can get the compiler improvements of 1.5
     kotlin("jvm") version "1.5.32"
+    id("co.uzzu.dotenv.gradle") version "2.0.0"
+    id("io.freefair.lombok") version "6.6"
     id("net.bindernews.grimage")
 }
 

@@ -81,6 +81,13 @@ public class ModInterop {
         return new CardGroup[]{};
     }
 
+    public CardGroup getMasterDeck(AbstractCreature c) {
+        if (c instanceof AbstractPlayer) {
+            return ((AbstractPlayer) c).masterDeck;
+        }
+        return null;
+    }
+
     public Optional<CardGroup> getCardsByType(AbstractCreature c, CardGroup.CardGroupType type) {
         return Arrays.stream(getCards(c)).filter(g -> g.type == type).findFirst();
     }

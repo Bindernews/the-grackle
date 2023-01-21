@@ -23,9 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- * A collection of miscellaneous utility functions that should be relatively re-usable for other
- * Slay the Spire mods. Feel free to copy-paste this file into your own projects, as long as you
- * retain the MIT license.
+ * A collection of miscellaneous utility functions that should be relatively re-usable for other Slay the Spire mods.
+ * <br/>
+ * Feel free to copy-paste this file into your own projects, as long as you retain the MIT license.
  *
  * @author bindernews
  */

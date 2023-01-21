@@ -238,11 +238,12 @@ public class GrackleMod implements
                 new BufferInputs(),
                 new BurnCream(),
                 new Cackle(),
-                new CorvusConundrum(),
+                new CopyCrow(),
                 new CrashLanding(),
                 new Death(),
                 new Defend_GK(),
                 new Duck(),
+                new EagleEye(),
                 new EmbodyFire(),
                 new EvasiveManeuvers(),
                 new FOOF(),
@@ -252,10 +253,12 @@ public class GrackleMod implements
                 new FireWithin(),
                 new FiredUpCard(),
                 new Flock(),
+                new GentleLanding(),
                 new Grenenade(),
                 new HangarMaintenance(),
                 new HenPeck(),
                 new InFlightService(),
+                new MidairRefuel(),
                 new Murder(),
                 new Parachute(),
                 new Paratrooper(),
@@ -316,14 +319,14 @@ public class GrackleMod implements
     /**
      * Returns a new ID with the mod prefix.
      */
-    public static String makeId(String name) {
+    public static @NotNull String makeId(String name) {
         return MOD_ID_COLON + name;
     }
 
     /**
      * Returns a new ID with the mod prefix and the class name as the suffix.
      */
-    public static String makeId(Class<?> clazz) {
+    public static @NotNull String makeId(Class<?> clazz) {
         return makeId(clazz.getSimpleName());
     }
 

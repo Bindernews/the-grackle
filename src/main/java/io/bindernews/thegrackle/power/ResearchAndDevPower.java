@@ -1,10 +1,11 @@
 package io.bindernews.thegrackle.power;
 
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
-import com.megacrit.cardcrawl.actions.common.UpgradeRandomCardAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import io.bindernews.thegrackle.GrackleMod;
+import io.bindernews.thegrackle.vfx.UpgradeRandomCardEffect;
 
 public class ResearchAndDevPower extends BasePower {
     public static final String POWER_ID = GrackleMod.makeId(ResearchAndDevPower.class);
@@ -27,7 +28,7 @@ public class ResearchAndDevPower extends BasePower {
     @Override
     public void onVictory() {
         for (int i = 0; i < amount; i++) {
-            addToBot(new UpgradeRandomCardAction());
+            AbstractDungeon.effectsQueue.add(new UpgradeRandomCardEffect(owner));
         }
     }
 
