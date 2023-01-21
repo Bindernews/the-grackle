@@ -1,16 +1,15 @@
-package io.bindernews.thegrackle.relics;
+package io.bindernews.thegrackle.relics
 
-import io.bindernews.thegrackle.GrackleMod;
+import basemod.abstracts.CustomRelic
+import io.bindernews.thegrackle.helper.RelicHelper
+import io.bindernews.thegrackle.helper.makeId
 
-public class PhoenixIdol extends BaseRelic {
-    public static final String ID = GrackleMod.makeId("PhoenixIdol");
-
-    public PhoenixIdol() {
-        super(ID, RelicTier.RARE, LandingSound.MAGICAL);
+class PhoenixIdol : CustomRelic(ID, "", RelicTier.RARE, LandingSound.MAGICAL) {
+    init {
+        RelicHelper.loadImages(this)
     }
 
-    @Override
-    public void onLoseHp(int damageAmount) {
-        super.onLoseHp(damageAmount);
+    companion object {
+        @JvmField val ID = makeId(PhoenixIdol::class)
     }
 }

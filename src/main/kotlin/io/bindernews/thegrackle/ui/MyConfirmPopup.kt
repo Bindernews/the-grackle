@@ -1,59 +1,42 @@
-package io.bindernews.thegrackle.ui;
+package io.bindernews.thegrackle.ui
 
-import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
-import com.megacrit.cardcrawl.screens.options.ConfirmPopup;
-import io.bindernews.bnsts.eventbus.EventEmit;
-import io.bindernews.bnsts.eventbus.IEventEmit;
-import lombok.Getter;
+import com.evacipated.cardcrawl.modthespire.lib.SpireEnum
+import com.megacrit.cardcrawl.screens.options.ConfirmPopup
+import io.bindernews.bnsts.eventbus.EventEmit
+import io.bindernews.bnsts.eventbus.IEventEmit
 
-public class MyConfirmPopup extends ConfirmPopup {
-    @Getter
-    private final IEventEmit<Action> onAction = new EventEmit<>();
-
-    public MyConfirmPopup(String title, String desc) {
-        super(title, desc, CO.CUSTOM);
-    }
-
-    @Override
-    public void show() {
+class MyConfirmPopup(title: String?, desc: String?) : ConfirmPopup(title, desc, CO.CUSTOM) {
+    val onAction: IEventEmit<Action> = EventEmit()
+    override fun show() {
         if (!shown) {
-            shown = true;
-            onAction.emit(Action.SHOW);
+            shown = true
+            onAction.emit(Action.SHOW)
         }
     }
 
-    @Override
-    public void hide() {
+    override fun hide() {
         if (shown) {
-            shown = false;
-            onAction.emit(Action.HIDE);
+            shown = false
+            onAction.emit(Action.HIDE)
         }
     }
 
-    @Override
-    protected void noButtonEffect() {
-        hide();
-        onAction.emit(Action.NO);
+    override fun noButtonEffect() {
+        hide()
+        onAction.emit(Action.NO)
     }
 
-    @Override
-    protected void yesButtonEffect() {
-        hide();
-        onAction.emit(Action.YES);
+    override fun yesButtonEffect() {
+        hide()
+        onAction.emit(Action.YES)
     }
 
-
-
-    public enum Action {
-        YES,
-        NO,
-        SHOW,
-        HIDE,
+    enum class Action {
+        YES, NO, SHOW, HIDE
     }
 
-
-    public static class CO {
+    object CO {
         @SpireEnum(name = "GRACKLE_CUSTOM")
-        public static ConfirmType CUSTOM;
+        var CUSTOM: ConfirmType? = null
     }
 }

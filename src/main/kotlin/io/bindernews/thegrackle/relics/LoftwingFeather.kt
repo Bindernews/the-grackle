@@ -1,19 +1,21 @@
-package io.bindernews.thegrackle.relics;
+package io.bindernews.thegrackle.relics
 
-import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
-import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.stance.StanceAloft;
+import basemod.abstracts.CustomRelic
+import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction
+import io.bindernews.thegrackle.helper.RelicHelper
+import io.bindernews.thegrackle.helper.makeId
+import io.bindernews.thegrackle.stance.StanceAloft
 
-public class LoftwingFeather extends BaseRelic {
-    public static final String ID = GrackleMod.makeId(LoftwingFeather.class);
-
-    public LoftwingFeather() {
-        super(ID, RelicTier.BOSS, LandingSound.FLAT);
+class LoftwingFeather : CustomRelic(ID, "", RelicTier.BOSS, LandingSound.FLAT) {
+    init {
+        RelicHelper.loadImages(this)
     }
 
+    override fun onPlayerEndTurn() {
+        addToBot(ChangeStanceAction(StanceAloft.STANCE_ID))
+    }
 
-    @Override
-    public void onPlayerEndTurn() {
-        addToBot(new ChangeStanceAction(StanceAloft.STANCE_ID));
+    companion object {
+        @JvmField val ID = makeId(LoftwingFeather::class)
     }
 }

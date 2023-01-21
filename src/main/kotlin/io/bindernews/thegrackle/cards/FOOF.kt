@@ -30,7 +30,7 @@ class FOOF : BaseCard(C, VARS) {
         init {
             Events.svcCardChange().on { ev ->
                 if (ev.card is FOOF) {
-                    CardClickableLink.getInst().openOrClose(ABOUT_TITLE, ABOUT_URL, ev.isOpen)
+                    CardClickableLink.inst.openOrClose(ABOUT_TITLE, ABOUT_URL, ev.open)
                 }
             }
         }

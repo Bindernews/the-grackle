@@ -1,18 +1,22 @@
-package io.bindernews.thegrackle.relics;
+package io.bindernews.thegrackle.relics
 
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.variables.ExtraHitsVariable;
+import basemod.abstracts.CustomRelic
+import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.RelicHelper
+import io.bindernews.thegrackle.helper.makeId
+import io.bindernews.thegrackle.variables.ExtraHitsVariable
 
-public class BerserkerTotem extends BaseRelic {
-    public static final String ID = GrackleMod.makeId(BerserkerTotem.class);
-
-    public BerserkerTotem() {
-        super(ID, RelicTier.COMMON, LandingSound.SOLID);
+class BerserkerTotem : CustomRelic(ID, "", RelicTier.COMMON, LandingSound.SOLID) {
+    init {
+        RelicHelper.loadImages(this)
     }
-    
-    static {
-        ExtraHitsVariable.getOnApplyPowers().on(-4,
-                e -> e.addCount(AbstractDungeon.player.hasRelic(ID) ? 1 : 0));
+
+    companion object {
+        @JvmField val ID = makeId(BerserkerTotem::class)
+        init {
+            ExtraHitsVariable.getOnApplyPowers().on(-4) {
+                it.addCount(if (iop().hasRelic(it.source, ID)) 1 else 0)
+            }
+        }
     }
 }

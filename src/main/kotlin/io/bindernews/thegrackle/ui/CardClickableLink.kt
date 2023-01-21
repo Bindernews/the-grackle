@@ -1,165 +1,149 @@
-package io.bindernews.thegrackle.ui;
+package io.bindernews.thegrackle.ui
 
-import basemod.ReflectionHacks;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.Hitbox;
-import com.megacrit.cardcrawl.helpers.HitboxListener;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
-import com.megacrit.cardcrawl.localization.UIStrings;
-import io.bindernews.bnsts.Lazy;
-import io.bindernews.thegrackle.GrackleMod;
-import io.bindernews.thegrackle.api.IPopup;
-import lombok.Getter;
-import lombok.val;
+import basemod.ReflectionHacks
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.NinePatch
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.megacrit.cardcrawl.core.CardCrawlGame
+import com.megacrit.cardcrawl.helpers.FontHelper
+import com.megacrit.cardcrawl.helpers.Hitbox
+import com.megacrit.cardcrawl.helpers.HitboxListener
+import com.megacrit.cardcrawl.helpers.input.InputHelper
+import io.bindernews.thegrackle.GrackleMod
+import io.bindernews.thegrackle.api.IPopup
+import io.bindernews.thegrackle.helper.makeId
+import java.awt.Desktop
+import java.awt.Insets
+import java.io.IOException
+import java.net.URI
+import java.net.URISyntaxException
+import java.util.*
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Objects;
+class CardClickableLink : IPopup, HitboxListener {
+    val strings = CardCrawlGame.languagePack.getUIString(ID)!!
+    private val confirmPopup = MyConfirmPopup(strings.TEXT[0], "")
+    private val urlHb = Hitbox(1f, 1f)
+    private val font: BitmapFont = FontHelper.tipBodyFont
+    private var enabled = false
+    private var title: String? = null
+    private var url: URI? = null
+    private var textH = 0f
 
-public class CardClickableLink implements IPopup, HitboxListener {
-    public static final String UI_ID = GrackleMod.makeId(CardClickableLink.class);
-
-    @Getter(lazy = true)
-    private static final UIStrings strings = CardCrawlGame.languagePack.getUIString(UI_ID);
-
-    private static final Lazy<CardClickableLink> inst = Lazy.of(CardClickableLink::new);
-    public static CardClickableLink getInst() { return inst.get(); }
-
-    @Getter(lazy = true)
-    private static final NinePatch tooltipBox = makeTooltipBox();
-    private static NinePatch makeTooltipBox() {
-        val path = GrackleMod.MOD_RES + "/images/ui/tip_box.png";
-        val tex = Objects.requireNonNull(GrackleMod.loadTexture(path));
-        return new NinePatch(tex, 80, 80, 32, 32);
-    }
-
-    public static Insets padding = new Insets(8, 16, 8, 16);
-    public static Color BUTTON_COLOR = new Color(0xd93030ff);
-    public static Color BRIGHTEN = new Color(1f, 1f, 1f, 0.3f);
-
-    final MyConfirmPopup confirmPopup = new MyConfirmPopup(getStrings().TEXT[0], "");
-    final Hitbox urlHb = new Hitbox(1.f, 1.f);
-    final BitmapFont font;
-    boolean enabled = false;
-    String title;
-    URI url;
-    float textH = 0.f;
-
-    private CardClickableLink() {
-        font = FontHelper.tipBodyFont;
-        confirmPopup.getOnAction().on(a -> {
+    init {
+        confirmPopup.onAction.on { a ->
             if (a == MyConfirmPopup.Action.YES) {
-                openBrowser();
+                openBrowser()
             }
-        });
-    }
-
-    public void open(String title, String url) {
-        try {
-            this.url = new URI(url);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         }
-        this.title = title;
-        enabled = true;
-        val popup = CardCrawlGame.cardPopup;
-        val cardHb = (Hitbox) ReflectionHacks.getPrivate(popup, popup.getClass(), "cardHb");
-        val nw = FontHelper.getSmartWidth(font, title, cardHb.width, 1.f)
-                + padding.left + padding.right;
-        textH = FontHelper.getHeight(font, title, 2.f);
-        val nh = textH + padding.top + padding.bottom;
-        urlHb.resize(nw, nh);
-        urlHb.move(cardHb.cX, cardHb.y + cardHb.height + (nh * 2.f));
-        confirmPopup.desc = url;
     }
 
-    public void close() {
-        enabled = false;
-        title = "";
-        url = null;
+    fun open(title: String, url: String) {
+        try {
+            this.url = URI(url)
+        } catch (e: URISyntaxException) {
+            throw RuntimeException(e)
+        }
+        this.title = title
+        enabled = true
+        val popup = CardCrawlGame.cardPopup
+        val cardHb = ReflectionHacks.getPrivate<Any>(popup, popup.javaClass, "cardHb") as Hitbox
+        val nw = (FontHelper.getSmartWidth(font, title, cardHb.width, 1f)
+                + padding.left + padding.right)
+        textH = FontHelper.getHeight(font, title, 2f)
+        val nh = textH + padding.top + padding.bottom
+        urlHb.resize(nw, nh)
+        urlHb.move(cardHb.cX, cardHb.y + cardHb.height + nh * 2f)
+        confirmPopup.desc = url
+    }
+
+    fun close() {
+        enabled = false
+        title = ""
+        url = null
     }
 
     /**
-     * Calls {@link #open} or {@link #close()} depending on the value of {@code isOpen}.
-     * @param title Passed to {@code open()}
-     * @param url Passed to {@code open()}
+     * Calls [.open] or [.close] depending on the value of `isOpen`.
+     * @param title Passed to `open()`
+     * @param url Passed to `open()`
      */
-    public void openOrClose(String title, String url, boolean isOpen) {
+    fun openOrClose(title: String, url: String, isOpen: Boolean) {
         if (isOpen) {
-            open(title, url);
+            open(title, url)
         } else {
-            close();
+            close()
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        renderSelf(sb);
-        confirmPopup.render(sb);
+    override fun render(sb: SpriteBatch) {
+        renderSelf(sb)
+        confirmPopup.render(sb)
     }
 
-    private void renderSelf(SpriteBatch sb) {
-        sb.setColor(BUTTON_COLOR);
-        val tbox = getTooltipBox();
-        val realW = tbox.getTotalWidth();
-        val realH = tbox.getTotalHeight() - tbox.getMiddleHeight();
-        val scaleW = urlHb.width / realW;
-        val scaleH = urlHb.height / realH;
-        tbox.draw(sb, urlHb.x, urlHb.y, 0, 0, realW, realH, scaleW, scaleH, 0.f);
+    private fun renderSelf(sb: SpriteBatch) {
+        sb.color = BUTTON_COLOR
+        val tbox = tooltipBox
+        val realW = tbox.totalWidth
+        val realH = tbox.totalHeight - tbox.middleHeight
+        val scaleW = urlHb.width / realW
+        val scaleH = urlHb.height / realH
+        tbox.draw(sb, urlHb.x, urlHb.y, 0f, 0f, realW, realH, scaleW, scaleH, 0f)
         // Render highlights
         if (urlHb.hovered) {
-            sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-            sb.setColor(BRIGHTEN);
-            tbox.draw(sb, urlHb.x, urlHb.y, 0, 0, realW, realH, scaleW, scaleH, 0.f);
-            sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
+            sb.color = BRIGHTEN
+            tbox.draw(sb, urlHb.x, urlHb.y, 0f, 0f, realW, realH, scaleW, scaleH, 0f)
+            sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         }
-        FontHelper.renderFontCentered(sb, font, title, urlHb.cX, urlHb.cY, Color.WHITE);
+        FontHelper.renderFontCentered(sb, font, title, urlHb.cX, urlHb.cY, Color.WHITE)
     }
 
-    @Override
-    public void update() {
-        urlHb.encapsulatedUpdate(this);
-        confirmPopup.update();
+    override fun update() {
+        urlHb.encapsulatedUpdate(this)
+        confirmPopup.update()
     }
 
-    @Override
-    public boolean isEnabled() {
+    override fun isEnabled(): Boolean {
         if (!CardCrawlGame.cardPopup.isOpen) {
-            enabled = false;
+            enabled = false
         }
-        return enabled;
+        return enabled
     }
 
-    @Override
-    public void hoverStarted(Hitbox hitbox) {
-    }
-
-    @Override
-    public void startClicking(Hitbox hitbox) {
+    override fun hoverStarted(hitbox: Hitbox) {}
+    override fun startClicking(hitbox: Hitbox) {
         // Consume the event
-        InputHelper.justClickedLeft = false;
+        InputHelper.justClickedLeft = false
     }
 
-    @Override
-    public void clicked(Hitbox hitbox) {
-        if (hitbox == urlHb) {
-            confirmPopup.show();
+    override fun clicked(hitbox: Hitbox) {
+        if (hitbox === urlHb) {
+            confirmPopup.show()
         }
     }
 
-    public void openBrowser() {
+    fun openBrowser() {
         try {
-            Desktop.getDesktop().browse(url);
-        } catch (IOException e) {
-            GrackleMod.log.warn("unable to open browser", e);
+            Desktop.getDesktop().browse(url)
+        } catch (e: IOException) {
+            GrackleMod.log.warn("unable to open browser", e)
         }
+    }
+
+    companion object {
+        @JvmStatic val inst = CardClickableLink()
+        @JvmField val ID = makeId(CardClickableLink::class)
+
+        val tooltipBox by lazy {
+            val path = GrackleMod.MOD_RES + "/images/ui/tip_box.png"
+            val tex = Objects.requireNonNull(GrackleMod.loadTexture(path))
+            NinePatch(tex, 80, 80, 32, 32)
+        }
+
+        val padding = Insets(8, 16, 8, 16)
+        val BUTTON_COLOR = Color(-0x26cfcf01)
+        val BRIGHTEN = Color(1f, 1f, 1f, 0.3f)
     }
 }

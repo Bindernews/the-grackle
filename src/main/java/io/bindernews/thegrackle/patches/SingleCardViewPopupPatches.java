@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import io.bindernews.thegrackle.Events;
-import io.bindernews.thegrackle.interfaces.SvcChangeCardEvent;
+import io.bindernews.thegrackle.api.SvcChangeCardEvent;
 import lombok.val;
 
 @SuppressWarnings("unused")

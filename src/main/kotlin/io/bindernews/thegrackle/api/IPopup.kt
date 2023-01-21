@@ -1,11 +1,9 @@
-package io.bindernews.thegrackle.api;
+package io.bindernews.thegrackle.api
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
-public interface IPopup {
-
-    void render(SpriteBatch sb);
-    void update();
-
-    boolean isEnabled();
+interface IPopup {
+    fun render(sb: SpriteBatch)
+    fun update()
+    fun isEnabled(): Boolean
 }

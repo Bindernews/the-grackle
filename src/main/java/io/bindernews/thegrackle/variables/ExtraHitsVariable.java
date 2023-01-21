@@ -9,8 +9,7 @@ import io.bindernews.thegrackle.GrackleMod;
 import io.bindernews.thegrackle.MiscUtil;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
-import io.bindernews.thegrackle.helper.HitCountEvent;
-import lombok.Getter;
+import io.bindernews.thegrackle.api.HitCountEvent;
 import lombok.val;
 
 import java.util.Collections;
@@ -29,8 +28,8 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
 
     public static ExtraHitsVariable inst = new ExtraHitsVariable();
 
-    @Getter
     private static final EventEmit<HitCountEvent> onApplyPowers = new EventEmit<>();
+    public static EventEmit<HitCountEvent> getOnApplyPowers() { return onApplyPowers; }
 
     public ExtraHitsVariable() {
         super(Fields.extraHits, new VariableInst());
@@ -53,8 +52,7 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
         if (source == null) {
             return 0;
         }
-        val event = new HitCountEvent(source, null, Collections.emptySet(), 0);
-        event.setCount(event.getBaseCount());
+        val event = new HitCountEvent(source, null, Collections.emptySet(), 0, 0);
         getOnApplyPowers().emit(event);
         // Limit to 0
         return Math.max(event.getCount(), -initial);
@@ -77,8 +75,7 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
     public void applyPowers(AbstractCard card) {
         if (baseValue(card) != -1) {
             val source = iop().getCardOwner(card);
-            val event = new HitCountEvent(source, card, Collections.emptySet(), 0);
-            event.setCount(event.getBaseCount());
+            val event = new HitCountEvent(source, card, Collections.emptySet(), 0, 0);
             onApplyPowers.emit(event);
             // Limit final hit count to 0
             val extra = Math.max(event.getCount(), 0);

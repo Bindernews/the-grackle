@@ -5,19 +5,20 @@ import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.evacipated.cardcrawl.mod.stslib.icons.AbstractCustomIcon;
-import com.evacipated.cardcrawl.mod.stslib.icons.CustomIconHelper;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
-import io.bindernews.thegrackle.icons.MusicNoteIcon;
+import io.bindernews.thegrackle.helper.ExtKt;
+import io.bindernews.thegrackle.icons.IconsKt;
 import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
@@ -39,7 +40,7 @@ import java.util.stream.Stream;
 @SpireInitializer
 public class GrackleMod implements
         AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
-        EditKeywordsSubscriber, PostInitializeSubscriber, PreUpdateSubscriber
+        EditKeywordsSubscriber, PostInitializeSubscriber, PreUpdateSubscriber, OnStartBattleSubscriber
 {
     public static final Logger log = LogManager.getLogger(GrackleMod.class);
 
@@ -136,8 +137,9 @@ public class GrackleMod implements
 
     @Override
     public void receiveEditCards() {
-        registerIcons();
+        IconsKt.registerIcons();
         registerDynamicVariables();
+
         log.debug(CO.REG_START, "cards");
         AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(BaseCard.class);
@@ -176,17 +178,6 @@ public class GrackleMod implements
         log.debug(CO.REG_END, "dynamic variables");
     }
 
-    private void registerIcons() {
-        log.debug(CO.REG_START, "icons");
-        val list = new AbstractCustomIcon[] {
-                MusicNoteIcon.getInst()
-        };
-        for (val icon : list) {
-            CustomIconHelper.addCustomIcon(icon);
-        }
-        log.debug(CO.REG_END, "icons");
-    }
-
     @Override
     public void receiveEditStrings() {
         MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG);
@@ -207,6 +198,12 @@ public class GrackleMod implements
     public void receiveAddAudio() {
         val sfxPath = MOD_RES + "/audio/";
         BaseMod.addAudio(CO.SFX_QUACK, sfxPath + "duck_quack.ogg");
+    }
+
+
+    @Override
+    public void receiveOnBattleStart(AbstractRoom room) {
+        ExtKt.setFireheartGained(AbstractDungeon.player, 0);
     }
 
     /**
@@ -295,7 +292,7 @@ public class GrackleMod implements
      * @param subPath Path relative to {@link CO#RES_IMAGES}
      * @return A lazy-loaded {@link TextureAtlas}
      */
-    public static Lazy<TextureAtlas> lazyAtlas(String subPath) {
+    public static @NotNull Lazy<TextureAtlas> lazyAtlas(String subPath) {
         return Lazy.of(() -> new TextureAtlas(CO.RES_IMAGES + subPath));
     }
 

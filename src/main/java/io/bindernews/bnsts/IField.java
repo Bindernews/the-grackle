@@ -2,6 +2,7 @@ package io.bindernews.bnsts;
 
 import lombok.SneakyThrows;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.util.function.Function;
@@ -26,7 +27,7 @@ public interface IField<T, F> extends Function<T, F> {
      * @param <T> Class type
      * @param <F> Field type
      */
-    static <T, F> IField<T, F> unreflect(Class<T> clz, String name) {
+    static <T, F> @NotNull IField<T, F> unreflect(Class<T> clz, String name) {
         try {
             val lookup = MethodHandles.lookup();
             val m = clz.getDeclaredField(name);

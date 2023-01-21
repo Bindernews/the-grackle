@@ -57,7 +57,6 @@ public abstract class BaseCard extends CustomCard {
      * @param p Player or CharBoss
      * @param m Monster or Player target
      */
-    @SuppressWarnings("NullableProblems")
     public void apply(@NotNull AbstractCreature p, AbstractCreature m) {}
 
     public static TextureAtlas getCards() {

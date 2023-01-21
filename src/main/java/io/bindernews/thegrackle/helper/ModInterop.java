@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import io.bindernews.bnsts.Lazy;
 import lombok.extern.log4j.Log4j2;
@@ -64,6 +65,17 @@ public class ModInterop {
             return new ChangeStanceAction(stanceId);
         }
         return null;
+    }
+
+    public @NotNull Stream<AbstractRelic> getRelics(AbstractCreature c) {
+        if (c instanceof AbstractPlayer) {
+            return ((AbstractPlayer) c).relics.stream();
+        }
+        return Stream.empty();
+    }
+
+    public boolean hasRelic(@NotNull AbstractCreature c, @NotNull String relicId) {
+        return getRelics(c).anyMatch(r -> r.relicId.equals(relicId));
     }
 
     public AbstractGameAction damageAllEnemies(AbstractCreature c, int[] amount, DamageType type, AttackEffect fx) {
@@ -221,6 +233,14 @@ public class ModInterop {
                 return new EnemyChangeStanceAction(stanceId);
             }
             return next.changeStance(c, stanceId);
+        }
+
+        @Override
+        public @NotNull Stream<AbstractRelic> getRelics(AbstractCreature c) {
+            if (c instanceof AbstractCharBoss) {
+                return ((AbstractCharBoss) c).relics.stream().map(r -> r);
+            }
+            return next.getRelics(c);
         }
 
         @Override

@@ -16,17 +16,18 @@ class AddHitsAction(
 
     override fun update() {
         val clz: Class<out AbstractCard> = card.javaClass
-        card.baseExtraHits += amount
-        card.applyPowers()
+        updateCard(card)
         Arrays.stream(cardGroups)
-            .flatMap { a: CardGroup -> a.group.stream() }
+            .flatMap { it.group.stream() }
             .parallel()
             .filter { clz.isInstance(it) }
-            .forEach {
-                it.baseExtraHits += amount
-                it.applyPowers()
-            }
+            .forEach(this::updateCard)
         isDone = true
+    }
+
+    private fun updateCard(card: AbstractCard) {
+        card.baseExtraHits += amount
+        card.applyPowers()
     }
 
     companion object {

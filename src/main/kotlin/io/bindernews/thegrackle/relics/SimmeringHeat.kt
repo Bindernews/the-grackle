@@ -1,36 +1,34 @@
-package io.bindernews.thegrackle.relics;
+package io.bindernews.thegrackle.relics
 
-import basemod.abstracts.CustomRelic;
-import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction;
-import com.megacrit.cardcrawl.cards.status.Burn;
-import com.megacrit.cardcrawl.core.EnergyManager;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import io.bindernews.thegrackle.GrackleMod;
+import basemod.abstracts.CustomRelic
+import com.megacrit.cardcrawl.actions.common.MakeTempCardInHandAction
+import com.megacrit.cardcrawl.cards.status.Burn
+import com.megacrit.cardcrawl.core.EnergyManager
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon
+import io.bindernews.thegrackle.helper.RelicHelper
+import io.bindernews.thegrackle.helper.makeId
 
-public class SimmeringHeat extends CustomRelic {
-    public static final String RELIC_ID = GrackleMod.makeId(SimmeringHeat.class);
-
-    public SimmeringHeat() {
-        super(RELIC_ID, "", RelicTier.BOSS, LandingSound.FLAT);
-        BaseRelic.loadImages(this);
+class SimmeringHeat : CustomRelic(ID, "", RelicTier.BOSS, LandingSound.FLAT) {
+    init {
+        RelicHelper.loadImages(this)
     }
 
-    @Override
-    public void atTurnStartPostDraw() {
-        addToBot(new MakeTempCardInHandAction(new Burn()));
+    override fun atTurnStartPostDraw() {
+        addToBot(MakeTempCardInHandAction(Burn()))
     }
 
-    @Override
-    public void onEquip() {
-        getEnergyManager().energyMaster++;
+    override fun onEquip() {
+        energyManager.energyMaster++
     }
 
-    @Override
-    public void onUnequip() {
-        getEnergyManager().energyMaster--;
+    override fun onUnequip() {
+        energyManager.energyMaster--
     }
 
-    protected EnergyManager getEnergyManager() {
-        return AbstractDungeon.player.energy;
+    private val energyManager: EnergyManager
+        get() = AbstractDungeon.player.energy
+
+    companion object {
+        @JvmField val ID = makeId(SimmeringHeat::class)
     }
 }

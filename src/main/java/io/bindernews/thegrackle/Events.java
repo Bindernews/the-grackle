@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import io.bindernews.bnsts.eventbus.*;
 import io.bindernews.thegrackle.api.IPopup;
-import io.bindernews.thegrackle.interfaces.SvcChangeCardEvent;
+import io.bindernews.thegrackle.api.SvcChangeCardEvent;
 
 /**
  * A collection of {@link EventEmit}s, serving as a global event registry.
@@ -23,5 +23,5 @@ public class Events {
     /** Event emitter, called at the end of {@link Metrics#run}. */
     public static IEventEmit<Metrics> metricsRun() { return metricsRun; }
     
-    public static HandlerList<IPopup> popups() { return popups; }
+    public static IHandlerList<IPopup> popups() { return popups; }
 }

@@ -3,11 +3,11 @@ package io.bindernews.thegrackle.power;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import io.bindernews.thegrackle.CreatureStats;
 import io.bindernews.thegrackle.GrackleMod;
 import io.bindernews.thegrackle.stance.StancePhoenix;
 
 import static io.bindernews.thegrackle.helper.ModInterop.iop;
+import static io.bindernews.thegrackle.patches.Fields.fireheartGained;
 
 public class FireheartPower extends BasePower {
     public static final String POWER_ID = GrackleMod.makeId(FireheartPower.class);
@@ -18,7 +18,7 @@ public class FireheartPower extends BasePower {
         setOwnerAmount(owner, amount);
         isTurnBased = true;
         type = PowerType.BUFF;
-        CreatureStats.mgr.get(owner).fireheartGained += amount;
+        fireheartGained.set(owner, fireheartGained.get(owner) + amount);
         loadRegion("flameBarrier");
         updateDescription();
     }
