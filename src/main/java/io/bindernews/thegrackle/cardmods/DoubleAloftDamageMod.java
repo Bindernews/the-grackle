@@ -13,7 +13,7 @@ import static io.bindernews.thegrackle.helper.ModInterop.iop;
 public class DoubleAloftDamageMod extends AbstractCardModifier {
 
     @Override
-    public float modifyBaseDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
+    public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
         AbstractCreature owner = iop().getCardOwner(card);
         if (StanceAloft.isAloft(owner)) {
             return damage * 2.f;

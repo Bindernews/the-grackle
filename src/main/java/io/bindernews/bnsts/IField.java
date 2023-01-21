@@ -14,7 +14,19 @@ public interface IField<T, F> extends Function<T, F> {
     void set(T obj, F value);
 
 
-    public static <T, F> IField<T, F> unreflect(Class<T> clz, String name) {
+    /**
+     * Create an {@link IField} instance which can get and set the named field of {@code clz}.
+     * <br/>
+     * Note that if the field is read-only, this will not crash unless you try to set it, making
+     * it suitable for use with {@code final} fields.
+     *
+     * @param clz Class with the field to access
+     * @param name Name of the field
+     * @return a new {@code IField} instance
+     * @param <T> Class type
+     * @param <F> Field type
+     */
+    static <T, F> IField<T, F> unreflect(Class<T> clz, String name) {
         try {
             val lookup = MethodHandles.lookup();
             val m = clz.getDeclaredField(name);

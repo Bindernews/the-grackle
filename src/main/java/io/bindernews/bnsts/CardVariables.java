@@ -28,6 +28,8 @@ public class CardVariables implements ICardInitializer {
 
     private final ArrayList<VariableSetting> settings = new ArrayList<>();
     private final ArrayList<ICardInitializer> children = new ArrayList<>();
+    private final InitList initList = new InitList();
+
 
     public CardVariables() {}
 
@@ -46,8 +48,8 @@ public class CardVariables implements ICardInitializer {
         children.add(initializer);
     }
 
-    public void addModifier(AbstractCardModifier modifier) {
-        child(new CardModifierSetup(modifier));
+    public void addModifier(final AbstractCardModifier modifier) {
+        onInit(card -> CardModifierManager.addModifier(card, modifier));
     }
 
     public void block(int base, int upg) {
@@ -74,27 +76,16 @@ public class CardVariables implements ICardInitializer {
         });
     }
 
-    public void exhaust(boolean base) {
-        exhaust(base, base);
-    }
-
-    public void exhaust(boolean base, boolean upg) {
-        child(new LambdaCardInit(
-                card -> card.exhaust = base,
-                card -> card.exhaust = upg
-        ));
-    }
-
     public void tags(final AbstractCard.CardTags ...tags) {
         onInit(card -> Collections.addAll(card.tags, tags));
     }
 
-    public void onUpgrade(Consumer<AbstractCard> action) {
-        child(new LambdaCardInit(x -> {}, action));
+    public void onInit(Consumer<AbstractCard> action) {
+        initList.onInit(action);
     }
 
-    public void onInit(Consumer<AbstractCard> action) {
-        child(new LambdaCardInit(action, x -> {}));
+    public void onUpgrade(Consumer<AbstractCard> action) {
+        initList.onUpgrade(action);
     }
 
     @Override
@@ -104,6 +95,7 @@ public class CardVariables implements ICardInitializer {
             s.variable.setValue(card, s.value);
         }
         children.forEach(a -> a.init(card));
+        initList.init(card);
         card.initializeDescription();
     }
 
@@ -122,6 +114,7 @@ public class CardVariables implements ICardInitializer {
             }
         }
         children.forEach(a -> a.upgrade(card));
+        initList.upgrade(card);
     }
 
     @Data
@@ -130,20 +123,6 @@ public class CardVariables implements ICardInitializer {
         final int value;
         final int valueUpg;
     }
-
-    @Data
-    public static class CardModifierSetup implements ICardInitializer {
-        final AbstractCardModifier modifier;
-
-        @Override
-        public void init(AbstractCard card) {
-            CardModifierManager.addModifier(card, modifier.makeCopy());
-        }
-
-        @Override
-        public void upgrade(AbstractCard card) {}
-    }
-
 
     private static final MethodHandle hUpgradeDamage;
     private static final MethodHandle hUpgradeBlock;

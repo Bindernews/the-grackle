@@ -1,12 +1,12 @@
 package io.bindernews.thegrackle.relics;
 
 import basemod.abstracts.CustomRelic;
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import io.bindernews.bnsts.IField;
 import io.bindernews.thegrackle.GrackleMod;
 import lombok.val;
-import lombok.var;
 
 import java.util.Objects;
 
@@ -22,7 +22,7 @@ public abstract class BaseRelic extends CustomRelic {
     public static void loadImages(AbstractRelic relic) {
         val path = GrackleMod.MOD_RES + "/images/relics/" + GrackleMod.removePrefix(relic.relicId);
         val tex = Objects.requireNonNull(GrackleMod.loadTexture(path + ".png"));
-        var texOutline = GrackleMod.loadTexture(path + "_o.png");
+        Texture texOutline = GrackleMod.loadTexture(path + "_o.png");
         if (texOutline == null) {
             texOutline = tex;
         }

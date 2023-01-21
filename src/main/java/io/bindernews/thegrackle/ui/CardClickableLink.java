@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.HitboxListener;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.UIStrings;
+import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.GrackleMod;
 import io.bindernews.thegrackle.api.IPopup;
 import lombok.Getter;
@@ -29,8 +30,8 @@ public class CardClickableLink implements IPopup, HitboxListener {
     @Getter(lazy = true)
     private static final UIStrings strings = CardCrawlGame.languagePack.getUIString(UI_ID);
 
-    @Getter(lazy = true)
-    private static final CardClickableLink inst = new CardClickableLink();
+    private static final Lazy<CardClickableLink> inst = Lazy.of(CardClickableLink::new);
+    public static CardClickableLink getInst() { return inst.get(); }
 
     @Getter(lazy = true)
     private static final NinePatch tooltipBox = makeTooltipBox();
