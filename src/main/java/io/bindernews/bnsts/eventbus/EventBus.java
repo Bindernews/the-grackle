@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class EventBus {
 
@@ -24,6 +25,9 @@ public class EventBus {
      * @param handlerType A {@link FunctionalInterface}, similar to {@link Consumer}
      */
     public void register(Class<?> handlerType) {
+        if (handlers.containsKey(handlerType)) {
+            throw new EventBusException("duplicate handler class " + handlerType.getName());
+        }
         handlers.put(handlerType, new HandlerList<>());
     }
 
@@ -80,10 +84,9 @@ public class EventBus {
 
     public <T> void once(T handler) { get(reify(handler)).once(handler); }
 
-    @SuppressWarnings("unchecked")
-    public <T> void callEach(Consumer<T> action) {
-        val handlerType = (Class<T>) reifyConsumer((Class<? extends Consumer<?>>) action.getClass());
-        get(handlerType).callEach(action);
+    public <T> void use(Class<T> handlerType, Consumer<Stream<T>> action) {
+//        val handlerType = (Class<T>) reifyConsumer((Class<? extends Consumer<?>>) action.getClass());
+        get(handlerType).use(action);
     }
 
     @SuppressWarnings("unchecked")

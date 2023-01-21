@@ -133,8 +133,8 @@ class CardClickableLink : IPopup, HitboxListener {
     }
 
     companion object {
-        @JvmStatic val inst = CardClickableLink()
         @JvmField val ID = makeId(CardClickableLink::class)
+        @JvmStatic val inst by lazy { CardClickableLink() }
 
         val tooltipBox by lazy {
             val path = GrackleMod.MOD_RES + "/images/ui/tip_box.png"

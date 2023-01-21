@@ -49,12 +49,21 @@ public interface IHandlerList<T> {
      */
     @NotNull Stream<T> getHandlers();
 
+
+    /**
+     * Calls {@code action} with a stream of handlers, then removes any 'once' handlers
+     * and processes any other pending actions.
+     */
+    void use(Consumer<Stream<T>> action);
+
     /**
      * Calls {@code action} for each handler in the list,
      * then removes any 'once' handlers.<br/>
      * This is similar to calling {@code emit()} but often more convenient.
      */
-    void callEach(Consumer<T> action);
+    default void forEach(Consumer<T> action) {
+        use(s -> s.forEach(action));
+    }
 
 
     static <E extends Comparable<E>> boolean addOrdered(ArrayList<E> list, E elem) {

@@ -42,8 +42,8 @@ class MainMenuMetricsRequest : IPopup {
     }
 
     companion object {
-        @JvmStatic val inst = MainMenuMetricsRequest()
         @JvmField val ID = makeId(MainMenuMetricsRequest::class)
+        @JvmStatic val inst by lazy { MainMenuMetricsRequest() }
 
         fun setUploadData(enabled: Boolean) {
             val panel = CardCrawlGame.mainMenuScreen.optionPanel

@@ -1,6 +1,6 @@
 {
-  "grackle:BersekerTotem": {
-    "NAME": "Berserker Totem",
+  "grackle:BerserkerTotem": {
+    "NAME": "Bearserker Totem",
     "FLAVOR": "If violence wasn't your last resort, you didn't resort to enough of it.",
     "DESCRIPTIONS": [
       "All multi-hit attacks deal one extra hit."
@@ -18,6 +18,12 @@
     "FLAVOR": "The feather of a red Loftwing.",
     "DESCRIPTIONS": [
       "Enter grackle:Aloft at the end of each turn."
+    ]
+  },
+  "grackle:SimmeringHeat": {
+    "NAME": "Simmering Heat",
+    "DESCRIPTIONS": [
+      "Gain 1 energy, add a Burn to your hand at the start of each turn."
     ]
   }
 }

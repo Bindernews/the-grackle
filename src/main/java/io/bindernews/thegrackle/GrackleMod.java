@@ -21,7 +21,9 @@ import io.bindernews.thegrackle.helper.ExtKt;
 import io.bindernews.thegrackle.icons.IconsKt;
 import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
+import io.bindernews.thegrackle.relics.BerserkerTotem;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
+import io.bindernews.thegrackle.relics.SimmeringHeat;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import io.bindernews.thegrackle.ui.MainMenuMetricsRequest;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
@@ -130,8 +132,9 @@ public class GrackleMod implements
 
         // Add class-specific relics
         Stream.of(
-                new LoftwingFeather()
-//                new SimmeringHeat()
+                new BerserkerTotem(),
+                new LoftwingFeather(),
+                new SimmeringHeat()
         ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.En.COLOR_BLACK));
     }
 
@@ -156,7 +159,7 @@ public class GrackleMod implements
 
     @Override
     public void receivePreUpdate() {
-        Events.popups().callEach(p -> {
+        Events.popups().forEach(p -> {
             if (p.isEnabled()) p.update();
         });
     }

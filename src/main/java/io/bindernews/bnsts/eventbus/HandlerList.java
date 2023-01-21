@@ -64,17 +64,21 @@ public class HandlerList<H> implements IHandlerList<H> {
     }
 
     /** {@inheritDoc} */
-    @Override @SuppressWarnings("unchecked")
-    public void callEach(Consumer<H> action) {
-        locked++;
-        for (Entry h : handlers) {
-            action.accept((H) h.handler);
+    public void use(Consumer<Stream<H>> action) {
+        try {
+            locked++;
+            action.accept(getHandlers());
+            processRemove();
+        } finally {
+            locked--;
         }
+    }
+
+    protected void processRemove() {
         if (!removeList.isEmpty()) {
             handlers.removeAll(removeList);
             removeList.clear();
         }
-        locked--;
     }
 
     @Data

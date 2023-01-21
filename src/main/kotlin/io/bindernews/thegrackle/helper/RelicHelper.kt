@@ -1,5 +1,6 @@
 package io.bindernews.thegrackle.helper
 
+import com.badlogic.gdx.graphics.Texture
 import com.megacrit.cardcrawl.localization.RelicStrings
 import com.megacrit.cardcrawl.relics.AbstractRelic
 import io.bindernews.bnsts.IField
@@ -8,16 +9,15 @@ import java.util.*
 
 
 object RelicHelper {
-    fun loadImages(relic: AbstractRelic) {
-        val path = GrackleMod.MOD_RES + "/images/relics/" + GrackleMod.removePrefix(relic.relicId)
-        val tex = Objects.requireNonNull(GrackleMod.loadTexture("$path.png"))
+
+    fun loadImages(relicId: String): Array<Texture> {
+        val path = GrackleMod.MOD_RES + "/images/relics/" + GrackleMod.removePrefix(relicId)
+        val tex = Objects.requireNonNull(GrackleMod.loadTexture("$path.png"))!!
         var texOutline = GrackleMod.loadTexture(path + "_o.png")
         if (texOutline == null) {
             texOutline = tex
         }
-        relic.img = tex
-        relic.outlineImg = texOutline
-        relic.largeImg = tex
+        return arrayOf(tex, texOutline, tex)
     }
 
     val fRelicStrings =
