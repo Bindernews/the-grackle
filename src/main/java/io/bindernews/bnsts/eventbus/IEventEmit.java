@@ -8,13 +8,4 @@ import java.util.function.Consumer;
  */
 public interface IEventEmit<T> extends IHandlerList<Consumer<T>> {
     void emit(T event);
-
-    @Override
-    @SuppressWarnings("unchecked")
-    default void emit(Object... args) {
-        if (args.length != 1) {
-            throw new RuntimeException("IEventEmit only takes ONE argument");
-        }
-        emit((T) args[0]);
-    }
 }

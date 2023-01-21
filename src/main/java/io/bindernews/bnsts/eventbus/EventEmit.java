@@ -29,21 +29,14 @@ import java.util.stream.Stream;
  * @param <T> The event type
  */
 public class EventEmit<T> implements IEventEmit<T> {
-    public static final int DEFAULT_PRIORITY = 0;
 
     private final ArrayList<Entry<T>> handlers = new ArrayList<>();
 
     /** {@inheritDoc} */
     @Override
-    public void on(Consumer<T> handler) {
-        on(DEFAULT_PRIORITY, handler);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public void on(int priority, Consumer<T> handler) {
         val entry = new Entry<>(handler, priority);
-        EventBus.addOrdered(handlers, entry);
+        val ignore = IHandlerList.addOrdered(handlers, entry);
     }
 
     /** {@inheritDoc} */
@@ -56,6 +49,19 @@ public class EventEmit<T> implements IEventEmit<T> {
     @Override
     public @NotNull Stream<Consumer<T>> getHandlers() {
         return handlers.stream().map(e -> e.handler);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void callEach(Consumer<Consumer<T>> action) {
+        boolean anyOnce = false;
+        for (val h : handlers) {
+            action.accept(h.handler);
+            anyOnce = anyOnce || h.once;
+        }
+        if (anyOnce) {
+            handlers.removeIf(h -> h.once);
+        }
     }
 
     /** {@inheritDoc} */
@@ -76,7 +82,7 @@ public class EventEmit<T> implements IEventEmit<T> {
     public void once(Consumer<T> handler) {
         val entry = new Entry<>(handler, 9999);
         entry.once = true;
-        EventBus.addOrdered(handlers, entry);
+        val ignore = IHandlerList.addOrdered(handlers, entry);
     }
 
     @Data

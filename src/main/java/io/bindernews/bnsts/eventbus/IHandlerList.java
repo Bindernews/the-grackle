@@ -2,6 +2,9 @@ package io.bindernews.bnsts.eventbus;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -46,5 +49,20 @@ public interface IHandlerList<T> {
      */
     @NotNull Stream<T> getHandlers();
 
-    void emit(Object... args);
+    /**
+     * Calls {@code action} for each handler in the list,
+     * then removes any 'once' handlers.<br/>
+     * This is similar to calling {@code emit()} but often more convenient.
+     */
+    void callEach(Consumer<T> action);
+
+
+    static <E extends Comparable<E>> boolean addOrdered(ArrayList<E> list, E elem) {
+        int pos = Collections.binarySearch(list, elem);
+        if (pos < 0) {
+            list.add(-(pos + 1), elem);
+            return true;
+        }
+        return false;
+    }
 }

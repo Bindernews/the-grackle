@@ -1,7 +1,7 @@
 package io.bindernews.thegrackle;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.metrics.Metrics;
+import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import io.bindernews.bnsts.eventbus.*;
 import io.bindernews.thegrackle.api.IPopup;
 import io.bindernews.thegrackle.interfaces.SvcChangeCardEvent;
@@ -13,15 +13,11 @@ public class Events {
 
     private Events() {}
 
-    private static final EventEmit<SpriteBatch> onPopupRender = new EventEmit<>();
     private static final EventEmit<SvcChangeCardEvent> svcCardChange = new EventEmit<>();
     private static final EventEmit<Metrics> metricsRun = new EventEmit<>();
-    private static final HandlerList<IPopup> popups = new HandlerList<>(IPopup.class, "update");
+    private static final HandlerList<IPopup> popups = new HandlerList<>();
 
-    /** Listeners for popup rendering. This uses {@link EventEmit} for performance. */
-    public static IEventEmit<SpriteBatch> popupRender() { return onPopupRender; }
-
-    /** Event for when {@link com.megacrit.cardcrawl.screens.SingleCardViewPopup} changes cards. */
+    /** Event for when {@link SingleCardViewPopup} changes cards. */
     public static IEventEmit<SvcChangeCardEvent> svcCardChange() { return svcCardChange; }
 
     /** Event emitter, called at the end of {@link Metrics#run}. */

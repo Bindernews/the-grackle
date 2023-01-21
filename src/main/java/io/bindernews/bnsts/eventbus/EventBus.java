@@ -22,11 +22,9 @@ public class EventBus {
     /**
      * Register a new event handler type.
      * @param handlerType A {@link FunctionalInterface}, similar to {@link Consumer}
-     * @param methodName Name of the functional method (e.g. "accept")
      */
-    public void register(Class<?> handlerType, String methodName) {
-        val handle = findHandle(handlerType, methodName);
-        handlers.put(handlerType, new HandlerList<>(handle));
+    public void register(Class<?> handlerType) {
+        handlers.put(handlerType, new HandlerList<>());
     }
 
     public <T> void registerConsumer(Class<? extends Consumer<T>> handlerType) {
@@ -82,16 +80,19 @@ public class EventBus {
 
     public <T> void once(T handler) { get(reify(handler)).once(handler); }
 
-    public <T> void emit(Class<T> handlerType, Object... args) {
-        get(handlerType).emit(args);
+    @SuppressWarnings("unchecked")
+    public <T> void callEach(Consumer<T> action) {
+        val handlerType = (Class<T>) reifyConsumer((Class<? extends Consumer<?>>) action.getClass());
+        get(handlerType).callEach(action);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> void emitEvent(T event) {
         val handlerType = eventReverseMap.get(event.getClass());
         if (handlerType == null) {
             throw new EventBusException("unknown event type " + event.getClass().getName());
         }
-        get(handlerType).emit(event);
+        ((IEventEmit<T>) get(handlerType)).emit(event);
     }
 
     @SuppressWarnings("unchecked")
@@ -163,14 +164,5 @@ public class EventBus {
         } else {
             return null;
         }
-    }
-
-    public static <E extends Comparable<E>> boolean addOrdered(ArrayList<E> list, E elem) {
-        int pos = Collections.binarySearch(list, elem);
-        if (pos < 0) {
-            list.add(-(pos + 1), elem);
-            return true;
-        }
-        return false;
     }
 }

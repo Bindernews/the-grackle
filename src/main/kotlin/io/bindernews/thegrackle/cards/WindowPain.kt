@@ -17,7 +17,7 @@ class WindowPain : BaseCard(C, VARS) {
         val VARS = CardVariables().apply {
             cost(1)
             block(6, 10)
-            magic(1, 2)
+            magic(2, 3)
         }
     }
 }

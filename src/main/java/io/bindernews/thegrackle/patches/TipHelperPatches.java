@@ -11,7 +11,9 @@ public class TipHelperPatches {
     @SpirePatch(clz = TipHelper.class, method = "render")
     public static class OnRender {
         public static void Postfix(SpriteBatch sb) {
-            Events.popupRender().emit(sb);
+            Events.popups().getHandlers().forEach(p -> {
+                if (p.isEnabled()) p.render(sb);
+            });
         }
     }
 }

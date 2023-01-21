@@ -1,43 +1,60 @@
 package io.bindernews.bnsts.eventbus;
 
 import lombok.Data;
-import lombok.SneakyThrows;
-import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class HandlerList<H> implements IHandlerList<H> {
-    protected final MethodHandle hAccept;
     protected final ArrayList<Entry> handlers;
+    protected final ArrayList<Entry> removeList;
 
-    public HandlerList(MethodHandle accept) {
-        hAccept = accept;
+    /**
+     * Tracks recursive calls to callEach so that we don't try to modify
+     * {@code handlers} while iterating through it.
+     */
+    protected int locked = 0;
+
+    public HandlerList() {
         handlers = new ArrayList<>();
-    }
-
-    public HandlerList(Class<H> clz, String methodName) {
-        this(EventBus.findHandle(clz, methodName));
+        removeList = new ArrayList<>();
     }
 
     @Override
     public void on(int priority, H handler) {
-        val entry = new Entry(handler, priority, hAccept.bindTo(handler));
-        EventBus.addOrdered(handlers, entry);
+        Entry entry = new Entry(handler, priority);
+        IHandlerList.addOrdered(handlers, entry);
     }
 
     @Override
     public void off(H handler) {
-        handlers.removeIf(e -> e.handler == handler);
+        if (locked == 0) {
+            handlers.removeIf(e -> e.handler == handler);
+        } else {
+            offLater(handler);
+        }
+    }
+
+    public void offLater(H handler) {
+        Entry toRemove = null;
+        for (Entry e : handlers) {
+            if (e.handler == handler) {
+                toRemove = e;
+                break;
+            }
+        }
+        if (toRemove != null) {
+            removeList.add(toRemove);
+        }
     }
 
     @Override
     public void once(H handler) {
-        val entry = new Entry(handler, 9999, hAccept.bindTo(handler));
-        entry.once = true;
-        EventBus.addOrdered(handlers, entry);
+        Entry entry = new Entry(handler, 9999);
+        IHandlerList.addOrdered(handlers, entry);
+        removeList.add(entry);
     }
 
     /** {@inheritDoc} */
@@ -46,25 +63,24 @@ public class HandlerList<H> implements IHandlerList<H> {
         return handlers.stream().map(e -> (H) e.handler);
     }
 
-    @SneakyThrows
-    public void emit(Object... args) {
-        boolean anyOnce = false;
-        for (val h : handlers) {
-            h.hBound.invokeWithArguments(args);
-            anyOnce = anyOnce || h.once;
+    /** {@inheritDoc} */
+    @Override @SuppressWarnings("unchecked")
+    public void callEach(Consumer<H> action) {
+        locked++;
+        for (Entry h : handlers) {
+            action.accept((H) h.handler);
         }
-        if (anyOnce) {
-            handlers.removeIf(h -> h.once);
+        if (!removeList.isEmpty()) {
+            handlers.removeAll(removeList);
+            removeList.clear();
         }
+        locked--;
     }
 
     @Data
     protected static class Entry implements Comparable<Entry> {
         final Object handler;
         final int priority;
-        /** Method handle bound with this object as the handler. */
-        final MethodHandle hBound;
-        protected boolean once = false;
 
         @Override
         public int compareTo(@NotNull Entry o) {

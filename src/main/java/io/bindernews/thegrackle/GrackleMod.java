@@ -4,7 +4,6 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.mod.stslib.icons.AbstractCustomIcon;
 import com.evacipated.cardcrawl.mod.stslib.icons.CustomIconHelper;
@@ -15,7 +14,6 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
@@ -23,6 +21,7 @@ import io.bindernews.thegrackle.icons.MusicNoteIcon;
 import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
+import io.bindernews.thegrackle.relics.SimmeringHeat;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import io.bindernews.thegrackle.ui.MainMenuMetricsRequest;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 @SpireInitializer
 public class GrackleMod implements
         AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
-        EditKeywordsSubscriber, PostInitializeSubscriber, OnStartBattleSubscriber, PreUpdateSubscriber
+        EditKeywordsSubscriber, PostInitializeSubscriber, PreUpdateSubscriber
 {
     public static final Logger log = LogManager.getLogger(GrackleMod.class);
 
@@ -104,8 +103,6 @@ public class GrackleMod implements
                 MetricsPatches.sendPost(metrics, CO.METRICS_URL);
             }
         });
-
-        Events.popupRender().on(this::onPopupRender);
     }
 
     @SuppressWarnings("unused")
@@ -133,7 +130,8 @@ public class GrackleMod implements
 
         // Add class-specific relics
         Stream.of(
-                new LoftwingFeather()
+                new LoftwingFeather(),
+                new SimmeringHeat()
         ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.En.COLOR_BLACK));
     }
 
@@ -157,14 +155,8 @@ public class GrackleMod implements
 
     @Override
     public void receivePreUpdate() {
-        Events.popups().getHandlers().forEach(p -> {
+        Events.popups().callEach(p -> {
             if (p.isEnabled()) p.update();
-        });
-    }
-
-    public void onPopupRender(SpriteBatch sb) {
-        Events.popups().getHandlers().forEach(p -> {
-            if (p.isEnabled()) p.render(sb);
         });
     }
 
@@ -218,11 +210,6 @@ public class GrackleMod implements
         BaseMod.addAudio(CO.SFX_QUACK, sfxPath + "duck_quack.ogg");
     }
 
-    @Override
-    public void receiveOnBattleStart(AbstractRoom abstractRoom) {
-
-    }
-
     /**
      * Exists so that all cards are "used", and so we have an easily-sorted list of cards.
      */
@@ -270,6 +257,7 @@ public class GrackleMod implements
                 new SnapGracklePop(),
                 new Strike_GK(),
                 new SummonEgrets(),
+                new Suplex(),
                 new Swoop(),
                 new Tailwind(),
                 new Takeoff(),

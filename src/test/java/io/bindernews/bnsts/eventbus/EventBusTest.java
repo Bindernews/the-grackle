@@ -13,7 +13,7 @@ class EventBusTest {
     void registerGood() {
         assertDoesNotThrow(() -> {
             val bus = new EventBus();
-            bus.register(Handler1.class, "accept");
+            bus.register(Handler1.class);
         });
     }
 
@@ -21,7 +21,7 @@ class EventBusTest {
     void registerBad() {
         assertThrows(EventBusException.class, () -> {
             val bus = new EventBus();
-            bus.register(Handler1.class, "accepting");
+            bus.register(Handler1.class);
         });
     }
 
@@ -95,7 +95,7 @@ class EventBusTest {
         val out = new int[2];
         bus.<Handler1>on((a, b) -> out[0] = a + b);
         bus.<Handler1>on((a, b) -> out[1] = a * b);
-        bus.emit(Handler1.class, 2, 3);
+        bus.<Handler1>callEach(h -> h.accept(2, 3));
         assertArrayEquals(new int[]{5, 6}, out);
     }
 
@@ -120,7 +120,7 @@ class EventBusTest {
 
     private EventBus makeTestBus() {
         val bus = new EventBus();
-        bus.register(Handler1.class, "accept");
+        bus.register(Handler1.class);
         bus.registerConsumer(Handler2.class);
         return bus;
     }
