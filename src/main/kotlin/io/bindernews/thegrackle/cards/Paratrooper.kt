@@ -1,58 +1,50 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.stances.NeutralStance;
-import io.bindernews.bnsts.CardVariables;
-import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
-import io.bindernews.thegrackle.cardmods.RequireAloftMod;
-import io.bindernews.thegrackle.stance.StanceAloft;
-import io.bindernews.thegrackle.variables.ExtraHitsVariable;
-import lombok.val;
-import org.jetbrains.annotations.NotNull;
-
-import static io.bindernews.thegrackle.helper.ModInterop.iop;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon
+import com.megacrit.cardcrawl.monsters.AbstractMonster
+import com.megacrit.cardcrawl.stances.NeutralStance
+import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.cardmods.ExtraHitsMod
+import io.bindernews.thegrackle.cardmods.RequireAloftMod
+import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.extraHits
+import io.bindernews.thegrackle.helper.hits
+import io.bindernews.thegrackle.stance.StanceAloft
 
 /**
  * Crash-Landing, but better.
  */
-public class Paratrooper extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("Paratrooper", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1, -1);
-        c.damage(7, 12);
-        c.add(ExtraHitsVariable.inst, 1, -1);
-        c.addModifier(new ExtraHitsMod());
-        c.addModifier(new RequireAloftMod());
-    });
-
-    /** For damage display calculation */
-    public AbstractCreature owner = AbstractDungeon.player;
-
-    public Paratrooper() {
-        super(C, VARS);
+class Paratrooper : BaseCard(C, VARS) {
+    /** For damage display calculation  */
+    var owner: AbstractCreature? = AbstractDungeon.player
+    override fun calculateDamageDisplay(mo: AbstractMonster) {
+        val stance = StanceAloft.getInstanceOn(owner)
+        stance.ifPresent { st -> st.enabled = false }
+        calculateCardDamage(mo)
+        stance.ifPresent { st -> st.enabled = true }
     }
 
-    @Override
-    public void calculateDamageDisplay(AbstractMonster mo) {
-        val stance = StanceAloft.getInstanceOn(owner);
-        stance.ifPresent(st -> st.enabled = false);
-        calculateCardDamage(mo);
-        stance.ifPresent(st -> st.enabled = true);
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.SLASH_DIAGONAL
+        val hits = extraHits
+        addToBot(iop().changeStance(p, NeutralStance.STANCE_ID))
+        for (i in 0 until hits) {
+            addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), fx))
+        }
     }
 
-    @Override
-    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
-        val fx = AbstractGameAction.AttackEffect.SLASH_DIAGONAL;
-        val hits = ExtraHitsVariable.inst.value(this);
-        addToBot(iop().changeStance(p, NeutralStance.STANCE_ID));
-        for (int i = 0; i < hits; i++) {
-            addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
+    companion object {
+        @JvmField val C = CardConfig("Paratrooper", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY)
+        val VARS = CardVariables.config { c ->
+            c.cost(1, -1)
+            c.damage(7, 12)
+            c.hits(1, -1)
+            c.addModifier(ExtraHitsMod())
+            c.addModifier(RequireAloftMod())
         }
     }
 }

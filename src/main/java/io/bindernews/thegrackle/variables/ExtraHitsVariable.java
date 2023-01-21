@@ -1,5 +1,6 @@
 package io.bindernews.thegrackle.variables;
 
+import basemod.helpers.CardModifierManager;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -67,7 +68,7 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
 
     @Override
     public void makeMultiHit(AbstractCard card) {
-        ExtraHitsMod.applyTo(card);
+        CardModifierManager.addModifier(card, new ExtraHitsMod());
     }
 
     /**
@@ -97,12 +98,6 @@ public class ExtraHitsVariable extends AbstractSimpleVariable implements IMultiH
      */
     public static Consumer<HitCountEvent> addPowerAmount(final String powerId) {
         return ev -> ev.addCount(MiscUtil.getPowerAmount(ev.getSource(), powerId, 0));
-    }
-
-    public interface Mixin {
-        default int getExtraHits() {
-            return inst.value((AbstractCard) this);
-        }
     }
 
     @SpirePatch(clz = AbstractCard.class, method = SpirePatch.CLASS)

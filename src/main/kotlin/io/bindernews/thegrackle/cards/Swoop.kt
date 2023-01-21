@@ -1,25 +1,20 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.stances.NeutralStance;
-import io.bindernews.bnsts.CardVariables;
-import io.bindernews.thegrackle.power.SwoopPower;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
+import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.stances.NeutralStance
+import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.power.SwoopPower
 
-import static io.bindernews.thegrackle.helper.ModInterop.iop;
-
-public class Swoop extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("Swoop", CardType.SKILL, CardRarity.RARE, CardTarget.SELF);
-    static final CardVariables VARS = CardVariables.config(c -> c.cost(2, 1));
-
-    public Swoop() {
-        super(C, VARS);
+class Swoop : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        addToBot(iop().changeStance(p, NeutralStance.STANCE_ID))
+        addToBot(ApplyPowerAction(p, p, SwoopPower(p)))
     }
 
-    @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
-        addToBot(iop().changeStance(p, NeutralStance.STANCE_ID));
-        addToBot(new ApplyPowerAction(p, p, new SwoopPower(p)));
+    companion object {
+        @JvmField val C = CardConfig("Swoop", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
+        val VARS = CardVariables.config { c: CardVariables -> c.cost(2, 1) }
     }
 }

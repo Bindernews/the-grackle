@@ -1,25 +1,20 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.powers.watcher.VigorPower;
-import io.bindernews.bnsts.CardVariables;
-import org.jetbrains.annotations.NotNull;
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
+import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.powers.watcher.VigorPower
+import io.bindernews.bnsts.CardVariables
 
-public class TargetingComputer extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("TargetingComputer", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1);
-        c.magic(3, 6);
-    });
-
-    public TargetingComputer() {
-        super(C, VARS);
+class TargetingComputer : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        addToBot(ApplyPowerAction(p, p, VigorPower(p, magicNumber), magicNumber))
     }
 
-    @Override
-    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
-        addToBot(new ApplyPowerAction(p, p, new VigorPower(p, magicNumber), magicNumber));
+    companion object {
+        @JvmField val C = CardConfig("TargetingComputer", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        val VARS = CardVariables.config { c ->
+            c.cost(1)
+            c.magic(3, 6)
+        }
     }
 }

@@ -1,31 +1,26 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import basemod.AutoAdd;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardVariables;
-import lombok.val;
+import basemod.AutoAdd.Seen
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.core.AbstractCreature
+import io.bindernews.bnsts.CardVariables
 
-@AutoAdd.Seen
-public class Strike_GK extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("Strike_GK", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1, -1);
-        c.damage(6, 9);
-    });
-
-    public Strike_GK() {
-        super(C, VARS);
-        tags.add(CardTags.STARTER_STRIKE);
-        tags.add(CardTags.STRIKE);
+@Seen
+class Strike_GK : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.SLASH_HORIZONTAL
+        addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), fx))
     }
 
-    @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
-        val fx = AbstractGameAction.AttackEffect.SLASH_HORIZONTAL;
-        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
+    companion object {
+        @JvmField
+        val C = CardConfig("Strike_GK", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY)
+        val VARS = CardVariables.config { c ->
+            c.cost(1, -1)
+            c.damage(6, 9)
+            c.tags(CardTags.STARTER_STRIKE, CardTags.STRIKE)
+        }
     }
 }

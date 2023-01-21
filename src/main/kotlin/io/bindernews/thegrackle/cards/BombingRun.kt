@@ -1,36 +1,30 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardVariables;
-import io.bindernews.thegrackle.cardmods.ExtraHitsMod;
-import io.bindernews.thegrackle.variables.ExtraHitsVariable;
-import lombok.val;
-import org.jetbrains.annotations.NotNull;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.core.AbstractCreature
+import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.cardmods.ExtraHitsMod
+import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.extraHits
+import io.bindernews.thegrackle.helper.hits
 
-import static io.bindernews.thegrackle.helper.ModInterop.iop;
-
-public class BombingRun extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("BombingRun", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1);
-        c.damage(6, 10);
-        c.add(ExtraHitsVariable.inst, 1, -1);
-        c.addModifier(new ExtraHitsMod());
-        c.multiDamage(true, true);
-    });
-
-    public BombingRun() {
-        super(C, VARS);
+class BombingRun : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.BLUNT_HEAVY
+        val hits = extraHits
+        for (i in 0 until hits) {
+            addToBot(iop().damageAllEnemies(p, multiDamage, damageTypeForTurn, fx))
+        }
     }
 
-    @Override
-    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
-        val fx = AbstractGameAction.AttackEffect.BLUNT_HEAVY;
-        val hits = ExtraHitsVariable.inst.value(this);
-        for (int i = 0; i < hits; i++) {
-            addToBot(iop().damageAllEnemies(p, multiDamage, damageTypeForTurn, fx));
+    companion object {
+        @JvmField val C = CardConfig("BombingRun", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY)
+        val VARS = CardVariables.config { c ->
+            c.cost(1)
+            c.damage(6, 10)
+            c.hits(1, -1)
+            c.addModifier(ExtraHitsMod())
+            c.multiDamage(true, true)
         }
     }
 }

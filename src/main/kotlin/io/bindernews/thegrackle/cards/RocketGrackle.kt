@@ -1,33 +1,28 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.VulnerablePower;
-import io.bindernews.bnsts.CardVariables;
-import lombok.val;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.monsters.AbstractMonster
+import com.megacrit.cardcrawl.powers.VulnerablePower
+import io.bindernews.bnsts.CardVariables
 
-public class RocketGrackle extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("RocketGrackle", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(1, -1);
-        c.damage(8, 12);
-        c.magic(1, 2);
-    });
-
-    public RocketGrackle() {
-        super(C, VARS);
+class RocketGrackle : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.BLUNT_HEAVY
+        val isMonster = p is AbstractMonster
+        addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), fx))
+        addToBot(ApplyPowerAction(m, p, VulnerablePower(m, magicNumber, isMonster), magicNumber))
     }
 
-    @Override
-    public void apply(AbstractCreature p, AbstractCreature m) {
-        val fx = AbstractGameAction.AttackEffect.BLUNT_HEAVY;
-        val isMonster = p instanceof AbstractMonster;
-        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageTypeForTurn), fx));
-        addToBot(new ApplyPowerAction(m, p, new VulnerablePower(m, magicNumber, isMonster), magicNumber));
+    companion object {
+        @JvmField val C = CardConfig("RocketGrackle", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        val VARS = CardVariables.config { c ->
+            c.cost(1, -1)
+            c.damage(8, 12)
+            c.magic(1, 2)
+        }
     }
 }

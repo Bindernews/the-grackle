@@ -23,7 +23,7 @@ class UpgradeRandomCardEffect(cards: CardGroup, private val isPlayer: Boolean = 
 
     constructor(owner: AbstractCreature) : this(
         iop().getMasterDeck(owner) ?: CardGroup(CardGroupType.UNSPECIFIED)
-    ) {}
+    )
 
     override fun update() {
         if (showEffect == null && group.size() > 0) {

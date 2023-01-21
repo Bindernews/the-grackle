@@ -1,28 +1,22 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.actions.common.DamageAction;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import io.bindernews.bnsts.CardVariables;
-import lombok.val;
-import org.jetbrains.annotations.NotNull;
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
+import com.megacrit.cardcrawl.actions.common.DamageAction
+import com.megacrit.cardcrawl.cards.DamageInfo
+import com.megacrit.cardcrawl.core.AbstractCreature
+import io.bindernews.bnsts.CardVariables
 
-public class Scratch extends BaseCard {
-    public static final CardConfig C =
-            new CardConfig("Scratch", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY);
-    static final CardVariables VARS = CardVariables.config(c -> {
-        c.cost(0, -1);
-        c.damage(6, 10);
-    });
-
-    public Scratch() {
-        super(C, VARS);
+class Scratch : BaseCard(C, VARS) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+        val fx = AttackEffect.SLASH_DIAGONAL
+        addToBot(DamageAction(m, DamageInfo(p, damage, damageType), fx))
     }
 
-    @Override
-    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {
-        val fx = AbstractGameAction.AttackEffect.SLASH_DIAGONAL;
-        addToBot(new DamageAction(m, new DamageInfo(p, damage, damageType), fx));
+    companion object {
+        @JvmField val C = CardConfig("Scratch", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        val VARS = CardVariables.config { c: CardVariables ->
+            c.cost(0, -1)
+            c.damage(6, 10)
+        }
     }
 }
