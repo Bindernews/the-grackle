@@ -21,7 +21,6 @@ import io.bindernews.thegrackle.icons.MusicNoteIcon;
 import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
-import io.bindernews.thegrackle.relics.SimmeringHeat;
 import io.bindernews.thegrackle.ui.CardClickableLink;
 import io.bindernews.thegrackle.ui.MainMenuMetricsRequest;
 import io.bindernews.thegrackle.variables.ExtraHitsVariable;
@@ -130,8 +129,8 @@ public class GrackleMod implements
 
         // Add class-specific relics
         Stream.of(
-                new LoftwingFeather(),
-                new SimmeringHeat()
+                new LoftwingFeather()
+//                new SimmeringHeat()
         ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.En.COLOR_BLACK));
     }
 
