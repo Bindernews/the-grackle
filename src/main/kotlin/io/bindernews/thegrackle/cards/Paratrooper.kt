@@ -4,30 +4,17 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon
-import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.stances.NeutralStance
 import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.cardmods.ExtraHitsMod
-import io.bindernews.thegrackle.cardmods.RequireAloftMod
+import io.bindernews.thegrackle.cardmods.*
 import io.bindernews.thegrackle.helper.ModInterop.iop
 import io.bindernews.thegrackle.helper.extraHits
 import io.bindernews.thegrackle.helper.hits
-import io.bindernews.thegrackle.stance.StanceAloft
 
 /**
  * Crash-Landing, but better.
  */
 class Paratrooper : BaseCard(C, VARS) {
-    /** For damage display calculation  */
-    var owner: AbstractCreature? = AbstractDungeon.player
-    override fun calculateDamageDisplay(mo: AbstractMonster) {
-        val stance = StanceAloft.getInstanceOn(owner)
-        stance.ifPresent { st -> st.enabled = false }
-        calculateCardDamage(mo)
-        stance.ifPresent { st -> st.enabled = true }
-    }
-
     override fun apply(p: AbstractCreature, m: AbstractCreature) {
         val fx = AttackEffect.SLASH_DIAGONAL
         val hits = extraHits
@@ -45,6 +32,7 @@ class Paratrooper : BaseCard(C, VARS) {
             c.hits(1, -1)
             c.addModifier(ExtraHitsMod())
             c.addModifier(RequireAloftMod())
+            c.addModifier(AloftDmgUnaffectedMod())
         }
     }
 }

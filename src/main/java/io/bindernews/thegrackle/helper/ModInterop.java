@@ -11,7 +11,9 @@ import charbosses.powers.general.EnemyVigorPower;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
-import com.megacrit.cardcrawl.cards.*;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -19,12 +21,15 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import io.bindernews.bnsts.Lazy;
+import io.bindernews.thegrackle.cards.BaseCard;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -109,7 +114,10 @@ public class ModInterop {
      * @param card Card to check
      * @return Card owner
      */
-    public AbstractCreature getCardOwner(AbstractCard card) {
+    public @NotNull AbstractCreature getCardOwner(AbstractCard card) {
+        if (card instanceof BaseCard) {
+            return ((BaseCard) card).owner;
+        }
         return AbstractDungeon.player;
     }
 
@@ -256,7 +264,7 @@ public class ModInterop {
         }
 
         @Override
-        public AbstractCreature getCardOwner(AbstractCard card) {
+        public @NotNull AbstractCreature getCardOwner(AbstractCard card) {
             if (card instanceof AbstractBossCard) {
                 return ((AbstractBossCard) card).owner;
             }

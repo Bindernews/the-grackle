@@ -9,7 +9,7 @@ import io.bindernews.thegrackle.helper.RelicHelper
 import io.bindernews.thegrackle.helper.RelicHelper.relicStrings
 import io.bindernews.thegrackle.helper.makeId
 
-class SimmeringHeat : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.BOSS, LandingSound.FLAT) {
+class SimmeringHeat : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.BOSS, LandingSound.MAGICAL) {
     init {
         description = relicStrings.DESCRIPTIONS[0]
     }

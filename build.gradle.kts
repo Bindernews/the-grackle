@@ -138,6 +138,7 @@ run {
             filterImage(MaskOp(file("$cardsRoot/power/power_mask.png")))
         }
         from("$cardsRoot/skill") {
+            filterImage(MaskOp(file("$cardsRoot/skill/skill_mask.png")))
         }
         include("*_p.png")
         into("$resOut/images/cards")

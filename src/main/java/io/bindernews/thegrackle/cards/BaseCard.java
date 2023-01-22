@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import io.bindernews.bnsts.*;
 import io.bindernews.thegrackle.Grackle;
@@ -18,6 +19,7 @@ public abstract class BaseCard extends CustomCard {
             new TextureAtlas(Gdx.files.classpath(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas")));
 
     protected ICardInitializer cardInitializer;
+    public @NotNull AbstractCreature owner = AbstractDungeon.player;
 
     public BaseCard(CardConfig opts, ICardInitializer initializer) {
         this(opts);

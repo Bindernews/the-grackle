@@ -4,10 +4,7 @@ import org.apache.tools.ant.util.ReaderInputStream
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.awt.image.ImageObserver
-import java.io.ByteArrayOutputStream
-import java.io.FilterReader
-import java.io.Reader
-import java.io.StringReader
+import java.io.*
 import java.util.concurrent.CountDownLatch
 import javax.imageio.ImageIO
 
@@ -58,10 +55,21 @@ abstract class ImageFilter(`in`: Reader) : FilterReader(`in`) {
     }
 
     private fun loadImage(): StringReader {
-        val src = ImageIO.read(ReaderInputStream(`in`, Charsets.ISO_8859_1))
+        val src = makeRGBA8(ImageIO.read(ReaderInputStream(`in`, Charsets.ISO_8859_1)))
         val outBuf = ByteArrayOutputStream()
         ImageIO.write(processImage(src), "png", outBuf)
         return StringReader(outBuf.toString(BINARY_CHARSET))
+    }
+
+    private fun makeRGBA8(img: BufferedImage): BufferedImage {
+        if (img.type == BufferedImage.TYPE_INT_ARGB) {
+            return img
+        }
+        val img2 = BufferedImage(img.width, img.height, BufferedImage.TYPE_INT_ARGB)
+        val g = img2.createGraphics()
+        g.drawImage(img, 0, 0, null)
+        g.dispose()
+        return img2
     }
 
     abstract fun processImage(src: BufferedImage): BufferedImage
