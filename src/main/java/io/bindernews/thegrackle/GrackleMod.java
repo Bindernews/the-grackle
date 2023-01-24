@@ -4,7 +4,6 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -288,15 +287,6 @@ public class GrackleMod implements
                 return null;
             }
         });
-    }
-
-    /**
-     * Convenience function to lazy-load a texture atlas.
-     * @param subPath Path relative to {@link CO#RES_IMAGES}
-     * @return A lazy-loaded {@link TextureAtlas}
-     */
-    public static @NotNull Lazy<TextureAtlas> lazyAtlas(String subPath) {
-        return Lazy.of(() -> new TextureAtlas(CO.RES_IMAGES + subPath));
     }
 
     public static IMultiHitManager getMultiHitManager() {

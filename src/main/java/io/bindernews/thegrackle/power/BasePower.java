@@ -13,8 +13,8 @@ import lombok.val;
 
 @AutoAdd.Ignore
 public abstract class BasePower extends AbstractPower implements CloneablePowerInterface {
-
-    public static final Lazy<TextureAtlas> powerAtlas = GrackleMod.lazyAtlas("/powers/powers.atlas");
+    public static final Lazy<TextureAtlas> powerAtlas =
+            Lazy.of(() -> new TextureAtlas(GrackleMod.CO.RES_IMAGES + "/powers/powers.atlas"));
 
     public final PowerStrings strings;
 

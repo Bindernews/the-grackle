@@ -34,7 +34,7 @@ public class FireheartPower extends BasePower {
     }
 
     public boolean canEnterPhoenixStance() {
-        return !StancePhoenix.is(iop().getStance(owner)) && !owner.hasPower(CoolingPhoenixPower.POWER_ID);
+        return !StancePhoenix.isStance(iop().getStance(owner)) && !owner.hasPower(CoolingPhoenixPower.POWER_ID);
     }
 
     @Override

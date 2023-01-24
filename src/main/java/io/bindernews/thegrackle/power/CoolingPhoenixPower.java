@@ -23,7 +23,7 @@ public class CoolingPhoenixPower extends BasePower {
 
     @Override
     public void onChangeStance(AbstractStance oldStance, AbstractStance newStance) {
-        if (StancePhoenix.is(newStance)) {
+        if (StancePhoenix.isStance(newStance)) {
             addToTop(new ChangeStanceAction(oldStance));
         }
     }

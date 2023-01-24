@@ -2,21 +2,21 @@ package io.bindernews.thegrackle.cards;
 
 import basemod.AutoAdd;
 import basemod.abstracts.CustomCard;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import io.bindernews.bnsts.*;
+import io.bindernews.bnsts.ICardInitializer;
+import io.bindernews.bnsts.Lazy;
 import io.bindernews.thegrackle.Grackle;
 import io.bindernews.thegrackle.GrackleMod;
 import org.jetbrains.annotations.NotNull;
 
 @AutoAdd.Ignore
 public abstract class BaseCard extends CustomCard {
-    private static final Lazy<TextureAtlas> cards = Lazy.of(() ->
-            new TextureAtlas(Gdx.files.classpath(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas")));
+    private static final Lazy<TextureAtlas> cards =
+            Lazy.of(() -> new TextureAtlas(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas"));
 
     protected ICardInitializer cardInitializer;
     public @NotNull AbstractCreature owner = AbstractDungeon.player;
