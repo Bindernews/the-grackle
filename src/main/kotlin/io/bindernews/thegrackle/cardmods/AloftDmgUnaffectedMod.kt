@@ -4,23 +4,22 @@ import basemod.abstracts.AbstractCardModifier
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.stance.StanceAloft
-import java.util.Optional
 
 class AloftDmgUnaffectedMod : AbstractCardModifier() {
 
-    private var stance: Optional<StanceAloft> = Optional.empty()
+    private var stance: StanceAloft? = null
 
     override fun modifyBaseDamage(damage: Float, type: DamageInfo.DamageType, card: AbstractCard, target: AbstractMonster?): Float {
-        stance = iop().getCardOwner(card).let { StanceAloft.getInstanceOn(it) }
-        stance.ifPresent { it.enabled = false }
+        stance = iop().getCardOwner(card)?.let { StanceAloft.getInstanceOn(it).orElse(null) }
+        stance?.enabled = false
         return damage
     }
 
     override fun modifyDamageFinal(damage: Float, type: DamageInfo.DamageType?, card: AbstractCard?, target: AbstractMonster?): Float {
-        stance.ifPresent { it.enabled = true }
-        stance = Optional.empty()
+        stance?.enabled = true
+        stance = null
         return damage
     }
 

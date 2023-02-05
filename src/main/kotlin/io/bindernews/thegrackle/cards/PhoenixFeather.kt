@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.powers.RepairPower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 
 /**
  * It's Self-Repair.
@@ -15,7 +15,7 @@ class PhoenixFeather : BaseCard(C, VARS) {
         addToBot(ApplyPowerAction(p, p, RepairPower(p, magicNumber), magicNumber))
     }
 
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         throwPlayerOnly()
     }
 

@@ -5,7 +5,7 @@ import basemod.helpers.BaseModCardTags
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.power.HealingPhoenixPower
 
 @AutoAdd.Ignore

@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.actions.utility.WaitAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.vfx.combat.GiantTextEffect
 import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.cardmods.RequireAloftMod
 
 class Death : BaseCard(C, VARS) {

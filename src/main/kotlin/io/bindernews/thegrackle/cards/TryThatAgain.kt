@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards
 import com.megacrit.cardcrawl.actions.unique.CalculatedGambleAction
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 
 class TryThatAgain : BaseCard(C, VARS) {
     override fun use(p: AbstractPlayer, m: AbstractMonster) {

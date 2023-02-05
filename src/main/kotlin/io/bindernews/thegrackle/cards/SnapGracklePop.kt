@@ -3,8 +3,8 @@ package io.bindernews.thegrackle.cards
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.VulnerablePower
 import com.megacrit.cardcrawl.powers.WeakPower
-import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.CardVariables
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.helper.magic2
 
 /**

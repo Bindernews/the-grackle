@@ -5,11 +5,11 @@ import basemod.helpers.CardModifierManager
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.DrawPower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop
 
 class Tailwind : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val power = ModInterop.iop().createPower(DrawPower.POWER_ID, p, magicNumber)
         addToBot(ApplyPowerAction(p, p, power, magicNumber))
     }

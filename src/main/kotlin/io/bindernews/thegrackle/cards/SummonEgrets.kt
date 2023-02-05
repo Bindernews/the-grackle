@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.unique.WhirlwindAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod
 
 class SummonEgrets : BaseCard(C, VARS) {

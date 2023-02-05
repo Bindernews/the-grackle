@@ -7,10 +7,10 @@ import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.powers.VulnerablePower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 
 class RocketGrackle : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.BLUNT_HEAVY
         val isMonster = p is AbstractMonster
         addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), fx))

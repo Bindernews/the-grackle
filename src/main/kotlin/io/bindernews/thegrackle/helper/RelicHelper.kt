@@ -13,10 +13,7 @@ object RelicHelper {
     fun loadImages(relicId: String): Array<Texture> {
         val path = GrackleMod.MOD_RES + "/images/relics/" + GrackleMod.removePrefix(relicId)
         val tex = Objects.requireNonNull(GrackleMod.loadTexture("$path.png"))!!
-        var texOutline = GrackleMod.loadTexture(path + "_o.png")
-        if (texOutline == null) {
-            texOutline = tex
-        }
+        val texOutline = GrackleMod.loadTexture(path + "_o.png") ?: tex
         return arrayOf(tex, texOutline, tex)
     }
 

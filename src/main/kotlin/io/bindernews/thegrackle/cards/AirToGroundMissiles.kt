@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.cardmods.DoubleAloftDamageMod
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod
 import io.bindernews.thegrackle.cardmods.RequireAloftMod
@@ -14,7 +14,7 @@ import io.bindernews.thegrackle.helper.extraHits
 import io.bindernews.thegrackle.helper.hits
 
 class AirToGroundMissiles : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.SLASH_HORIZONTAL
         val hits = extraHits
         for (i in 0 until hits) {

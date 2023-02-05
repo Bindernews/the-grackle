@@ -3,11 +3,11 @@ package io.bindernews.thegrackle.cards
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.EvolvePower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.power.BurnCreamPower
 
 class BurnCream : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(ApplyPowerAction(p, p, BurnCreamPower(p, -1), -1))
         if (upgraded) {
             addToBot(ApplyPowerAction(p, p, EvolvePower(p, 1)))

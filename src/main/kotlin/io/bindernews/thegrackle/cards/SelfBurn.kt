@@ -3,8 +3,8 @@ package io.bindernews.thegrackle.cards
 import com.megacrit.cardcrawl.actions.common.DrawCardAction
 import com.megacrit.cardcrawl.cards.status.Burn
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.CardVariables
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 
 @Suppress("MemberVisibilityCanBePrivate")
 class SelfBurn : BaseCard(C, VARS) {
@@ -13,7 +13,7 @@ class SelfBurn : BaseCard(C, VARS) {
      * This is intended to be used by boss characters.
      */
     var drawNow = true
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         if (drawNow) {
             addToBot(DrawCardAction(p, magicNumber))
         } else {

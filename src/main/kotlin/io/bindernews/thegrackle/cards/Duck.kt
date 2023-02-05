@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.BlurPower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.GrackleMod
 import io.bindernews.thegrackle.actions.SoundAction
 
@@ -13,7 +13,7 @@ class Duck : BaseCard(C, VARS) {
      * Set to false to disable quack sound.
      */
     var playSound = true
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
         addToBot(ApplyPowerAction(p, p, BlurPower(p, magicNumber), magicNumber))
         if (playSound) {

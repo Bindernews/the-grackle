@@ -1,5 +1,7 @@
 package io.bindernews.bnsts;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -15,7 +17,7 @@ public interface Lazy<T> extends Supplier<T> {
      * @return Lazy instance
      * @param <T> Lazy type
      */
-    static <T> Lazy<T> of(Supplier<T> creator) {
+    static <T> @NotNull Lazy<T> of(Supplier<T> creator) {
         return new SimpleLazy<>(creator);
     }
 
@@ -25,7 +27,7 @@ public interface Lazy<T> extends Supplier<T> {
      * @return Lazy instance
      * @param <T> Lazy type
      */
-    static <T> Lazy<T> ofSync(Supplier<T> creator) {
+    static <T> @NotNull Lazy<T> ofSync(Supplier<T> creator) {
         return new SyncLazy<>(creator);
     }
 }

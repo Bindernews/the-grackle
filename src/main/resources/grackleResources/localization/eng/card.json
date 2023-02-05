@@ -200,7 +200,7 @@
   },
   "grackle:Suplex": {
     "NAME": "Suplex",
-    "DESCRIPTION": "Deal !D! damage (!M! per hit) NL and !M! damage to yourself. NL Does not consume extra hits.",
+    "DESCRIPTION": "Deal !D! damage, !M! per hit. NL Take !M! damage. NL Does not consume extra hits.",
     "FLAVOR": "Does 4x damage to trains."
   },
   "grackle:Swoop": {

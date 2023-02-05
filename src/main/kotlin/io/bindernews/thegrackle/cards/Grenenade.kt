@@ -2,9 +2,9 @@ package io.bindernews.thegrackle.cards
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.helper.hits
 import io.bindernews.thegrackle.variables.ExtraHitsVariable
 
@@ -14,7 +14,7 @@ class Grenenade : BaseCard(C) {
         VARS.init(this)
     }
 
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.FIRE
         val hits = ExtraHitsVariable.inst.value(this)
         for (i in 0 until hits) {

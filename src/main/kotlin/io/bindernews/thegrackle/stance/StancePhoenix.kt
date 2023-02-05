@@ -8,12 +8,13 @@ import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.stances.AbstractStance
 import com.megacrit.cardcrawl.stances.NeutralStance
+import io.bindernews.bnsts.MiscUtil.addToBot
 import io.bindernews.thegrackle.GrackleMod
-import io.bindernews.thegrackle.MiscUtil
+import io.bindernews.thegrackle.downfall.stances.EnemyStanceDelegate
 import io.bindernews.thegrackle.helper.ModInterop
 import io.bindernews.thegrackle.power.CoolingPhoenixPower
 
-class StancePhoenix : AbstractStance() {
+class StancePhoenix : AbstractStance(), EnemyStanceDelegate {
     var owner: AbstractCreature
     var canExitStance: Boolean
 
@@ -25,12 +26,15 @@ class StancePhoenix : AbstractStance() {
         updateDescription()
     }
 
+    override val description: String
+        get() = description
+
     override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
         // All the benefits
         return aloftInst.atDamageReceive(damage, damageType)
     }
 
-    override fun atDamageGive(damage: Float, damageType: DamageType): Float {
+    override fun atDamageGive(damage: Float, type: DamageType): Float {
         // None of the downsides
         return damage
     }
@@ -42,18 +46,18 @@ class StancePhoenix : AbstractStance() {
     override fun onExitStance() {
         // If the turn has not ended then go back into our stance
         if (!canExitStance) {
-            MiscUtil.addToBot(ModInterop.iop().changeStance(owner, STANCE_ID))
+            addToBot(ModInterop.iop().changeStance(owner, STANCE_ID))
         }
     }
 
     override fun atStartOfTurn() {
         canExitStance = true
-        MiscUtil.addToBot(ApplyPowerAction(owner, owner, CoolingPhoenixPower(owner, 1)))
-        MiscUtil.addToBot(ModInterop.iop().changeStance(owner, NeutralStance.STANCE_ID))
+        addToBot(ApplyPowerAction(owner, owner, CoolingPhoenixPower(owner, 1)))
+        addToBot(ModInterop.iop().changeStance(owner, NeutralStance.STANCE_ID))
     }
 
     override fun onEndOfTurn() {
-        MiscUtil.addToBot(SkipEnemiesTurnAction())
+        addToBot(SkipEnemiesTurnAction())
     }
 
     override fun updateDescription() {
@@ -68,7 +72,10 @@ class StancePhoenix : AbstractStance() {
          * So we can calculate damage without code duplication.
          */
         private val aloftInst = StanceAloft()
-        @JvmStatic fun isStance(s: AbstractStance): Boolean {
+        @JvmStatic fun isStance(s: AbstractStance?): Boolean {
+            if (s == null) {
+                return false
+            }
             return s.ID == STANCE_ID
         }
     }

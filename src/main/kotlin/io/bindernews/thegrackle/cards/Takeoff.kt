@@ -2,12 +2,12 @@ package io.bindernews.thegrackle.cards
 
 import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop
 import io.bindernews.thegrackle.stance.StanceAloft
 
 class Takeoff : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
         addToBot(ModInterop.iop().changeStance(p, StanceAloft.STANCE_ID))
     }

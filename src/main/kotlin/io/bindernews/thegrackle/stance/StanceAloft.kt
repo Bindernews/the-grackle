@@ -8,10 +8,11 @@ import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.stances.AbstractStance
 import io.bindernews.thegrackle.GrackleMod
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.downfall.stances.EnemyStanceDelegate
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import java.util.*
 
-class StanceAloft : AbstractStance() {
+class StanceAloft : AbstractStance(), EnemyStanceDelegate {
     /**
      * Used for temporary damage calculations.
      */
@@ -23,6 +24,9 @@ class StanceAloft : AbstractStance() {
         updateDescription()
     }
 
+    override val description: String
+        get() = description
+
     override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
         return if (damageType == DamageType.NORMAL && enabled) {
             damage / 2f
@@ -31,8 +35,8 @@ class StanceAloft : AbstractStance() {
         }
     }
 
-    override fun atDamageGive(damage: Float, damageType: DamageType): Float {
-        return if (damageType == DamageType.NORMAL && enabled) {
+    override fun atDamageGive(damage: Float, type: DamageType): Float {
+        return if (type == DamageType.NORMAL && enabled) {
             damage / 2f
         } else {
             damage
@@ -63,7 +67,7 @@ class StanceAloft : AbstractStance() {
          * @param card the card to update
          */
         @Suppress("UNUSED_PARAMETER")
-        fun checkPlay(card: AbstractCard, p: AbstractPlayer?, ignoredM: AbstractMonster?): Boolean {
+        fun checkPlay(card: AbstractCard, p: AbstractPlayer, ignoredM: AbstractMonster?): Boolean {
             val b = isAloft(p)
             if (!b) {
                 card.cantUseMessage = STRINGS.DESCRIPTION[1]
@@ -72,12 +76,10 @@ class StanceAloft : AbstractStance() {
         }
 
         fun isAloft(p: AbstractCreature?): Boolean {
-            val st = iop().getStance(p)
-            return if (st == null) {
-                false
-            } else {
-                isAloft(st)
+            if (p == null) {
+                return false
             }
+            return iop().getStance(p)?.let { isAloft(it) } ?: false
         }
 
         fun isAloft(s: AbstractStance): Boolean {

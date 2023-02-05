@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardBrieflyEffect
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 
 class UpgradeRandomCardEffect(cards: CardGroup, private val isPlayer: Boolean = true) : AbstractGameEffect() {
     private val group: CardGroup = CardGroup(CardGroupType.UNSPECIFIED)
