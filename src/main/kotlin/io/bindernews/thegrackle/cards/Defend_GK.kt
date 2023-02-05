@@ -7,7 +7,7 @@ import io.bindernews.bnsts.CardVariables
 
 @Seen
 class Defend_GK : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
     }
 

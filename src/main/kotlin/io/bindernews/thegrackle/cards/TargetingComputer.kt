@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.powers.watcher.VigorPower
 import io.bindernews.bnsts.CardVariables
 
 class TargetingComputer : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(ApplyPowerAction(p, p, VigorPower(p, magicNumber), magicNumber))
     }
 

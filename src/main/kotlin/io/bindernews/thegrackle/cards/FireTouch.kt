@@ -6,8 +6,8 @@ import io.bindernews.bnsts.CardVariables
 import io.bindernews.thegrackle.power.BurningPower
 
 class FireTouch : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
-        addToBot(ApplyPowerAction(m, p, BurningPower(m, p, magicNumber), magicNumber))
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
+        addToBot(ApplyPowerAction(m, p, BurningPower(m!!, p, magicNumber), magicNumber))
     }
 
     companion object {

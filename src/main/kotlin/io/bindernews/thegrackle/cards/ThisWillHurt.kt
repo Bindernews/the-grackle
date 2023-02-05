@@ -6,18 +6,18 @@ import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.VulnerablePower
 import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import java.util.stream.Stream
 
 class ThisWillHurt : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.NONE
-        var targets = ModInterop.iop().getEnemies(p)
+        var targets = iop().getEnemies(p)
         if (!upgraded) {
-            targets = Stream.concat(ModInterop.iop().getFriends(p), targets)
+            targets = Stream.concat(iop().getFriends(p), targets)
         }
-        targets.forEach { cr: AbstractCreature? ->
-            val power = ModInterop.iop().createPower(VulnerablePower.POWER_ID, cr, magicNumber)
+        targets.forEach { cr ->
+            val power = iop().createPower(VulnerablePower.POWER_ID, cr, magicNumber)
             addToBot(ApplyPowerAction(cr, p, power, magicNumber, true, fx))
         }
         addToBot(GainBlockAction(p, p, block))

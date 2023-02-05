@@ -25,7 +25,16 @@ import java.util.function.Consumer;
 public class EventEmit<T> extends HandlerList<Consumer<T>> implements IEventEmit<T> {
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("unchecked")
     public void emit(T event) {
-        use(s -> s.forEach(h -> h.accept(event)));
+        try {
+            locked++;
+            for (Entry e : handlers) {
+                ((Consumer<T>) e.handler).accept(event);
+            }
+        } finally {
+            locked--;
+            postProcess();
+        }
     }
 }

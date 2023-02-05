@@ -7,7 +7,7 @@ import io.bindernews.thegrackle.helper.ModInterop
 import io.bindernews.thegrackle.stance.StanceAloft
 
 class Takeoff : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
         addToBot(ModInterop.iop().changeStance(p, StanceAloft.STANCE_ID))
     }

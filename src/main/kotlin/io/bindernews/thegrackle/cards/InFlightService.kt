@@ -7,10 +7,10 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.potions.RegenPotion
 import com.megacrit.cardcrawl.powers.RegenPower
 import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 
 class InFlightService : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         if (p is AbstractPlayer) {
             addToBot(ObtainPotionAction(RegenPotion()))
         } else {

@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.powers.WeakPower
 import io.bindernews.bnsts.CardVariables
 
 class Cackle : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(ApplyPowerAction(m, p, WeakPower(m, magicNumber, false), magicNumber))
         addToBot(ApplyPowerAction(m, p, VulnerablePower(m, magicNumber, false), magicNumber))
     }

@@ -4,7 +4,9 @@ import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.localization.CardStrings
+import com.megacrit.cardcrawl.metrics.Metrics
 import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.GrackleMod
 import io.bindernews.thegrackle.cards.BaseCard
 import io.bindernews.thegrackle.patches.Fields
 import io.bindernews.thegrackle.variables.ExtraHitsVariable
@@ -44,3 +46,16 @@ inline var AbstractCreature.fireheartGained: Int
     get() = Fields.fireheartGained.get(this)
     set(value) = Fields.fireheartGained.set(this, value)
 
+/**
+ * Upload the metrics to the passed url in JSON format.
+  * @param url URL to upload data to
+ */
+fun Metrics.sendPost(url: String) {
+    try {
+        val m = Metrics::class.java.getDeclaredMethod("sendPost", String::class.java, String::class.java)
+        m.isAccessible = true
+        m.invoke(this, url, null)
+    } catch (ex: ReflectiveOperationException) {
+        GrackleMod.log.error("Exception while sending metrics to $url", ex)
+    }
+}

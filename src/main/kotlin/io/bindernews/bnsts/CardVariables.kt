@@ -1,273 +1,252 @@
-package io.bindernews.bnsts;
+package io.bindernews.bnsts
 
-import basemod.abstracts.AbstractCardModifier;
-import basemod.abstracts.DynamicVariable;
-import basemod.helpers.CardModifierManager;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
-import com.evacipated.cardcrawl.mod.stslib.variables.*;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.DamageInfo;
-import lombok.*;
-import org.jetbrains.annotations.NotNull;
-
-import java.lang.invoke.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.function.*;
+import basemod.abstracts.AbstractCardModifier
+import basemod.abstracts.DynamicVariable
+import basemod.helpers.CardModifierManager
+import basemod.helpers.dynamicvariables.BlockVariable
+import basemod.helpers.dynamicvariables.DamageVariable
+import basemod.helpers.dynamicvariables.MagicNumberVariable
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.ExhaustiveField
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.PersistFields
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.RefundFields
+import com.evacipated.cardcrawl.mod.stslib.variables.ExhaustiveVariable
+import com.evacipated.cardcrawl.mod.stslib.variables.PersistVariable
+import com.evacipated.cardcrawl.mod.stslib.variables.RefundVariable
+import com.megacrit.cardcrawl.cards.AbstractCard
+import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
+import lombok.SneakyThrows
+import java.lang.invoke.MethodHandle
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodType
+import java.util.*
+import java.util.function.Consumer
 
 /**
- * A utility for easily configuring an {@link AbstractCard}'s values.
- * <br/>
- * Calling {@link CardVariables#config} allows users to conveniently create and
- * set values. StSLib's {@link DynamicVariable}s are supported, as well as anything
- * implementing {@link IVariable}, allowing user expansion.
+ * A utility for easily configuring an [AbstractCard]'s values.
+ * <br></br>
+ * Calling [CardVariables.config] allows users to conveniently create and
+ * set values. StSLib's [DynamicVariable]s are supported, as well as anything
+ * implementing [IVariable], allowing user expansion.
  *
  * @author bindernews
  */
-public class CardVariables implements ICardInitializer {
-
-    private final ArrayList<VariableSetting> settings = new ArrayList<>();
-    private final ArrayList<ICardInitializer> children = new ArrayList<>();
-    private final InitList initList = new InitList();
-
-
-    public CardVariables() {}
-
-    @NotNull
-    public static CardVariables config(Consumer<CardVariables> c) {
-        val cv = new CardVariables();
-        c.accept(cv);
-        return cv;
+class CardVariables : ICardInitializer {
+    private val settings = ArrayList<VariableSetting>()
+    private val children = ArrayList<ICardInitializer>()
+    private val initList = InitList()
+    fun add(variable: IVariable, value: Int, valueUpg: Int) {
+        settings.add(VariableSetting(variable, value, valueUpg))
     }
 
-    public void add(IVariable variable, int value, int valueUpg) {
-        settings.add(new VariableSetting(variable, value, valueUpg));
+    fun child(initializer: ICardInitializer) {
+        children.add(initializer)
     }
 
-    public void child(ICardInitializer initializer) {
-        children.add(initializer);
+    fun addModifier(modifier: AbstractCardModifier) {
+        onInit { CardModifierManager.addModifier(it, modifier) }
     }
 
-    public void addModifier(final AbstractCardModifier modifier) {
-        onInit(card -> CardModifierManager.addModifier(card, modifier));
+    @JvmOverloads fun block(base: Int, upg: Int = -1) { add(vBlock, base, upg) }
+    @JvmOverloads fun cost(base: Int, upg: Int = -1) { add(vCost, base, upg) }
+    @JvmOverloads fun damage(base: Int, upg: Int = -1) { add(vDamage, base, upg) }
+    @JvmOverloads fun magic(base: Int, upg: Int = -1) { add(vMagic, base, upg) }
+
+    fun multiDamage(base: Boolean, upg: Boolean) {
+        child(object : ICardInitializer {
+            override fun init(card: AbstractCard) {
+                fIsMultiDamage[card] = base
+            }
+
+            override fun forceUpgrade(card: AbstractCard) {
+                fIsMultiDamage[card] = upg
+            }
+        })
     }
 
-    public void block(int base, int upg) {
-        add(vBlock, base, upg);
+    fun tags(vararg tags: AbstractCard.CardTags) {
+        onInit { card: AbstractCard -> Collections.addAll(card.tags, *tags) }
     }
 
-    public void cost(int base) { cost(base, -1); }
-    public void cost(int base, int upg) {
-        add(vCost, base, upg);
+    fun onInit(action: Consumer<AbstractCard>) {
+        initList.onInit(action)
     }
 
-    public void damage(int base, int upg) {
-        add(vDamage, base, upg);
+    fun onUpgrade(action: Consumer<AbstractCard>) {
+        initList.onUpgrade(action)
     }
 
-    public void magic(int base, int upg) {
-        add(vMagic, base, upg);
-    }
-
-    public void multiDamage(boolean base, boolean upg) {
-        child(new ICardInitializer() {
-            @Override public void init(AbstractCard card) { fIsMultiDamage.set(card, base); }
-            @Override public void upgrade(AbstractCard card) { fIsMultiDamage.set(card, upg); }
-        });
-    }
-
-    public void tags(final AbstractCard.CardTags ...tags) {
-        onInit(card -> Collections.addAll(card.tags, tags));
-    }
-
-    public void onInit(Consumer<AbstractCard> action) {
-        initList.onInit(action);
-    }
-
-    public void onUpgrade(Consumer<AbstractCard> action) {
-        initList.onUpgrade(action);
-    }
-
-    @Override
-    public void init(AbstractCard card) {
-        for (val s : settings) {
-            s.variable.setBaseValue(card, s.value);
-            s.variable.setValue(card, s.value);
+    override fun init(card: AbstractCard) {
+        for (s in settings) {
+            s.variable.setBaseValue(card, s.value)
+            s.variable.setValue(card, s.value)
         }
-        children.forEach(a -> a.init(card));
-        initList.init(card);
-        card.initializeDescription();
+        children.forEach(Consumer { a: ICardInitializer -> a.init(card) })
+        initList.init(card)
+        card.initializeDescription()
     }
 
-    @Override
-    public void upgrade(AbstractCard card) {
+    override fun upgrade(card: AbstractCard) {
         if (!card.upgraded) {
-            upgradeName(card);
-            forceUpgrade(card);
+            upgradeName(card)
+            forceUpgrade(card)
         }
     }
 
-    public void forceUpgrade(AbstractCard card) {
-        for (val s : settings) {
+    override fun forceUpgrade(card: AbstractCard) {
+        for (s in settings) {
             if (s.valueUpg != -1) {
-                s.variable.upgrade(card, s.valueUpg - s.value);
+                s.variable.upgrade(card, s.valueUpg - s.value)
             }
         }
-        children.forEach(a -> a.upgrade(card));
-        initList.upgrade(card);
+        children.forEach { it.forceUpgrade(card) }
+        initList.upgrade(card)
     }
 
-    @Data
-    static class VariableSetting {
-        final IVariable variable;
-        final int value;
-        final int valueUpg;
+    internal data class VariableSetting(val variable: IVariable, val value: Int = 0, val valueUpg: Int = 0)
+
+    fun interface AcceptCard {
+        @Throws(Throwable::class)
+        fun accept(card: AbstractCard, amount: Int)
     }
 
-    private static final MethodHandle hUpgradeDamage;
-    private static final MethodHandle hUpgradeBlock;
-    private static final MethodHandle hUpgradeMagic;
-    private static final MethodHandle hUpgradeName;
-    private static final MethodHandle hUpgradeCost;
-
-    public static final IField<AbstractCard, Boolean> fIsMultiDamage =
-            IField.unreflect(AbstractCard.class, "isMultiDamage");
-
-    public static final IField<AbstractCard, DamageInfo.DamageType> fDamageType =
-            IField.unreflect(AbstractCard.class, "damageType");
-
-    static {
-        val mtypeInt = MethodType.methodType(void.class, int.class);
-        val mtypeNone = MethodType.methodType(void.class);
-        hUpgradeDamage = findCardMethod("upgradeDamage", mtypeInt);
-        hUpgradeBlock = findCardMethod("upgradeBlock", mtypeInt);
-        hUpgradeMagic = findCardMethod("upgradeMagicNumber", mtypeInt);
-        hUpgradeCost = findCardMethod("upgradeBaseCost", mtypeInt);
-        hUpgradeName = findCardMethod("upgradeName", mtypeNone);
-    }
-
-    private static MethodHandle findCardMethod(String name, MethodType args) {
-        try {
-            val m = AbstractCard.class.getDeclaredMethod(name, args.parameterArray());
-            m.setAccessible(true);
-            return MethodHandles.lookup().unreflect(m);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+    companion object {
+        fun config(c: Consumer<CardVariables>): CardVariables {
+            val cv = CardVariables()
+            c.accept(cv)
+            return cv
         }
-    }
 
-    @SneakyThrows
-    public static void upgradeName(AbstractCard card) {
-        hUpgradeName.invoke(card);
-    }
+        private val hUpgradeDamage: MethodHandle
+        private val hUpgradeBlock: MethodHandle
+        private val hUpgradeMagic: MethodHandle
+        private val hUpgradeName: MethodHandle
+        private val hUpgradeCost: MethodHandle
+        val fIsMultiDamage = IField.unreflect<AbstractCard, Boolean>(
+            AbstractCard::class.java, "isMultiDamage"
+        )
+        val fDamageType = IField.unreflect<AbstractCard, DamageType>(AbstractCard::class.java, "damageType")
 
-    public static final IVariable vBlock = new IVariable() {
-        @Override
-        public int value(AbstractCard card) { return card.block; }
-        @Override
-        public int baseValue(AbstractCard card) { return card.baseBlock; }
-        @Override
-        public boolean upgraded(AbstractCard card) { return card.upgradedBlock; }
-        @Override
-        public boolean isModified(AbstractCard card) { return card.isBlockModified; }
-        @Override
-        public void setValue(AbstractCard card, int amount) { card.block = amount; }
-        @Override
-        public void setBaseValue(AbstractCard card, int amount) { card.baseBlock = amount; }
-        @Override @SneakyThrows
-        public void upgrade(AbstractCard card, int amount) { hUpgradeBlock.invoke(card, amount); }
-    };
-
-    public static final IVariable vDamage = new IVariable() {
-        @Override
-        public int value(AbstractCard card) { return card.damage; }
-        @Override
-        public int baseValue(AbstractCard card) { return card.baseDamage; }
-        @Override
-        public boolean upgraded(AbstractCard card) { return card.upgradedDamage; }
-        @Override
-        public boolean isModified(AbstractCard card) { return card.isDamageModified; }
-        @Override
-        public void setValue(AbstractCard card, int amount) { card.damage = amount; }
-        @Override
-        public void setBaseValue(AbstractCard card, int amount) { card.baseDamage = amount; }
-        @Override @SneakyThrows
-        public void upgrade(AbstractCard card, int amount) { hUpgradeDamage.invoke(card, amount); }
-    };
-
-    public static final IVariable vMagic = new IVariable() {
-        @Override
-        public int value(AbstractCard card) { return card.magicNumber; }
-        @Override
-        public int baseValue(AbstractCard card) { return card.baseMagicNumber; }
-        @Override
-        public boolean upgraded(AbstractCard card) { return card.upgradedMagicNumber; }
-        @Override
-        public boolean isModified(AbstractCard card) { return card.isMagicNumberModified; }
-        @Override
-        public void setValue(AbstractCard card, int amount) { card.magicNumber = amount; }
-        @Override
-        public void setBaseValue(AbstractCard card, int amount) { card.baseMagicNumber = amount; }
-        @Override @SneakyThrows
-        public void upgrade(AbstractCard card, int amount) { hUpgradeMagic.invoke(card, amount); }
-    };
-
-    public static final IVariable vCost = new IVariable() {
-        @Override
-        public int value(AbstractCard card) { return card.costForTurn; }
-        @Override
-        public int baseValue(AbstractCard card) { return card.cost; }
-        @Override
-        public boolean upgraded(AbstractCard card) { return card.upgradedCost; }
-        @Override
-        public boolean isModified(AbstractCard card) { return card.isCostModified; }
-        @Override
-        public void setValue(AbstractCard card, int amount) { card.costForTurn = amount; }
-        @Override
-        public void setBaseValue(AbstractCard card, int amount) { card.cost = amount; }
-        @Override @SneakyThrows
-        public void upgrade(AbstractCard card, int amount) {
-            hUpgradeCost.invoke(card, baseValue(card) + amount );
+        init {
+            val mtypeInt = MethodType.methodType(Void.TYPE, Int::class.javaPrimitiveType)
+            val mtypeNone = MethodType.methodType(Void.TYPE)
+            hUpgradeDamage = findCardMethod("upgradeDamage", mtypeInt)
+            hUpgradeBlock = findCardMethod("upgradeBlock", mtypeInt)
+            hUpgradeMagic = findCardMethod("upgradeMagicNumber", mtypeInt)
+            hUpgradeCost = findCardMethod("upgradeBaseCost", mtypeInt)
+            hUpgradeName = findCardMethod("upgradeName", mtypeNone)
         }
-    };
 
-    public static final IVariable vExhaustive = buildForDynamicVariable(
-            new ExhaustiveVariable(),
+        private fun findCardMethod(name: String, args: MethodType): MethodHandle {
+            return try {
+                val m = AbstractCard::class.java.getDeclaredMethod(name, *args.parameterArray())
+                m.isAccessible = true
+                MethodHandles.lookup().unreflect(m)
+            } catch (ex: Exception) {
+                throw RuntimeException(ex)
+            }
+        }
+
+        fun upgradeName(card: AbstractCard) {
+            hUpgradeName.invoke(card)
+        }
+
+        val vCost: IVariable = object : IVariable {
+            override fun value(card: AbstractCard): Int {
+                return card.costForTurn
+            }
+
+            override fun baseValue(card: AbstractCard): Int {
+                return card.cost
+            }
+
+            override fun upgraded(card: AbstractCard): Boolean {
+                return card.upgradedCost
+            }
+
+            override fun isModified(card: AbstractCard): Boolean {
+                return card.isCostModified
+            }
+
+            override fun setValue(card: AbstractCard, amount: Int) {
+                card.costForTurn = amount
+            }
+
+            override fun setBaseValue(card: AbstractCard, amount: Int) {
+                card.cost = amount
+            }
+            override fun upgrade(card: AbstractCard, amount: Int) {
+                hUpgradeCost.invoke(card, baseValue(card) + amount)
+            }
+        }
+        val vBlock = buildForDynamicVariable(
+            BlockVariable(),
+            AbstractCard::block::set,
+            AbstractCard::baseBlock::set,
+            hUpgradeBlock::invoke)
+        val vDamage = buildForDynamicVariable(
+            DamageVariable(),
+            AbstractCard::damage::set,
+            AbstractCard::baseDamage::set,
+            hUpgradeDamage::invoke)
+        val vMagic = buildForDynamicVariable(
+            MagicNumberVariable(),
+            AbstractCard::magicNumber::set,
+            AbstractCard::baseMagicNumber::set,
+            hUpgradeMagic::invoke)
+        val vExhaustive = buildForDynamicVariable(
+            ExhaustiveVariable(),
             ExhaustiveField.ExhaustiveFields.exhaustive::set,
             ExhaustiveVariable::setBaseValue,
-            ExhaustiveVariable::upgrade
-    );
-
-    public static final IVariable vRefund = buildForDynamicVariable(
-            new RefundVariable(),
+            ExhaustiveVariable::upgrade)
+        val vRefund = buildForDynamicVariable(
+            RefundVariable(),
             RefundFields.refund::set,
             RefundVariable::setBaseValue,
-            RefundVariable::upgrade
-    );
-
-    public static final IVariable vPersist = buildForDynamicVariable(
-            new PersistVariable(),
+            RefundVariable::upgrade)
+        val vPersist = buildForDynamicVariable(
+            PersistVariable(),
             PersistFields.persist::set,
             PersistFields::setBaseValue,
-            PersistFields::upgrade
-    );
+            PersistFields::upgrade)
 
+        fun buildForDynamicVariable(
+            dynVar: DynamicVariable,
+            fSetValue: AcceptCard,
+            fSetBaseValue: AcceptCard,
+            fUpgrade: AcceptCard
+        ): IVariable {
+            return object : IVariable {
+                override fun value(card: AbstractCard): Int {
+                    return dynVar.value(card)
+                }
 
-    public static IVariable buildForDynamicVariable(
-            final DynamicVariable dynVar,
-            final BiConsumer<AbstractCard, Integer> fSetValue,
-            final BiConsumer<AbstractCard, Integer> fSetBaseValue,
-            final BiConsumer<AbstractCard, Integer> fUpgrade
-    ) {
-        return new IVariable() {
-            public int value(AbstractCard card) { return dynVar.value(card); }
-            public int baseValue(AbstractCard card) { return dynVar.baseValue(card); }
-            public boolean upgraded(AbstractCard card) { return dynVar.upgraded(card); }
-            public boolean isModified(AbstractCard card) { return dynVar.isModified(card); }
-            @SneakyThrows
-            public void setValue(AbstractCard card, int amount) { fSetValue.accept(card, amount); }
-            public void setBaseValue(AbstractCard card, int amount) { fSetBaseValue.accept(card, amount); }
-            public void upgrade(AbstractCard card, int amount) { fUpgrade.accept(card, amount); }
-        };
+                override fun baseValue(card: AbstractCard): Int {
+                    return dynVar.baseValue(card)
+                }
+
+                override fun upgraded(card: AbstractCard): Boolean {
+                    return dynVar.upgraded(card)
+                }
+
+                override fun isModified(card: AbstractCard): Boolean {
+                    return dynVar.isModified(card)
+                }
+
+                @SneakyThrows
+                override fun setValue(card: AbstractCard, amount: Int) {
+                    fSetValue.accept(card, amount)
+                }
+
+                @SneakyThrows
+                override fun setBaseValue(card: AbstractCard, amount: Int) {
+                    fSetBaseValue.accept(card, amount)
+                }
+
+                @SneakyThrows
+                override fun upgrade(card: AbstractCard, amount: Int) {
+                    fUpgrade.accept(card, amount)
+                }
+            }
+        }
     }
 }

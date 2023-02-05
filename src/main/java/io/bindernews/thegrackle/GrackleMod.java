@@ -4,7 +4,6 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.badlogic.gdx.graphics.Texture;
-import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -14,11 +13,11 @@ import com.megacrit.cardcrawl.metrics.Metrics;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import io.bindernews.bnsts.Lazy;
+import io.bindernews.bnsts.MiscUtil;
 import io.bindernews.thegrackle.api.IMultiHitManager;
 import io.bindernews.thegrackle.cards.*;
 import io.bindernews.thegrackle.helper.ExtKt;
 import io.bindernews.thegrackle.icons.IconsKt;
-import io.bindernews.thegrackle.patches.MetricsPatches;
 import io.bindernews.thegrackle.power.BasePower;
 import io.bindernews.thegrackle.relics.BerserkerTotem;
 import io.bindernews.thegrackle.relics.LoftwingFeather;
@@ -52,11 +51,15 @@ public class GrackleMod implements
     /** Cache of loaded textures */
     private static final HashMap<String, Texture> textureCache = new HashMap<>();
 
+    private static final Lazy<Map<String, String>> miscUI = Lazy.of(() ->
+            CardCrawlGame.languagePack.getUIString(MOD_ID_COLON + "misc").TEXT_DICT);
+
     /**
      * Map of miscellaneous UI strings
      */
-    public static final Lazy<Map<String, String>> miscUI = Lazy.of(() ->
-            CardCrawlGame.languagePack.getUIString("grackle:misc").TEXT_DICT);
+    public static Map<String, String> getMiscUI() {
+        return miscUI.get();
+    }
 
     // Neat trick: fields in an interface are automatically 'public static final'
     // making it a convenient way to declare constants.
@@ -85,23 +88,17 @@ public class GrackleMod implements
         String KW_ALOFT = makeId("Aloft");
     }
 
-    /**
-     * Is the downfall mod installed?
-     */
-    public static boolean interopDownfall;
-
     private static boolean hasInit = false;
 
     public GrackleMod() {
         BaseMod.subscribe(this);
-        interopDownfall = Loader.isModLoaded("downfall");
         log.debug("registering color GRACKLE_BLACK");
         Grackle.Co.registerColor();
-        log.debug("done registering colors");
+        log.debug(CO.REG_END, "colors");
 
-        Events.metricsRun().on(metrics -> {
+        Events.getMetricsRun().on(metrics -> {
             if (metrics.type == Metrics.MetricRequestType.UPLOAD_METRICS && Grackle.isPlaying()) {
-                MetricsPatches.sendPost(metrics, CO.METRICS_URL);
+                ExtKt.sendPost(metrics, CO.METRICS_URL);
             }
         });
     }
@@ -117,13 +114,14 @@ public class GrackleMod implements
 
     @Override
     public void receiveEditCharacters() {
-        log.debug("registering characters");
+        log.debug(CO.REG_START, "character");
         Grackle.register();
-        log.debug("done registering characters");
+        log.debug(CO.REG_END, "character");
     }
 
     @Override
     public void receiveEditRelics() {
+        log.debug(CO.REG_START, "relics");
         // Add shared relics
 //        Stream.of(
 //                new PhoenixIdol()
@@ -134,7 +132,8 @@ public class GrackleMod implements
                 new BerserkerTotem(),
                 new LoftwingFeather(),
                 new SimmeringHeat()
-        ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.En.COLOR_BLACK));
+        ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.Co.COLOR_BLACK));
+        log.debug(CO.REG_END, "relics");
     }
 
     @Override
@@ -152,25 +151,25 @@ public class GrackleMod implements
     @Override
     public void receivePostInitialize() {
         registerPowers();
-        Events.popups().on(CardClickableLink.getInst());
-        Events.popups().on(MainMenuMetricsRequest.getInst());
+        Events.getPopups().on(CardClickableLink.getInst());
+        Events.getPopups().on(MainMenuMetricsRequest.getInst());
     }
 
     @Override
     public void receivePreUpdate() {
-        Events.popups().forEach(p -> {
+        Events.getPopups().forEach(p -> {
             if (p.isEnabled()) p.update();
         });
     }
 
     private void registerPowers() {
-        log.debug("registering powers");
+        log.debug(CO.REG_START, "powers");
         AutoAdd aa = new AutoAdd(MOD_ID);
         aa.packageFilter(BasePower.class);
         for (val c : MiscUtil.autoFindClasses(aa, AbstractPower.class)) {
-            MiscUtil.registerPower(c);
+            BaseMod.addPower(c, MiscUtil.getPowerId(c));
         }
-        log.debug("done registering powers");
+        log.debug(CO.REG_END, "powers");
     }
 
     private void registerDynamicVariables() {
@@ -198,8 +197,10 @@ public class GrackleMod implements
 
     @Override
     public void receiveAddAudio() {
+        log.debug(CO.REG_START, "audio");
         val sfxPath = MOD_RES + "/audio/";
         BaseMod.addAudio(CO.SFX_QUACK, sfxPath + "duck_quack.ogg");
+        log.debug(CO.REG_END, "audio");
     }
 
 

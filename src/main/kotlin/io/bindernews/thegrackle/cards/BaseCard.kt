@@ -1,75 +1,63 @@
-package io.bindernews.thegrackle.cards;
+package io.bindernews.thegrackle.cards
 
-import basemod.AutoAdd;
-import basemod.abstracts.CustomCard;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import io.bindernews.bnsts.ICardInitializer;
-import io.bindernews.bnsts.Lazy;
-import io.bindernews.thegrackle.Grackle;
-import io.bindernews.thegrackle.GrackleMod;
-import org.jetbrains.annotations.NotNull;
+import basemod.AutoAdd
+import basemod.abstracts.CustomCard
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.megacrit.cardcrawl.characters.AbstractPlayer
+import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon
+import com.megacrit.cardcrawl.monsters.AbstractMonster
+import io.bindernews.bnsts.ICardInitializer
+import io.bindernews.thegrackle.Grackle
+import io.bindernews.thegrackle.GrackleMod
 
 @AutoAdd.Ignore
-public abstract class BaseCard extends CustomCard {
-    private static final Lazy<TextureAtlas> cards =
-            Lazy.of(() -> new TextureAtlas(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas"));
+@Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
+abstract class BaseCard(opts: CardConfig, protected var cardInitializer: ICardInitializer?) : CustomCard(
+    opts.ID, opts.strings.NAME, RegionName(""), 1, opts.strings.DESCRIPTION,
+    opts.type, Grackle.Co.COLOR_BLACK, opts.rarity, opts.target
+) {
+    var owner: AbstractCreature? = AbstractDungeon.player
 
-    protected ICardInitializer cardInitializer;
-    public @NotNull AbstractCreature owner = AbstractDungeon.player;
+    constructor(opts: CardConfig) : this(opts, null)
 
-    public BaseCard(CardConfig opts, ICardInitializer initializer) {
-        this(opts);
-        this.cardInitializer = initializer;
-        this.cardInitializer.init(this);
+    init {
+        cardInitializer?.init(this)
+        opts.loadImages(cards)
+        portrait = opts.portrait
+        jokePortrait = opts.betaPortrait
     }
 
-    public BaseCard(CardConfig opts) {
-        super(opts.ID, opts.getStrings().NAME, new RegionName(""), 1, opts.getStrings().DESCRIPTION,
-                opts.type, Grackle.En.COLOR_BLACK, opts.rarity, opts.target);
-        opts.loadImages(getCards());
-        portrait = opts.getPortrait();
-        jokePortrait = opts.getBetaPortrait();
+    override fun applyPowers() {
+        magicNumber = baseMagicNumber
+        super.applyPowers()
     }
 
-    @Override
-    public void applyPowers() {
-        magicNumber = baseMagicNumber;
-        super.applyPowers();
+    override fun use(p: AbstractPlayer, m: AbstractMonster) {
+        apply(p, m)
     }
 
-    @Override
-    public void use(AbstractPlayer abstractPlayer, AbstractMonster abstractMonster) {
-        apply(abstractPlayer, abstractMonster);
-    }
-
-    @Override
-    public void upgrade() {
-        if (cardInitializer != null) {
-            cardInitializer.upgrade(this);
-        }
+    override fun upgrade() {
+        cardInitializer?.upgrade(this)
     }
 
     /**
-     * A more generic version of {@link BaseCard#use} which will be useful
+     * A more generic version of [BaseCard.use] which will be useful
      * when integrating with the Downfall mod.
      * @param p Player or CharBoss
      * @param m Monster or Player target
      */
-    public void apply(@NotNull AbstractCreature p, AbstractCreature m) {}
+    open fun apply(p: AbstractCreature, m: AbstractCreature?) {}
 
-    public static TextureAtlas getCards() {
-        return cards.get();
-    }
+    companion object {
+        val cards by lazy { TextureAtlas(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas") }
 
-    /**
-     * Should be used in {@link BaseCard#apply} to indicate that the card is only applicable to players,
-     * not downfall enemy bosses.
-     */
-    public static void throwPlayerOnly() {
-        throw new UnsupportedOperationException("FightFire only works with AbstractPlayer");
+        /**
+         * Should be used in [BaseCard.apply] to indicate that the card is only applicable to players,
+         * not downfall enemy bosses.
+         */
+        fun throwPlayerOnly() {
+            throw UnsupportedOperationException("FightFire only works with AbstractPlayer")
+        }
     }
 }

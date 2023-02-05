@@ -19,7 +19,7 @@ class DoubleAloftDamageMod : AbstractCardModifier() {
     }
 
     override fun modifyDescription(rawDescription: String, card: AbstractCard): String {
-        val ln = GrackleMod.miscUI.get()["double_aloft_damage"]
+        val ln = GrackleMod.getMiscUI()["double_aloft_damage"]
         return String.format("%s NL %s", rawDescription, ln)
     }
 

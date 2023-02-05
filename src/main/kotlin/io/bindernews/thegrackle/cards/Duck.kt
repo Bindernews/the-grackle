@@ -13,7 +13,7 @@ class Duck : BaseCard(C, VARS) {
      * Set to false to disable quack sound.
      */
     var playSound = true
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
         addToBot(ApplyPowerAction(p, p, BlurPower(p, magicNumber), magicNumber))
         if (playSound) {

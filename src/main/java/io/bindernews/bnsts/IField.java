@@ -44,4 +44,9 @@ public interface IField<T, F> extends Function<T, F> {
             throw new RuntimeException(ex);
         }
     }
+
+    @SuppressWarnings("unused")
+    static <T, F> @NotNull IField<T, F> unreflect(Class<T> clz, Class<F> fieldType, String name) {
+        return unreflect(clz, name);
+    }
 }

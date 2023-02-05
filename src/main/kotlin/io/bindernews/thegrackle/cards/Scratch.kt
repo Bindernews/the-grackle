@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.bnsts.CardVariables
 
 class Scratch : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.SLASH_DIAGONAL
         addToBot(DamageAction(m, DamageInfo(p, damage, damageType), fx))
     }

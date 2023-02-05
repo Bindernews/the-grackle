@@ -9,7 +9,7 @@ class CopyCrow : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("CorvusConundrum", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmStatic val C = CardConfig("CopyCrow", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         @JvmStatic val VARS = CardVariables().apply {
             cost(1)
         }

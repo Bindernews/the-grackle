@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.bnsts.CardVariables
 
 class EvasiveManeuvers : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
         addToBot(ScryAction(magicNumber))
     }

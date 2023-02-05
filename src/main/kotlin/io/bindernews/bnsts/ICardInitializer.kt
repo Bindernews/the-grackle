@@ -1,8 +1,13 @@
-package io.bindernews.bnsts;
+package io.bindernews.bnsts
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.AbstractCard
 
-public interface ICardInitializer {
-    void init(AbstractCard card);
-    void upgrade(AbstractCard card);
+interface ICardInitializer {
+    fun init(card: AbstractCard)
+    fun upgrade(card: AbstractCard) {
+        if (!card.upgraded) {
+            forceUpgrade(card)
+        }
+    }
+    fun forceUpgrade(card: AbstractCard)
 }

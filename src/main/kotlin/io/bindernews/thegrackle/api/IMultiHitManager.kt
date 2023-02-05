@@ -30,7 +30,7 @@ interface IMultiHitManager {
         return 0
     }
 
-    fun getExtraHitsCard(card: AbstractCard?, initial: Int): Int {
+    fun getExtraHitsCard(card: AbstractCard, initial: Int): Int {
         return 0
     }
 
@@ -38,5 +38,5 @@ interface IMultiHitManager {
      * Apply a modifier to make the card support multi hit.
      * @param card Card to tag as multi-hit
      */
-    fun makeMultiHit(card: AbstractCard?) {}
+    fun makeMultiHit(card: AbstractCard) {}
 }

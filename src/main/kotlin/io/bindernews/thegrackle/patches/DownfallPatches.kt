@@ -1,24 +1,26 @@
-package io.bindernews.thegrackle.patches;
+@file:Suppress("ClassName", "FunctionName")
 
-import charbosses.stances.AbstractEnemyStance;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
-import io.bindernews.thegrackle.downfall.stances.EnStanceAloft;
-import io.bindernews.thegrackle.downfall.stances.EnStancePhoenix;
+package io.bindernews.thegrackle.patches
 
-@SuppressWarnings("unused")
-public class DownfallPatches {
-    public static final String MOD = "downfall";
+import charbosses.stances.AbstractEnemyStance
+import com.evacipated.cardcrawl.modthespire.lib.SpirePatch
+import com.evacipated.cardcrawl.modthespire.lib.SpireReturn
+import io.bindernews.thegrackle.downfall.stances.EnStanceAloft
+import io.bindernews.thegrackle.downfall.stances.EnStancePhoenix
 
-    @SpirePatch(clz = AbstractEnemyStance.class, method = "getStanceFromName", requiredModId = MOD)
-    public static class patchEnemyStances {
-        public static SpireReturn<AbstractEnemyStance> Prefix(String name) {
-            if (name.equals(EnStancePhoenix.STANCE_ID)) {
-                return SpireReturn.Return(new EnStancePhoenix());
-            } else if (name.equals(EnStanceAloft.STANCE_ID)) {
-                return SpireReturn.Return(new EnStanceAloft());
+@Suppress("unused")
+object DownfallPatches {
+    const val MOD = "downfall"
+
+    @SpirePatch(clz = AbstractEnemyStance::class, method = "getStanceFromName", requiredModId = MOD)
+    object patchEnemyStances {
+        @JvmStatic fun Prefix(name: String): SpireReturn<AbstractEnemyStance> {
+            if (name == EnStancePhoenix.STANCE_ID) {
+                return SpireReturn.Return(EnStancePhoenix())
+            } else if (name == EnStanceAloft.STANCE_ID) {
+                return SpireReturn.Return(EnStanceAloft())
             }
-            return SpireReturn.Continue();
+            return SpireReturn.Continue()
         }
     }
 }

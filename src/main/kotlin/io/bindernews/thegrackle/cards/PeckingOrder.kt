@@ -7,16 +7,16 @@ import io.bindernews.bnsts.CardVariables
 import io.bindernews.thegrackle.power.PeckingOrderPower
 
 class PeckingOrder : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(ApplyPowerAction(p, p, PeckingOrderPower(p, magicNumber), magicNumber))
     }
 
     companion object {
         val C = CardConfig("PeckingOrder", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
-        val VARS = CardVariables.config { c: CardVariables ->
-            c.cost(1, -1)
-            c.magic(4, 6)
-            c.addModifier(ExhaustMod())
+        val VARS = CardVariables().apply {
+            cost(1, -1)
+            magic(4, 6)
+            addModifier(ExhaustMod())
         }
     }
 }

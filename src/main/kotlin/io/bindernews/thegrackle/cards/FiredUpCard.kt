@@ -6,7 +6,7 @@ import io.bindernews.bnsts.CardVariables
 import io.bindernews.thegrackle.power.FiredUpPower
 
 class FiredUpCard : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(ApplyPowerAction(p, p, FiredUpPower(p, magicNumber)))
     }
 

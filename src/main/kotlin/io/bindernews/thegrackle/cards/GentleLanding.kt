@@ -1,10 +1,11 @@
 package io.bindernews.thegrackle.cards
 
 import basemod.cardmods.ExhaustMod
+import basemod.cardmods.RetainMod
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
 import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 
 class GentleLanding : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
@@ -16,6 +17,7 @@ class GentleLanding : BaseCard(C, VARS) {
         val VARS = CardVariables().apply {
             cost(1, 0)
             addModifier(ExhaustMod())
+            addModifier(RetainMod())
         }
     }
 }

@@ -15,7 +15,7 @@ class PhoenixFeather : BaseCard(C, VARS) {
         addToBot(ApplyPowerAction(p, p, RepairPower(p, magicNumber), magicNumber))
     }
 
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         throwPlayerOnly()
     }
 

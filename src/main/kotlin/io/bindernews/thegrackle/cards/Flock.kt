@@ -11,7 +11,7 @@ import io.bindernews.thegrackle.helper.extraHits
 import io.bindernews.thegrackle.helper.hits
 
 class Flock : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.BLUNT_LIGHT
         val hits = extraHits
         for (i in 0 until hits) {

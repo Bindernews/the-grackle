@@ -2,11 +2,11 @@ package io.bindernews.thegrackle.cards
 
 import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.power.MultiHitPower
 
 class BePrepared : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(iop().actionApplyPower(p, p, MultiHitPower.POWER_ID, magicNumber))
     }
 

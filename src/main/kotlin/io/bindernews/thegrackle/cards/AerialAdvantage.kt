@@ -4,12 +4,12 @@ import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.actions.common.DrawCardAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import io.bindernews.bnsts.CardVariables
-import io.bindernews.thegrackle.helper.ModInterop.iop
+import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.helper.magic2
 import io.bindernews.thegrackle.stance.StanceAloft
 
 class AerialAdvantage : BaseCard(C, VARS) {
-    override fun apply(p: AbstractCreature, m: AbstractCreature) {
+    override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         // N.B Not applicable for charboss
         addToBot(iop().changeStance(p, StanceAloft.STANCE_ID))
         addToBot(iop().actionGainEnergy(p, magicNumber))

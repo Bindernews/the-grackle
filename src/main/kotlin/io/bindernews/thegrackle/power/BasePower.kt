@@ -1,66 +1,57 @@
-package io.bindernews.thegrackle.power;
+package io.bindernews.thegrackle.power
 
-import basemod.AutoAdd;
-import basemod.interfaces.CloneablePowerInterface;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.localization.PowerStrings;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import io.bindernews.bnsts.Lazy;
-import io.bindernews.thegrackle.GrackleMod;
-import lombok.val;
+import basemod.AutoAdd
+import basemod.interfaces.CloneablePowerInterface
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.core.CardCrawlGame
+import com.megacrit.cardcrawl.localization.PowerStrings
+import com.megacrit.cardcrawl.powers.AbstractPower
+import io.bindernews.thegrackle.GrackleMod
 
 @AutoAdd.Ignore
-public abstract class BasePower extends AbstractPower implements CloneablePowerInterface {
-    public static final Lazy<TextureAtlas> powerAtlas =
-            Lazy.of(() -> new TextureAtlas(GrackleMod.CO.RES_IMAGES + "/powers/powers.atlas"));
+abstract class BasePower(id: String) : AbstractPower(), CloneablePowerInterface {
+    val strings: PowerStrings
 
-    public final PowerStrings strings;
-
-    public BasePower(String id) {
-        ID = id;
-        strings = CardCrawlGame.languagePack.getPowerStrings(ID);
-        name = strings.NAME;
+    init {
+        ID = id
+        strings = CardCrawlGame.languagePack.getPowerStrings(ID)
+        name = strings.NAME
     }
 
-    protected void setOwnerAmount(AbstractCreature owner, int amount) {
-        this.owner = owner;
-        this.amount = amount;
+    protected fun setOwnerAmount(owner: AbstractCreature, amount: Int) {
+        this.owner = owner
+        this.amount = amount
     }
 
-    @Override
-    protected void loadRegion(String fileName) {
-        val k48 = "48/" + fileName;
-        val k128 = "128/" + fileName;
-
-        region48 = powerAtlas.get().findRegion(k48);
-        if (region48 == null) {
-            region48 = AbstractPower.atlas.findRegion(k48);
-        }
-        region128 = powerAtlas.get().findRegion(k128);
-        if (region128 == null) {
-            region128 = AbstractPower.atlas.findRegion(k128);
-        }
+    override fun loadRegion(fileName: String) {
+        val k48 = "48/$fileName"
+        val k128 = "128/$fileName"
+        region48 = powerAtlas.findRegion(k48) ?: atlas.findRegion(k48)
+        region128 = powerAtlas.findRegion(k128) ?: atlas.findRegion(k128)
     }
 
     /**
-     * Convenience method to use the indexed {@code DESCRIPTIONS} string
-     * in {@link String#format}, passing the rest of the arguments.
+     * Convenience method to use the indexed `DESCRIPTIONS` string
+     * in [String.format], passing the rest of the arguments.
      * @param index Index of the description string
      * @param args Format arguments
      * @return Formatted string
      */
-    public String formatDesc(int index, Object... args) {
-        return String.format(strings.DESCRIPTIONS[index], args);
+    fun formatDesc(index: Int, vararg args: Any): String {
+        return String.format(strings.DESCRIPTIONS[index], *args)
     }
 
-    @Override
-    public AbstractPower makeCopy() {
-        try {
-            return getClass().getConstructor(AbstractCreature.class, int.class).newInstance(owner, amount);
-        } catch (Exception ex) {
-            throw new UnsupportedOperationException("cannot automatically clone power");
+    override fun makeCopy(): AbstractPower {
+        return try {
+            javaClass.getConstructor(AbstractCreature::class.java, Int::class.javaPrimitiveType)
+                .newInstance(owner, amount)
+        } catch (ex: Exception) {
+            throw UnsupportedOperationException("cannot automatically clone power ${javaClass.name}")
         }
+    }
+
+    companion object {
+        val powerAtlas by lazy { TextureAtlas(GrackleMod.CO.RES_IMAGES + "/powers/powers.atlas") }
     }
 }

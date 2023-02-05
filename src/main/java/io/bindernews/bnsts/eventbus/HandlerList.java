@@ -1,15 +1,16 @@
 package io.bindernews.bnsts.eventbus;
 
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class HandlerList<H> implements IHandlerList<H> {
     protected final ArrayList<Entry> handlers;
     protected final ArrayList<Entry> removeList;
+    protected final ArrayList<Entry> addList;
 
     /**
      * Tracks recursive calls to callEach so that we don't try to modify
@@ -20,12 +21,17 @@ public class HandlerList<H> implements IHandlerList<H> {
     public HandlerList() {
         handlers = new ArrayList<>();
         removeList = new ArrayList<>();
+        addList = new ArrayList<>();
     }
 
     @Override
     public void on(int priority, H handler) {
         Entry entry = new Entry(handler, priority);
-        IHandlerList.addOrdered(handlers, entry);
+        if (locked == 0) {
+            IHandlerList.addOrdered(handlers, entry);
+        } else {
+            addList.add(entry);
+        }
     }
 
     @Override
@@ -50,6 +56,7 @@ public class HandlerList<H> implements IHandlerList<H> {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void once(H handler) {
         Entry entry = new Entry(handler, 9999);
@@ -68,23 +75,33 @@ public class HandlerList<H> implements IHandlerList<H> {
         try {
             locked++;
             action.accept(getHandlers());
-            processRemove();
         } finally {
             locked--;
+            postProcess();
         }
     }
 
-    protected void processRemove() {
+    protected void postProcess() {
         if (!removeList.isEmpty()) {
             handlers.removeAll(removeList);
             removeList.clear();
         }
+        if (!addList.isEmpty()) {
+            for (Entry e : addList) {
+                IHandlerList.addOrdered(handlers, e);
+            }
+            addList.clear();
+        }
     }
 
-    @Data
     protected static class Entry implements Comparable<Entry> {
         final Object handler;
         final int priority;
+
+        public Entry(Object handler, int priority) {
+            this.handler = handler;
+            this.priority = priority;
+        }
 
         @Override
         public int compareTo(@NotNull Entry o) {
@@ -94,6 +111,35 @@ public class HandlerList<H> implements IHandlerList<H> {
             }
             d = System.identityHashCode(handler) - System.identityHashCode(o.handler);
             return d;
+        }
+
+        public Object getHandler() {
+            return this.handler;
+        }
+
+        public int getPriority() {
+            return this.priority;
+        }
+
+        public boolean equals(final Object o) {
+            if (o == this) return true;
+            if (!(o instanceof HandlerList.Entry)) return false;
+            final Entry other = (Entry) o;
+            return Objects.equals(this.getHandler(), other.getHandler())
+                    && this.getPriority() == other.getPriority();
+        }
+
+        public int hashCode() {
+            final int PRIME = 59;
+            int result = 1;
+            final Object $handler = this.getHandler();
+            result = result * PRIME + ($handler == null ? 43 : $handler.hashCode());
+            result = result * PRIME + this.getPriority();
+            return result;
+        }
+
+        public String toString() {
+            return "HandlerList.Entry(handler=" + this.getHandler() + ", priority=" + this.getPriority() + ")";
         }
     }
 }
