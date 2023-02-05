@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards
 import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.actions.utility.ScryAction
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 
 class EvasiveManeuvers : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.VulnerablePower
 import com.megacrit.cardcrawl.powers.WeakPower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 
 class Cackle : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {

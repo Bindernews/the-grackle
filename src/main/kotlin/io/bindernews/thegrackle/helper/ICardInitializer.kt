@@ -1,4 +1,4 @@
-package io.bindernews.bnsts
+package io.bindernews.thegrackle.helper
 
 import com.megacrit.cardcrawl.cards.AbstractCard
 

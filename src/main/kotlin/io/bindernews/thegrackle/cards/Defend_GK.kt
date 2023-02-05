@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards
 import basemod.AutoAdd.Seen
 import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 
 @Seen
 class Defend_GK : BaseCard(C, VARS) {

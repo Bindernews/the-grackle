@@ -4,7 +4,7 @@ import basemod.cardmods.ExhaustMod
 import basemod.cardmods.RetainMod
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 
 class GentleLanding : BaseCard(C, VARS) {

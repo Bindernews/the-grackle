@@ -16,7 +16,7 @@ class RequireAloftMod : AbstractCardModifier() {
     }
 
     override fun modifyDescription(rawDescription: String, card: AbstractCard): String {
-        val mustBe = GrackleMod.getMiscUI()["must_be"]
+        val mustBe = GrackleMod.miscUI["must_be"]
         return String.format("%s %s NL %s", mustBe, GrackleMod.CO.KW_ALOFT, rawDescription)
     }
 

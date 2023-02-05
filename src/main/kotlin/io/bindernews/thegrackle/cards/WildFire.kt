@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards
 import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.cards.status.Burn
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.helper.magic2
 import io.bindernews.thegrackle.power.BurningPower

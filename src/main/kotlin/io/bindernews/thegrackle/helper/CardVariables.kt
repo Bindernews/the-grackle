@@ -1,4 +1,4 @@
-package io.bindernews.bnsts
+package io.bindernews.thegrackle.helper
 
 import basemod.abstracts.AbstractCardModifier
 import basemod.abstracts.DynamicVariable
@@ -14,6 +14,8 @@ import com.evacipated.cardcrawl.mod.stslib.variables.PersistVariable
 import com.evacipated.cardcrawl.mod.stslib.variables.RefundVariable
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
+import io.bindernews.bnsts.IField
+import io.bindernews.bnsts.IVariable
 import lombok.SneakyThrows
 import java.lang.invoke.MethodHandle
 import java.lang.invoke.MethodHandles
@@ -33,11 +35,14 @@ import java.util.function.Consumer
 class CardVariables : ICardInitializer {
     private val settings = ArrayList<VariableSetting>()
     private val children = ArrayList<ICardInitializer>()
-    private val initList = InitList()
+    private val initList = ArrayList<Consumer<AbstractCard>>()
+    private val upgradeList = ArrayList<Consumer<AbstractCard>>()
+
     fun add(variable: IVariable, value: Int, valueUpg: Int) {
         settings.add(VariableSetting(variable, value, valueUpg))
     }
 
+    @Suppress("unused")
     fun child(initializer: ICardInitializer) {
         children.add(initializer)
     }
@@ -52,27 +57,20 @@ class CardVariables : ICardInitializer {
     @JvmOverloads fun magic(base: Int, upg: Int = -1) { add(vMagic, base, upg) }
 
     fun multiDamage(base: Boolean, upg: Boolean) {
-        child(object : ICardInitializer {
-            override fun init(card: AbstractCard) {
-                fIsMultiDamage[card] = base
-            }
-
-            override fun forceUpgrade(card: AbstractCard) {
-                fIsMultiDamage[card] = upg
-            }
-        })
+        initList.add { fIsMultiDamage[it] = base }
+        upgradeList.add { fIsMultiDamage[it] = upg }
     }
 
     fun tags(vararg tags: AbstractCard.CardTags) {
-        onInit { card: AbstractCard -> Collections.addAll(card.tags, *tags) }
+        onInit { card -> Collections.addAll(card.tags, *tags) }
     }
 
     fun onInit(action: Consumer<AbstractCard>) {
-        initList.onInit(action)
+        initList.add(action)
     }
 
     fun onUpgrade(action: Consumer<AbstractCard>) {
-        initList.onUpgrade(action)
+        upgradeList.add(action)
     }
 
     override fun init(card: AbstractCard) {
@@ -81,7 +79,7 @@ class CardVariables : ICardInitializer {
             s.variable.setValue(card, s.value)
         }
         children.forEach(Consumer { a: ICardInitializer -> a.init(card) })
-        initList.init(card)
+        initList.forEach { it.accept(card) }
         card.initializeDescription()
     }
 
@@ -99,7 +97,7 @@ class CardVariables : ICardInitializer {
             }
         }
         children.forEach { it.forceUpgrade(card) }
-        initList.upgrade(card)
+        upgradeList.forEach { it.accept(card) }
     }
 
     internal data class VariableSetting(val variable: IVariable, val value: Int = 0, val valueUpg: Int = 0)

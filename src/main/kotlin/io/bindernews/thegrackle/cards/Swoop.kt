@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.power.SwoopPower
 

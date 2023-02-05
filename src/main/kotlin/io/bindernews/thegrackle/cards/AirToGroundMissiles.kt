@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.cardmods.DoubleAloftDamageMod
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod
 import io.bindernews.thegrackle.cardmods.RequireAloftMod

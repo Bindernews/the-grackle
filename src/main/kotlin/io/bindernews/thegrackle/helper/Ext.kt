@@ -1,11 +1,8 @@
 package io.bindernews.thegrackle.helper
 
-import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
-import com.megacrit.cardcrawl.localization.CardStrings
 import com.megacrit.cardcrawl.metrics.Metrics
-import io.bindernews.bnsts.CardVariables
 import io.bindernews.thegrackle.GrackleMod
 import io.bindernews.thegrackle.cards.BaseCard
 import io.bindernews.thegrackle.patches.Fields
@@ -20,8 +17,8 @@ fun CardVariables.magic2(base: Int, upg: Int) {
     add(Magic2Var.inst, base, upg)
 }
 
-inline val CardStrings.flavorText: String
-    get() = FlavorText.CardStringsFlavorField.flavor[this]
+//inline val CardStrings.flavorText: String
+//    get() = FlavorText.CardStringsFlavorField.flavor[this]
 
 inline fun <reified T: Any> makeId(clazz: KClass<T>): String = "grackle:" + clazz.simpleName
 

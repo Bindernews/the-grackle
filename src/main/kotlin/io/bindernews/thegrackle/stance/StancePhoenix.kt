@@ -10,10 +10,11 @@ import com.megacrit.cardcrawl.stances.AbstractStance
 import com.megacrit.cardcrawl.stances.NeutralStance
 import io.bindernews.bnsts.MiscUtil.addToBot
 import io.bindernews.thegrackle.GrackleMod
+import io.bindernews.thegrackle.downfall.stances.EnemyStanceDelegate
 import io.bindernews.thegrackle.helper.ModInterop
 import io.bindernews.thegrackle.power.CoolingPhoenixPower
 
-class StancePhoenix : AbstractStance() {
+class StancePhoenix : AbstractStance(), EnemyStanceDelegate {
     var owner: AbstractCreature
     var canExitStance: Boolean
 
@@ -25,12 +26,15 @@ class StancePhoenix : AbstractStance() {
         updateDescription()
     }
 
+    override val description: String
+        get() = description
+
     override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
         // All the benefits
         return aloftInst.atDamageReceive(damage, damageType)
     }
 
-    override fun atDamageGive(damage: Float, damageType: DamageType): Float {
+    override fun atDamageGive(damage: Float, type: DamageType): Float {
         // None of the downsides
         return damage
     }

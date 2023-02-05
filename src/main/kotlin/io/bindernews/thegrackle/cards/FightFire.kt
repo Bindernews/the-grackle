@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.CardGroup
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.actions.FightFireAction
 import io.bindernews.thegrackle.helper.BurnHelper
 import io.bindernews.thegrackle.helper.ModInterop.Companion.iop

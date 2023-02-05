@@ -3,7 +3,7 @@ package io.bindernews.thegrackle.cards
 import basemod.cardmods.InnateMod
 import basemod.helpers.CardModifierManager
 import com.megacrit.cardcrawl.core.AbstractCreature
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.helper.ModInterop.Companion.iop
 import io.bindernews.thegrackle.power.EmbodyFirePower
 

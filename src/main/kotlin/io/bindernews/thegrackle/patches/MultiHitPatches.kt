@@ -30,7 +30,7 @@ object MultiHitPatches {
     ))
 
     @JvmStatic fun manager(): IMultiHitManager {
-        return GrackleMod.getMultiHitManager()
+        return GrackleMod.multiHitManager
     }
 
     @SpirePatch2(clz = WhirlwindAction::class, method = "update")

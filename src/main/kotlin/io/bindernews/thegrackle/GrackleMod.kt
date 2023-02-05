@@ -1,127 +1,71 @@
-package io.bindernews.thegrackle;
+package io.bindernews.thegrackle
 
-import basemod.AutoAdd;
-import basemod.BaseMod;
-import basemod.interfaces.*;
-import com.badlogic.gdx.graphics.Texture;
-import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.metrics.Metrics;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import io.bindernews.bnsts.Lazy;
-import io.bindernews.bnsts.MiscUtil;
-import io.bindernews.thegrackle.api.IMultiHitManager;
-import io.bindernews.thegrackle.cards.*;
-import io.bindernews.thegrackle.helper.ExtKt;
-import io.bindernews.thegrackle.icons.IconsKt;
-import io.bindernews.thegrackle.power.BasePower;
-import io.bindernews.thegrackle.relics.BerserkerTotem;
-import io.bindernews.thegrackle.relics.LoftwingFeather;
-import io.bindernews.thegrackle.relics.SimmeringHeat;
-import io.bindernews.thegrackle.ui.CardClickableLink;
-import io.bindernews.thegrackle.ui.MainMenuMetricsRequest;
-import io.bindernews.thegrackle.variables.ExtraHitsVariable;
-import io.bindernews.thegrackle.variables.Magic2Var;
-import lombok.val;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
-
+import basemod.AutoAdd
+import basemod.BaseMod
+import basemod.interfaces.*
+import com.badlogic.gdx.graphics.Texture
+import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer
+import com.megacrit.cardcrawl.cards.AbstractCard
+import com.megacrit.cardcrawl.core.CardCrawlGame
+import com.megacrit.cardcrawl.core.Settings
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon
+import com.megacrit.cardcrawl.metrics.Metrics
+import com.megacrit.cardcrawl.powers.AbstractPower
+import com.megacrit.cardcrawl.rooms.AbstractRoom
+import io.bindernews.bnsts.MiscUtil
+import io.bindernews.thegrackle.Events.popups
+import io.bindernews.thegrackle.Grackle.Companion.register
+import io.bindernews.thegrackle.api.IMultiHitManager
+import io.bindernews.thegrackle.api.IPopup
+import io.bindernews.thegrackle.cards.*
+import io.bindernews.thegrackle.helper.fireheartGained
+import io.bindernews.thegrackle.helper.sendPost
+import io.bindernews.thegrackle.icons.registerIcons
+import io.bindernews.thegrackle.power.BasePower
+import io.bindernews.thegrackle.relics.BerserkerTotem
+import io.bindernews.thegrackle.relics.LoftwingFeather
+import io.bindernews.thegrackle.relics.SimmeringHeat
+import io.bindernews.thegrackle.ui.CardClickableLink
+import io.bindernews.thegrackle.ui.MainMenuMetricsRequest
+import io.bindernews.thegrackle.variables.ExtraHitsVariable
+import io.bindernews.thegrackle.variables.Magic2Var
+import org.apache.logging.log4j.LogManager
+import java.util.stream.Stream
 
 @SpireInitializer
-public class GrackleMod implements
-        AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber, EditStringsSubscriber,
-        EditKeywordsSubscriber, PostInitializeSubscriber, PreUpdateSubscriber, OnStartBattleSubscriber
-{
-    public static final Logger log = LogManager.getLogger(GrackleMod.class);
+class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubscriber, EditCardsSubscriber,
+    EditStringsSubscriber, EditKeywordsSubscriber, PostInitializeSubscriber, PreUpdateSubscriber,
+    OnStartBattleSubscriber {
 
-    public static final String MOD_ID = "grackle";
-    private static final String MOD_ID_COLON = MOD_ID + ":";
-    public static final String MOD_RES = "grackleResources";
-
-    /** Cache of loaded textures */
-    private static final HashMap<String, Texture> textureCache = new HashMap<>();
-
-    private static final Lazy<Map<String, String>> miscUI = Lazy.of(() ->
-            CardCrawlGame.languagePack.getUIString(MOD_ID_COLON + "misc").TEXT_DICT);
-
-    /**
-     * Map of miscellaneous UI strings
-     */
-    public static Map<String, String> getMiscUI() {
-        return miscUI.get();
-    }
-
-    // Neat trick: fields in an interface are automatically 'public static final'
-    // making it a convenient way to declare constants.
     /**
      * Various constants
      */
-    public interface CO {
-        /** Root path for image resources */
-        String RES_IMAGES = MOD_RES + "/images";
+    object CO {
+        /** Root path for image resources  */
+        const val RES_IMAGES = "$MOD_RES/images"
+        /** Root path of localization resources  */
+        const val RES_LANG = "$MOD_RES/localization"
+        const val REG_START = "begin registering {}"
+        const val REG_END = "done registering {}"
 
-        /** Root path of localization resources */
-        String RES_LANG = MOD_RES + "/localization";
+        /** Metrics upload url  */
+        const val METRICS_URL = "https://stats.grackle.bindernews.net"
 
-        String REG_START = "begin registering {}";
+        /** Sound effect ID  */
+        val SFX_QUACK = makeId("DUCK")
 
-        String REG_END = "done registering {}";
-
-        /** Metrics upload url */
-        String METRICS_URL = "https://stats.grackle.bindernews.net";
-
-        /** Sound effect ID */
-        String SFX_QUACK = makeId("DUCK");
-
-
-        /** The "Aloft" keyword */
-        String KW_ALOFT = makeId("Aloft");
+        /** The "Aloft" keyword  */
+        val KW_ALOFT = makeId("Aloft")
     }
 
-    private static boolean hasInit = false;
-
-    public GrackleMod() {
-        BaseMod.subscribe(this);
-        log.debug("registering color GRACKLE_BLACK");
-        Grackle.Co.registerColor();
-        log.debug(CO.REG_END, "colors");
-
-        Events.getMetricsRun().on(metrics -> {
-            if (metrics.type == Metrics.MetricRequestType.UPLOAD_METRICS && Grackle.isPlaying()) {
-                ExtKt.sendPost(metrics, CO.METRICS_URL);
-            }
-        });
+    override fun receiveEditCharacters() {
+        log.debug(CO.REG_START, "character")
+        register()
+        log.debug(CO.REG_END, "character")
     }
 
-    @SuppressWarnings("unused")
-    public static void initialize() {
-        if (!hasInit) {
-            GrackleMod mod = new GrackleMod();
-            // Done
-            hasInit = true;
-        }
-    }
-
-    @Override
-    public void receiveEditCharacters() {
-        log.debug(CO.REG_START, "character");
-        Grackle.register();
-        log.debug(CO.REG_END, "character");
-    }
-
-    @Override
-    public void receiveEditRelics() {
-        log.debug(CO.REG_START, "relics");
+    override fun receiveEditRelics() {
+        log.debug(CO.REG_START, "relics")
         // Add shared relics
 //        Stream.of(
 //                new PhoenixIdol()
@@ -129,196 +73,217 @@ public class GrackleMod implements
 
         // Add class-specific relics
         Stream.of(
-                new BerserkerTotem(),
-                new LoftwingFeather(),
-                new SimmeringHeat()
-        ).forEach(r -> BaseMod.addRelicToCustomPool(r, Grackle.Co.COLOR_BLACK));
-        log.debug(CO.REG_END, "relics");
+            BerserkerTotem(),
+            LoftwingFeather(),
+            SimmeringHeat()
+        ).forEach { BaseMod.addRelicToCustomPool(it, Grackle.Co.COLOR_BLACK) }
+        log.debug(CO.REG_END, "relics")
     }
 
-    @Override
-    public void receiveEditCards() {
-        IconsKt.registerIcons();
-        registerDynamicVariables();
-
-        log.debug(CO.REG_START, "cards");
-        AutoAdd aa = new AutoAdd(MOD_ID);
-        aa.packageFilter(BaseCard.class);
-        aa.cards();
-        log.debug(CO.REG_END, "cards");
+    override fun receiveEditCards() {
+        registerIcons()
+        registerDynamicVariables()
+        log.debug(CO.REG_START, "cards")
+        val aa = AutoAdd(MOD_ID)
+        aa.packageFilter(BaseCard::class.java)
+        aa.cards()
+        log.debug(CO.REG_END, "cards")
     }
 
-    @Override
-    public void receivePostInitialize() {
-        registerPowers();
-        Events.getPopups().on(CardClickableLink.getInst());
-        Events.getPopups().on(MainMenuMetricsRequest.getInst());
+    override fun receivePostInitialize() {
+        registerPowers()
+        popups.on(CardClickableLink.inst)
+        popups.on(MainMenuMetricsRequest.inst)
     }
 
-    @Override
-    public void receivePreUpdate() {
-        Events.getPopups().forEach(p -> {
-            if (p.isEnabled()) p.update();
-        });
+    override fun receivePreUpdate() {
+        popups.forEach { p: IPopup -> if (p.isEnabled()) p.update() }
     }
 
-    private void registerPowers() {
-        log.debug(CO.REG_START, "powers");
-        AutoAdd aa = new AutoAdd(MOD_ID);
-        aa.packageFilter(BasePower.class);
-        for (val c : MiscUtil.autoFindClasses(aa, AbstractPower.class)) {
-            BaseMod.addPower(c, MiscUtil.getPowerId(c));
+    private fun registerPowers() {
+        log.debug(CO.REG_START, "powers")
+        val aa = AutoAdd(MOD_ID)
+        aa.packageFilter(BasePower::class.java)
+        for (c in MiscUtil.autoFindClasses(aa, AbstractPower::class.java)) {
+            BaseMod.addPower(c, MiscUtil.getPowerId(c))
         }
-        log.debug(CO.REG_END, "powers");
+        log.debug(CO.REG_END, "powers")
     }
 
-    private void registerDynamicVariables() {
-        log.debug(CO.REG_START, "dynamic variables");
-        BaseMod.addDynamicVariable(ExtraHitsVariable.inst);
-        BaseMod.addDynamicVariable(Magic2Var.inst);
-        log.debug(CO.REG_END, "dynamic variables");
+    private fun registerDynamicVariables() {
+        log.debug(CO.REG_START, "dynamic variables")
+        BaseMod.addDynamicVariable(ExtraHitsVariable.inst)
+        BaseMod.addDynamicVariable(Magic2Var.inst)
+        log.debug(CO.REG_END, "dynamic variables")
     }
 
-    @Override
-    public void receiveEditStrings() {
-        MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG);
+    override fun receiveEditStrings() {
+        MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG)
         if (Settings.language != Settings.GameLanguage.ENG) {
-            MiscUtil.loadLocalization(CO.RES_LANG, Settings.language);
+            MiscUtil.loadLocalization(CO.RES_LANG, Settings.language)
         }
     }
 
-    @Override
-    public void receiveEditKeywords() {
-        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.GameLanguage.ENG);
+    override fun receiveEditKeywords() {
+        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.GameLanguage.ENG)
         if (Settings.language != Settings.GameLanguage.ENG) {
-            MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.language);
+            MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.language)
         }
     }
 
-    @Override
-    public void receiveAddAudio() {
-        log.debug(CO.REG_START, "audio");
-        val sfxPath = MOD_RES + "/audio/";
-        BaseMod.addAudio(CO.SFX_QUACK, sfxPath + "duck_quack.ogg");
-        log.debug(CO.REG_END, "audio");
+    override fun receiveAddAudio() {
+        log.debug(CO.REG_START, "audio")
+        val sfxPath = "$MOD_RES/audio"
+        BaseMod.addAudio(CO.SFX_QUACK, "$sfxPath/duck_quack.ogg")
+        log.debug(CO.REG_END, "audio")
     }
 
-
-    @Override
-    public void receiveOnBattleStart(AbstractRoom room) {
-        ExtKt.setFireheartGained(AbstractDungeon.player, 0);
+    override fun receiveOnBattleStart(room: AbstractRoom) {
+        AbstractDungeon.player.fireheartGained = 0
     }
 
-    /**
-     * Exists so that all cards are "used", and so we have an easily-sorted list of cards.
-     */
-    @SuppressWarnings("unused")
-    private static AbstractCard[] makeCardList() {
-        return new AbstractCard[] {
-                new AAA(),
-                new AerialAce(),
-                new AerialAdvantage(),
-                new AirToGroundMissiles(),
-                new BePrepared(),
-                new BombingRun(),
-                new BufferInputs(),
-                new BurnCream(),
-                new Cackle(),
-                new CopyCrow(),
-                new CrashLanding(),
-                new Death(),
-                new Defend_GK(),
-                new Duck(),
-                new EagleEye(),
-                new EmbodyFire(),
-                new EvasiveManeuvers(),
-                new FOOF(),
-                new Forage(),
-                new FightFire(),
-                new FireTouch(),
-                new FireWithin(),
-                new FiredUpCard(),
-                new Flock(),
-                new GentleLanding(),
-                new Grenenade(),
-                new HangarMaintenance(),
-                new HenPeck(),
-                new InFlightService(),
-                new MidairRefuel(),
-                new Murder(),
-                new Parachute(),
-                new Paratrooper(),
-                new PeckingOrder(),
-                new PhoenixFeather(),
-                new PhoenixForm(),
-                new Plague(),
-                new ResearchAndDev(),
-                new RocketGrackle(),
-                new Scratch(),
-                new SelfBurn(),
-                new SnapGracklePop(),
-                new Strike_GK(),
-                new SummonEgrets(),
-                new Suplex(),
-                new Swoop(),
-                new Tailwind(),
-                new Takeoff(),
-                new TargetingComputer(),
-                new ThisWillHurt(),
-                new TryThatAgain(),
-                new WildFire(),
-                new WindowPain()
-        };
-    }
+    companion object {
+        val log = LogManager.getLogger(GrackleMod::class.java)
+        const val MOD_ID = "grackle"
+        private const val MOD_ID_COLON = "$MOD_ID:"
+        const val MOD_RES = "grackleResources"
 
-    /**
-     * Attempts to load and cache the texture at the given path.
-     * @param path Path of the texture to load
-     * @return Either the texture or {@code null} if not found
-     */
-    @Nullable
-    public static Texture loadTexture(@NotNull String path) {
-        return textureCache.computeIfAbsent(path, (path2) -> {
-            try {
-                val tex = new Texture(path2);
-                tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-                return tex;
-            } catch (Exception e) {
-                log.warn(e);
-                return null;
+        /** Cache of loaded textures  */
+        private val textureCache = HashMap<String, Texture?>()
+
+        /**
+         * Map of miscellaneous UI strings
+         */
+        val miscUI: Map<String, String> by lazy {
+            CardCrawlGame.languagePack.getUIString("$MOD_ID:misc").TEXT_DICT
+        }
+
+        private var hasInit = false
+        @Suppress("unused")
+        @JvmStatic fun initialize() {
+            if (!hasInit) {
+                BaseMod.subscribe(GrackleMod())
+
+                log.debug(CO.REG_START, "colors")
+                Grackle.Co.registerColor()
+                log.debug(CO.REG_END, "colors")
+
+                Events.metricsRun.on { metrics: Metrics ->
+                    if (metrics.type == Metrics.MetricRequestType.UPLOAD_METRICS && Grackle.isPlaying) {
+                        metrics.sendPost(CO.METRICS_URL)
+                    }
+                }
+                // Done
+                hasInit = true
             }
-        });
-    }
+        }
 
-    public static IMultiHitManager getMultiHitManager() {
-        return ExtraHitsVariable.inst;
-    }
+        /**
+         * Exists so that all cards are "used", and so we have an easily-sorted list of cards.
+         */
+        @Suppress("unused")
+        private fun makeCardList(): Array<AbstractCard> {
+            return arrayOf(
+                AAA(),
+                AerialAce(),
+                AerialAdvantage(),
+                AirToGroundMissiles(),
+                BePrepared(),
+                BombingRun(),
+                BufferInputs(),
+                BurnCream(),
+                Cackle(),
+                CopyCrow(),
+                CrashLanding(),
+                Death(),
+                Defend_GK(),
+                Duck(),
+                EagleEye(),
+                EmbodyFire(),
+                EvasiveManeuvers(),
+                FOOF(),
+                Forage(),
+                FightFire(),
+                FireTouch(),
+                FireWithin(),
+                FiredUpCard(),
+                Flock(),
+                GentleLanding(),
+                Grenenade(),
+                HangarMaintenance(),
+                HenPeck(),
+                InFlightService(),
+                MidairRefuel(),
+                Murder(),
+                Parachute(),
+                Paratrooper(),
+                PeckingOrder(),
+                PhoenixFeather(),
+                PhoenixForm(),
+                Plague(),
+                ResearchAndDev(),
+                RocketGrackle(),
+                Scratch(),
+                SelfBurn(),
+                SnapGracklePop(),
+                Strike_GK(),
+                SummonEgrets(),
+                Suplex(),
+                Swoop(),
+                Tailwind(),
+                Takeoff(),
+                TargetingComputer(),
+                ThisWillHurt(),
+                TryThatAgain(),
+                WildFire(),
+                WindowPain()
+            )
+        }
 
-    /**
-     * Returns a new ID with the mod prefix.
-     */
-    public static @NotNull String makeId(String name) {
-        return MOD_ID_COLON + name;
-    }
+        /**
+         * Attempts to load and cache the texture at the given path.
+         * @param path Path of the texture to load
+         * @return Either the texture or `null` if not found
+         */
+        fun loadTexture(path: String): Texture? {
+            return textureCache.computeIfAbsent(path) { path2: String ->
+                try {
+                    Texture(path2).apply { setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear) }
+                } catch (e: Exception) {
+                    log.warn(e)
+                    null
+                }
+            }
+        }
 
-    /**
-     * Returns a new ID with the mod prefix and the class name as the suffix.
-     */
-    public static @NotNull String makeId(Class<?> clazz) {
-        return makeId(clazz.getSimpleName());
-    }
+        @JvmStatic val multiHitManager: IMultiHitManager
+            get() = ExtraHitsVariable.inst
 
+        /**
+         * Returns a new ID with the mod prefix.
+         */
+        @JvmStatic fun makeId(name: String): String {
+            return MOD_ID_COLON + name
+        }
 
-    /**
-     * Remove the mod prefix and colon from {@code id}.
-     * @param id ID string
-     * @return ID with prefix removed
-     */
-    public static String removePrefix(String id) {
-        if (id.startsWith(MOD_ID_COLON)) {
-            return id.substring(MOD_ID_COLON.length());
-        } else {
-            return id;
+        /**
+         * Returns a new ID with the mod prefix and the class name as the suffix.
+         */
+        @JvmStatic fun makeId(clazz: Class<*>): String {
+            return makeId(clazz.simpleName)
+        }
+
+        /**
+         * Remove the mod prefix and colon from `id`.
+         * @param id ID string
+         * @return ID with prefix removed
+         */
+        @JvmStatic fun removePrefix(id: String): String {
+            return if (id.startsWith(MOD_ID_COLON)) {
+                id.substring(MOD_ID_COLON.length)
+            } else {
+                id
+            }
         }
     }
 }

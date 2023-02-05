@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import io.bindernews.bnsts.ICardInitializer
+import io.bindernews.thegrackle.helper.ICardInitializer
 import io.bindernews.thegrackle.Grackle
 import io.bindernews.thegrackle.GrackleMod
 

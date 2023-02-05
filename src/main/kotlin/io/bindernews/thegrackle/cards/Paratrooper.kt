@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.cardmods.AloftDmgUnaffectedMod
 import io.bindernews.thegrackle.cardmods.ExtraHitsMod
 import io.bindernews.thegrackle.cardmods.RequireAloftMod

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.BlurPower
-import io.bindernews.bnsts.CardVariables
+import io.bindernews.thegrackle.helper.CardVariables
 import io.bindernews.thegrackle.GrackleMod
 import io.bindernews.thegrackle.actions.SoundAction
 
