@@ -1,8 +1,8 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.cards.status.Burn
 import com.megacrit.cardcrawl.core.AbstractCreature
+import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.magic2
@@ -22,8 +22,8 @@ class WildFire : BaseCard(C, VARS) {
             cost(2)
             magic(8, 10)
             magic2(2, -1)
-            onInit { it.cardsToPreview = Burn() }
-            addModifier(ExhaustMod())
+            onInit { it.cardsToPreview = Burn(); it.exhaust = true }
+            addModifier(AutoDescription())
         }
     }
 }

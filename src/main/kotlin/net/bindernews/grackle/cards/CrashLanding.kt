@@ -5,9 +5,9 @@ import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.AloftDmgUnaffectedMod
-import net.bindernews.grackle.cardmods.RequireAloftMod
+import net.bindernews.grackle.cardmods.RequireStanceMod
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 
 class CrashLanding : BaseCard(C, VARS) {
@@ -23,7 +23,7 @@ class CrashLanding : BaseCard(C, VARS) {
         val VARS = CardVariables().apply {
             cost(1, -1)
             damage(8, 12)
-            addModifier(RequireAloftMod())
+            addModifier(RequireStanceMod())
             addModifier(AloftDmgUnaffectedMod())
         }
     }

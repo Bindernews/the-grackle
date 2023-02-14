@@ -16,6 +16,7 @@ import net.bindernews.grackle.Events.metricsRun
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.cardmods.EmbodyFireMod
 import net.bindernews.grackle.stance.StanceAloft
+import net.bindernews.grackle.stance.StanceEagle
 import net.bindernews.grackle.stance.StancePhoenix
 
 @SpirePatch(clz = Metrics::class, method = "run")
@@ -43,13 +44,19 @@ object TipHelperOnRender {
 
 @SpirePatch(clz = AbstractStance::class, method = "getStanceFromName")
 object GetStanceFromName {
+    val stances = mapOf<String, Class<out AbstractStance>>(
+        StanceAloft.STANCE_ID to StanceAloft::class.java,
+        StanceEagle.STANCE_ID to StanceEagle::class.java,
+        StancePhoenix.STANCE_ID to StancePhoenix::class.java,
+    )
+
     @JvmStatic fun Prefix(name: String): SpireReturn<AbstractStance> {
-        if (name == StancePhoenix.STANCE_ID) {
-            return SpireReturn.Return(StancePhoenix())
-        } else if (name == StanceAloft.STANCE_ID) {
-            return SpireReturn.Return(StanceAloft())
+        val stanceRet = stances[name]?.getConstructor()?.newInstance()
+        return if (stanceRet != null) {
+            SpireReturn.Return(stanceRet)
+        } else {
+            SpireReturn.Continue()
         }
-        return SpireReturn.Continue()
     }
 }
 

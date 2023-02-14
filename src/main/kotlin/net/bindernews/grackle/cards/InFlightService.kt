@@ -1,11 +1,11 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.actions.common.ObtainPotionAction
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.potions.RegenPotion
 import com.megacrit.cardcrawl.powers.RegenPower
+import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 
@@ -20,10 +20,11 @@ class InFlightService : BaseCard(C, VARS) {
 
     companion object {
         @JvmStatic val C = CardConfig("InFlightService", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
-        val VARS = CardVariables.config { c ->
-            c.cost(2, 1)
-            c.magic(5, -1)
-            c.addModifier(ExhaustMod())
+        val VARS = CardVariables().apply {
+            cost(2, 1)
+            magic(5)
+            onInit { it.exhaust = true }
+            addModifier(AutoDescription())
         }
     }
 }

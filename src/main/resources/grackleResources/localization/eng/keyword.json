@@ -1,5 +1,21 @@
 [
   {
+    "PROPER_NAME": "Aloft",
+    "NAMES": [
+      "Aloft",
+      "aloft"
+    ],
+    "DESCRIPTION": "In this #yStance, you deal and receive half attack damage."
+  },
+  {
+    "PROPER_NAME": "Eagle",
+    "NAMES": [
+      "Eagle",
+      "eagle"
+    ],
+    "DESCRIPTION": "Gain 2 Pecking Order when you exit this stance."
+  },
+  {
     "ID": "firedup",
     "PROPER_NAME": "Fired Up",
     "NAMES": [
@@ -24,13 +40,5 @@
       "peck"
     ],
     "DESCRIPTION": "Increases number of hits for next multi-hit attacks."
-  },
-  {
-    "PROPER_NAME": "Aloft",
-    "NAMES": [
-      "Aloft",
-      "aloft"
-    ],
-    "DESCRIPTION": "In this #yStance, you deal and receive half attack damage."
   }
 ]

@@ -2,8 +2,8 @@ package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.ExtraHitsMod
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.hits
 import net.bindernews.grackle.variables.ExtraHitsVariable
@@ -57,12 +57,12 @@ class Grenenade : BaseCard(C) {
 
     companion object {
         @JvmField val C = CardConfig("Grenenade", CardType.ATTACK, CardRarity.RARE, CardTarget.ALL_ENEMY)
-        val VARS = CardVariables.config { c ->
-            c.cost(2)
-            c.damage(4, -1)
-            c.hits(1, -1)
-            c.multiDamage(true, true)
-            c.addModifier(ExtraHitsMod())
+        val VARS = CardVariables().apply {
+            cost(2)
+            damage(4)
+            hits(1)
+            multiDamage(true, true)
+            addModifier(ExtraHitsMod())
         }
     }
 }

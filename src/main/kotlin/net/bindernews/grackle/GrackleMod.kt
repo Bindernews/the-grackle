@@ -12,12 +12,12 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.rooms.AbstractRoom
-import net.bindernews.bnsts.MiscUtil
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.Grackle.Companion.register
 import net.bindernews.grackle.api.IMultiHitManager
 import net.bindernews.grackle.api.IPopup
 import net.bindernews.grackle.cards.*
+import net.bindernews.grackle.helper.MiscUtil
 import net.bindernews.grackle.helper.fireheartGained
 import net.bindernews.grackle.helper.sendPost
 import net.bindernews.grackle.icons.registerIcons
@@ -118,17 +118,11 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
     }
 
     override fun receiveEditStrings() {
-        MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG)
-        if (Settings.language != Settings.GameLanguage.ENG) {
-            MiscUtil.loadLocalization(CO.RES_LANG, Settings.language)
-        }
+        MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG, Settings.language)
     }
 
     override fun receiveEditKeywords() {
-        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.GameLanguage.ENG)
-        if (Settings.language != Settings.GameLanguage.ENG) {
-            MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.language)
-        }
+        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.GameLanguage.ENG, Settings.language)
     }
 
     override fun receiveAddAudio() {
@@ -218,6 +212,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 Parachute(),
                 Paratrooper(),
                 PeckingOrder(),
+                Perch(),
                 PhoenixFeather(),
                 PhoenixForm(),
                 Plague(),
@@ -236,7 +231,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 ThisWillHurt(),
                 TryThatAgain(),
                 WildFire(),
-                WindowPain()
+                WindowPain(),
             )
         }
 

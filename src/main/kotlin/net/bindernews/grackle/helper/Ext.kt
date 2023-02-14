@@ -10,10 +10,10 @@ import net.bindernews.grackle.variables.ExtraHitsVariable
 import net.bindernews.grackle.variables.Magic2Var
 import kotlin.reflect.KClass
 
-fun CardVariables.hits(base: Int, upg: Int) {
+fun CardVariables.hits(base: Int, upg: Int = -1) {
     add(ExtraHitsVariable.inst, base, upg)
 }
-fun CardVariables.magic2(base: Int, upg: Int) {
+fun CardVariables.magic2(base: Int, upg: Int = -1) {
     add(Magic2Var.inst, base, upg)
 }
 
@@ -22,7 +22,7 @@ fun CardVariables.magic2(base: Int, upg: Int) {
 
 inline fun <reified T: Any> makeId(clazz: KClass<T>): String = "grackle:" + clazz.simpleName
 
-inline var BaseCard.extraHits: Int
+inline var AbstractCard.extraHits: Int
     get() = ExtraHitsVariable.inst.value(this)
     set(value) = ExtraHitsVariable.inst.setValue(this, value)
 inline var AbstractCard.baseExtraHits: Int

@@ -4,9 +4,9 @@ import com.megacrit.cardcrawl.cards.CardGroup
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.actions.FightFireAction
 import net.bindernews.grackle.helper.BurnHelper
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 
 class FightFire : BaseCard(C, VARS) {
@@ -47,10 +47,10 @@ class FightFire : BaseCard(C, VARS) {
     companion object {
         @JvmField val C = CardConfig("FightFire", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY)
         const val DAMAGE = 4
-        val VARS = CardVariables.config { c ->
-            c.cost(1, -1)
-            c.damage(DAMAGE, -1)
-            c.magic(4, 6)
+        val VARS = CardVariables().apply {
+            cost(1)
+            damage(DAMAGE)
+            magic(4, 6)
         }
     }
 }

@@ -1,10 +1,10 @@
-package net.bindernews.grackle.downfall.stances
+package net.bindernews.grackle.stance
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
 
-interface EnemyStanceDelegate {
+interface StanceDelegate {
     fun atStartOfTurn()
     fun onEndOfTurn()
     fun onEnterStance()
@@ -17,5 +17,5 @@ interface EnemyStanceDelegate {
     fun updateDescription()
     fun render(sb: SpriteBatch)
     fun stopIdleSfx()
-    val description: String
+    fun getDescription(): String
 }

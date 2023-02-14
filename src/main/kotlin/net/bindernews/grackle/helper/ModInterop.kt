@@ -25,7 +25,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.relics.AbstractRelic
 import com.megacrit.cardcrawl.stances.AbstractStance
-import net.bindernews.bnsts.Lazy
+import net.bindernews.eventbus.Lazy
 import net.bindernews.grackle.cards.BaseCard
 import java.util.*
 import java.util.function.Function

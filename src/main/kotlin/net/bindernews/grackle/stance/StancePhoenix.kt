@@ -8,13 +8,12 @@ import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.stances.AbstractStance
 import com.megacrit.cardcrawl.stances.NeutralStance
-import net.bindernews.bnsts.MiscUtil.addToBot
 import net.bindernews.grackle.GrackleMod
-import net.bindernews.grackle.downfall.stances.EnemyStanceDelegate
-import net.bindernews.grackle.helper.ModInterop
+import net.bindernews.grackle.helper.MiscUtil.addToBot
+import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.power.CoolingPhoenixPower
 
-class StancePhoenix : AbstractStance(), EnemyStanceDelegate {
+class StancePhoenix : AbstractStance(), StanceDelegate {
     var owner: AbstractCreature
     var canExitStance: Boolean
 
@@ -26,8 +25,7 @@ class StancePhoenix : AbstractStance(), EnemyStanceDelegate {
         updateDescription()
     }
 
-    override val description: String
-        get() = description
+    override fun getDescription(): String = description
 
     override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
         // All the benefits
@@ -46,14 +44,14 @@ class StancePhoenix : AbstractStance(), EnemyStanceDelegate {
     override fun onExitStance() {
         // If the turn has not ended then go back into our stance
         if (!canExitStance) {
-            addToBot(ModInterop.iop().changeStance(owner, STANCE_ID))
+            addToBot(iop().changeStance(owner, STANCE_ID))
         }
     }
 
     override fun atStartOfTurn() {
         canExitStance = true
         addToBot(ApplyPowerAction(owner, owner, CoolingPhoenixPower(owner, 1)))
-        addToBot(ModInterop.iop().changeStance(owner, NeutralStance.STANCE_ID))
+        addToBot(iop().changeStance(owner, NeutralStance.STANCE_ID))
     }
 
     override fun onEndOfTurn() {

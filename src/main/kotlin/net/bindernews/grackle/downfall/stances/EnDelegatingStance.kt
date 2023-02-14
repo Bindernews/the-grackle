@@ -4,14 +4,15 @@ import charbosses.stances.AbstractEnemyStance
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
+import net.bindernews.grackle.stance.StanceDelegate
 
 @Suppress("LeakingThis")
 abstract class EnDelegatingStance : AbstractEnemyStance() {
-    abstract val inner: EnemyStanceDelegate
+    abstract val inner: StanceDelegate
 
     override fun updateDescription() {
         inner.updateDescription()
-        description = inner.description
+        description = inner.getDescription()
     }
 
     override fun atStartOfTurn() {

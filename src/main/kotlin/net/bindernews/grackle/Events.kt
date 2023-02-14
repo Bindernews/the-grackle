@@ -13,14 +13,10 @@ import net.bindernews.grackle.api.SvcChangeCardEvent
  * A collection of [EventEmit]s, serving as a global event registry.
  */
 object Events {
-
     /** Event for when [SingleCardViewPopup] changes cards.  */
-    @JvmStatic val svcCardChange: IEventEmit<SvcChangeCardEvent> =
-        EventEmit()
+    @JvmStatic val svcCardChange: IEventEmit<SvcChangeCardEvent> = EventEmit()
     /** Event emitter, called at the end of [Metrics.run].  */
-    @JvmStatic val metricsRun: IEventEmit<Metrics> =
-        EventEmit()
+    @JvmStatic val metricsRun: IEventEmit<Metrics> = EventEmit()
     /** List of UI popups */
-    @JvmStatic val popups: IHandlerList<IPopup> =
-        HandlerList()
+    @JvmStatic val popups: IHandlerList<IPopup> = HandlerList()
 }

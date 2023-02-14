@@ -228,6 +228,7 @@ tasks.register<IntellijRun>("genIntelliJRuns") {
 }
 
 tasks.register("packagePatchedJar") {
+    dependsOn("installJar")
     doLast {
         exec {
             executable = findJavaExe("$stsHome/jre")
@@ -237,6 +238,7 @@ tasks.register("packagePatchedJar") {
         copy {
             from("$stsHome/desktop-1.0-patched.jar")
             into("$projectDir/lib")
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
     }
 }

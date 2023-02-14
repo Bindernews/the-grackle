@@ -8,11 +8,10 @@ import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.GrackleMod
-import net.bindernews.grackle.downfall.stances.EnemyStanceDelegate
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import java.util.*
 
-class StanceAloft : AbstractStance(), EnemyStanceDelegate {
+class StanceAloft : AbstractStance(), StanceDelegate {
     /**
      * Used for temporary damage calculations.
      */
@@ -24,8 +23,7 @@ class StanceAloft : AbstractStance(), EnemyStanceDelegate {
         updateDescription()
     }
 
-    override val description: String
-        get() = description
+    override fun getDescription(): String = description
 
     override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
         return if (damageType == DamageType.NORMAL && enabled) {

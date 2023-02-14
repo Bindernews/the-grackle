@@ -15,8 +15,8 @@ class HangarMaintenance : BaseCard(C, VARS) {
     companion object {
         @JvmField val C = CardConfig("HangarMaintenance", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
         val VARS = CardVariables.config { c ->
-            c.cost(2, -1)
-            c.magic(5, 8)
+            c.cost(2, 1)
+            c.magic(5)
         }
     }
 }

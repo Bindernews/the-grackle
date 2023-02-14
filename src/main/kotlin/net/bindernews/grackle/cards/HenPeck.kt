@@ -4,8 +4,8 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.ExtraHitsMod
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.helper.hits
 
@@ -21,7 +21,7 @@ class HenPeck : BaseCard(C, VARS) {
         @JvmStatic val C = CardConfig("HenPeck", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
         @JvmStatic val VARS = CardVariables().apply {
             cost(1)
-            damage(4, -1)
+            damage(4)
             hits(3, 4)
             addModifier(ExtraHitsMod())
         }

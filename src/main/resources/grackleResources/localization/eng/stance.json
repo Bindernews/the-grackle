@@ -6,6 +6,12 @@
       "Card may only be played while aloft"
     ]
   },
+  "grackle:StanceEagle": {
+    "NAME": "Eagle",
+    "DESCRIPTION": [
+      "Gain %d Pecking Order when you exit this stance."
+    ]
+  },
   "grackle:StancePhoenix": {
     "NAME": "Phoenix",
     "DESCRIPTION": [

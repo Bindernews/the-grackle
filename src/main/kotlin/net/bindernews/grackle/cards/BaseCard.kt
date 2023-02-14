@@ -7,13 +7,14 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import net.bindernews.grackle.helper.ICardInitializer
 import net.bindernews.grackle.Grackle
 import net.bindernews.grackle.GrackleMod
+import net.bindernews.grackle.helper.ICardInitializer
+import net.bindernews.grackle.helper.ModInterop
 
 @AutoAdd.Ignore
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
-abstract class BaseCard(opts: CardConfig, protected var cardInitializer: ICardInitializer?) : CustomCard(
+abstract class BaseCard(private val opts: CardConfig, protected var cardInitializer: ICardInitializer?) : CustomCard(
     opts.ID, opts.strings.NAME, RegionName(""), 1, opts.strings.DESCRIPTION,
     opts.type, Grackle.Co.COLOR_BLACK, opts.rarity, opts.target
 ) {
@@ -48,6 +49,8 @@ abstract class BaseCard(opts: CardConfig, protected var cardInitializer: ICardIn
      * @param m Monster or Player target
      */
     open fun apply(p: AbstractCreature, m: AbstractCreature?) {}
+
+    inline val iop: ModInterop get() = ModInterop.iop()
 
     companion object {
         val cards by lazy { TextureAtlas(GrackleMod.CO.RES_IMAGES + "/cards/cards.atlas") }

@@ -3,7 +3,6 @@ package net.bindernews.grackle.helper
 import com.evacipated.cardcrawl.mod.stslib.damagemods.AbstractDamageModifier
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.animations.VFXAction
-import com.megacrit.cardcrawl.actions.common.AttackDamageRandomEnemyAction
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction
 import com.megacrit.cardcrawl.cards.AbstractCard
@@ -24,9 +23,9 @@ abstract class ExtraHitModifier : AbstractDamageModifier() {
         return b
     }
 
-    class SimpleExtraHits(effect: AttackEffect?) : ExtraHitModifier() {
+    class SimpleExtraHits(effect: AttackEffect) : ExtraHitModifier() {
         init {
-            attackEffect = effect!!
+            attackEffect = effect
         }
 
         override fun onAttack(info: DamageInfo, damageAmount: Int, target: AbstractCreature) {
@@ -40,34 +39,6 @@ abstract class ExtraHitModifier : AbstractDamageModifier() {
 
         override fun makeCopy(): AbstractDamageModifier {
             return SimpleExtraHits(attackEffect)
-        }
-    }
-
-    class SwordBoomerangMod : ExtraHitModifier() {
-        private var card: AbstractCard? = null
-        override fun atDamageGive(
-            damage: Float,
-            type: DamageType,
-            target: AbstractCreature,
-            card: AbstractCard
-        ): Float {
-            this.card = card
-            applied = false
-            this.extraHits = ExtraHitsVariable.inst.getExtraHitsCard(card, 4)
-            return damage
-        }
-
-        override fun onAttack(info: DamageInfo, damageAmount: Int, target: AbstractCreature) {
-            if (checkApplied()) {
-                return
-            }
-            for (i in 0 until extraHits) {
-                addToBot(AttackDamageRandomEnemyAction(card, AttackEffect.SLASH_HORIZONTAL))
-            }
-        }
-
-        override fun makeCopy(): AbstractDamageModifier {
-            return SwordBoomerangMod()
         }
     }
 

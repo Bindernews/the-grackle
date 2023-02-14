@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
+import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
 
 class Murder : BaseCard(C, VARS) {
@@ -20,6 +21,7 @@ class Murder : BaseCard(C, VARS) {
                 it.isInnate = true
                 it.exhaust = true
             }
+            addModifier(AutoDescription())
         }
     }
 }

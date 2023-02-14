@@ -1,4 +1,4 @@
-package net.bindernews.bnsts;
+package net.bindernews.eventbus;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -7,12 +7,15 @@ import java.util.function.Supplier;
 
 /**
  * An interface and implementations of the lazy-evaluation, or lazy initialization, pattern.
+ * <p>
+ * The implementation is based on Lombok's {@code @Getter(lazy=true)} annotation.
+ * </p>
  * @param <T> Type of object to be lazily-loaded
  */
 public interface Lazy<T> extends Supplier<T> {
 
     /**
-     * Create a {@link Lazy} which is NOT thread-safe.
+     * Create a {@link Lazy} which is NOT thread-safe during initialization.
      * @param creator Lazy initializer
      * @return Lazy instance
      * @param <T> Lazy type
@@ -22,7 +25,7 @@ public interface Lazy<T> extends Supplier<T> {
     }
 
     /**
-     * Create a {@link Lazy} which IS thread-safe.
+     * Create a {@link Lazy} which IS thread-safe during initialization.
      * @param creator Lazy initializer
      * @return Lazy instance
      * @param <T> Lazy type

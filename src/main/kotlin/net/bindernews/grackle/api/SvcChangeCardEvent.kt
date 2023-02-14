@@ -5,6 +5,6 @@ import com.megacrit.cardcrawl.cards.CardGroup
 
 data class SvcChangeCardEvent(
     val card: AbstractCard,
-    val group: CardGroup,
+    val group: CardGroup?,
     val open: Boolean,
 )

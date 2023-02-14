@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.stances.NeutralStance
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.AloftDmgUnaffectedMod
 import net.bindernews.grackle.cardmods.ExtraHitsMod
-import net.bindernews.grackle.cardmods.RequireAloftMod
+import net.bindernews.grackle.cardmods.RequireStanceMod
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.helper.hits
@@ -33,7 +33,7 @@ class Paratrooper : BaseCard(C, VARS) {
             c.damage(7, 12)
             c.hits(1, -1)
             c.addModifier(ExtraHitsMod())
-            c.addModifier(RequireAloftMod())
+            c.addModifier(RequireStanceMod())
             c.addModifier(AloftDmgUnaffectedMod())
         }
     }

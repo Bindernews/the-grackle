@@ -1,10 +1,9 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.InnateMod
-import basemod.helpers.CardModifierManager
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.DrawPower
+import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop
 
@@ -18,7 +17,8 @@ class Tailwind : BaseCard(C, VARS) {
         @JvmStatic val VARS = CardVariables().apply {
             cost(1)
             magic(1, -1)
-            onUpgrade { CardModifierManager.addModifier(it, InnateMod()) }
+            onUpgrade { it.isInnate = true; }
+            addModifier(AutoDescription())
         }
     }
 }

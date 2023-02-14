@@ -6,10 +6,10 @@ import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.DoubleAloftDamageMod
 import net.bindernews.grackle.cardmods.ExtraHitsMod
-import net.bindernews.grackle.cardmods.RequireAloftMod
+import net.bindernews.grackle.cardmods.RequireStanceMod
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.helper.hits
 
@@ -34,7 +34,7 @@ class AirToGroundMissiles : BaseCard(C, VARS) {
             hits(1, -1)
             multiDamage(true, true)
             addModifier(ExtraHitsMod())
-            addModifier(RequireAloftMod())
+            addModifier(RequireStanceMod())
             addModifier(DoubleAloftDamageMod())
         }
     }

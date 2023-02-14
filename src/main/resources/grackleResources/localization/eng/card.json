@@ -71,7 +71,7 @@
   },
   "grackle:EagleEye": {
     "NAME": "Eagle Eye",
-    "DESCRIPTION": "Gain !B! Block. NL Scry !M!."
+    "DESCRIPTION": "Scry !M!. NL Enter grackle:Eagle stance."
   },
   "grackle:EmbodyFire": {
     "NAME": "Embody Fire",
@@ -142,7 +142,7 @@
   },
   "grackle:Murder": {
     "NAME": "Murder",
-    "DESCRIPTION": "Innate. NL Deal !D! damage. NL Exhaust.",
+    "DESCRIPTION": "Deal !D! damage.",
     "FLAVOR": "...of crows"
   },
   "grackle:Parachute": {
@@ -156,6 +156,10 @@
   "grackle:PeckingOrder": {
     "NAME": "Pecking Order",
     "DESCRIPTION": "TODO"
+  },
+  "grackle:Perch": {
+    "NAME": "Perch",
+    "DESCRIPTION": "Gain 1 [E]. NL Gain !M! Vigor. NL Enter Eagle stance."
   },
   "grackle:PhoenixFeather": {
     "NAME": "Phoenix Feather",
