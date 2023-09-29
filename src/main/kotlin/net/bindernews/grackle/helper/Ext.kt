@@ -1,5 +1,7 @@
 package net.bindernews.grackle.helper
 
+import basemod.abstracts.AbstractCardModifier
+import basemod.helpers.CardModifierManager
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.metrics.Metrics
@@ -55,4 +57,8 @@ fun Metrics.sendPost(url: String) {
     } catch (ex: ReflectiveOperationException) {
         GrackleMod.log.error("Exception while sending metrics to $url", ex)
     }
+}
+
+fun AbstractCard.addModifier(modifier: AbstractCardModifier) {
+    CardModifierManager.addModifier(this, modifier)
 }

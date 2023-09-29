@@ -4,10 +4,13 @@ package net.bindernews.grackle.patches
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager
+import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn
+import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.cards.status.Burn
 import com.megacrit.cardcrawl.core.Settings
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.helpers.TipHelper
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.screens.GameOverScreen
@@ -15,6 +18,8 @@ import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.Events.metricsRun
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.cardmods.EmbodyFireMod
+import net.bindernews.grackle.helper.ModInterop.Companion.iop
+import net.bindernews.grackle.relics.FlammableFlask
 import net.bindernews.grackle.stance.StanceAloft
 import net.bindernews.grackle.stance.StanceEagle
 import net.bindernews.grackle.stance.StancePhoenix

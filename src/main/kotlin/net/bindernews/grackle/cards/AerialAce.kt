@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
+import net.bindernews.grackle.cardmods.AloftDmgUnaffectedMod
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.DoubleAloftDamageMod
 
@@ -17,6 +18,7 @@ class AerialAce : BaseCard(C, VARS) {
         val VARS = CardVariables().apply {
             cost(1)
             damage(8, 12)
+            addModifier(AloftDmgUnaffectedMod())
             addModifier(DoubleAloftDamageMod())
         }
     }

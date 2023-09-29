@@ -4,6 +4,7 @@ import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.Events
+import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.power.BurningPower
 import net.bindernews.grackle.ui.CardClickableLink
@@ -21,7 +22,8 @@ class FOOF : BaseCard(C, VARS) {
         val VARS = CardVariables.config { c ->
             c.cost(1)
             c.magic(10, 16)
-            c.addModifier(ExhaustMod())
+            c.onInit { it.exhaust = true }
+            c.addModifier(AutoDescription())
         }
 
         const val ABOUT_TITLE = "Things I Won't Work With: Dioxygen Difluoride"

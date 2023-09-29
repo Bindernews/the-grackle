@@ -21,6 +21,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.core.EnergyManager
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.relics.AbstractRelic
@@ -37,6 +38,7 @@ import java.util.stream.Stream
  */
 open class ModInterop {
     protected var next: ModInterop? = null
+
     open fun getStance(c: AbstractCreature): AbstractStance? {
         return if (c is AbstractPlayer) {
             c.stance
@@ -150,6 +152,15 @@ open class ModInterop {
         return ApplyPowerAction(target, source, createPower(powerId, target, amount), amount)
     }
 
+    /**
+     * Returns the energy manager for the given creature.
+     */
+    open fun getEnergy(c: AbstractCreature): EnergyManager? {
+        return if (c is AbstractPlayer) {
+            c.energy
+        } else null
+    }
+
     class DownfallInterop : ModInterop() {
         private val powerReplacements = HashMap<String, Class<out AbstractPower>>()
 
@@ -205,6 +216,12 @@ open class ModInterop {
             return if (c is AbstractCharBoss) {
                 EnemyGainEnergyAction(c as AbstractCharBoss?, amount)
             } else next!!.actionGainEnergy(c, amount)
+        }
+
+        override fun getEnergy(c: AbstractCreature): EnergyManager? {
+            return if (c is AbstractCharBoss) {
+                c.energy
+            } else next!!.getEnergy(c)
         }
 
         private fun initPowerReplacements() {

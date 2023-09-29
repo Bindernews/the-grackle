@@ -1,10 +1,12 @@
 package net.bindernews.grackle.cards
 
+import basemod.AutoAdd
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.power.FiredUpPower
 
+@AutoAdd.Ignore
 class FiredUpCard : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(ApplyPowerAction(p, p, FiredUpPower(p, magicNumber)))

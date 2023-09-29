@@ -8,6 +8,14 @@
     "DESCRIPTION": "In this #yStance, you deal and receive half attack damage."
   },
   {
+    "PROPER_NAME": "Burning",
+    "NAMES": [
+      "Burning",
+      "burning"
+    ],
+    "DESCRIPTION": "Burning targets take more attack damage and receive damage at the end of each turn."
+  },
+  {
     "PROPER_NAME": "Eagle",
     "NAMES": [
       "Eagle",

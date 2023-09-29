@@ -6,6 +6,13 @@
       "All multi-hit attacks deal one extra hit."
     ]
   },
+  "grackle:FlammableFlask": {
+    "NAME": "Flammable Flask",
+    "FLAVOR": "A magic flask containing chlorine trifluoride",
+    "DESCRIPTIONS": [
+      "Whenever you apply grackle:Burning, apply an additional #b{} #yBurning."
+    ]
+  },
   "grackle:PhoenixIdol": {
     "NAME": "Phoenix Idol",
     "FLAVOR": "A small carving of a phoenix, slightly charred.",

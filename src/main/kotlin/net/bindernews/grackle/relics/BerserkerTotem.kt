@@ -8,6 +8,9 @@ import net.bindernews.grackle.helper.RelicHelper.relicStrings
 import net.bindernews.grackle.helper.makeId
 import net.bindernews.grackle.variables.ExtraHitsVariable
 
+/**
+ * Adds 1 extra hit to all multi-hit attacks.
+ */
 class BerserkerTotem : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.COMMON, LandingSound.SOLID) {
     init {
         updateDescription(null)

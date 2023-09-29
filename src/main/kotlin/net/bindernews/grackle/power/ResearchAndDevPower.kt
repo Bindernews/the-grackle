@@ -5,8 +5,13 @@ import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import net.bindernews.grackle.GrackleMod
+import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.vfx.UpgradeRandomCardEffect
 
+/**
+ * At the end of combat, upgrades a random card in your deck.
+ * Removed if you lose HP. Only applicable to player.
+ */
 class ResearchAndDevPower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID) {
     init {
         setOwnerAmount(owner, amount)
@@ -22,7 +27,8 @@ class ResearchAndDevPower(owner: AbstractCreature, amount: Int) : BasePower(POWE
 
     override fun onVictory() {
         for (i in 0 until amount) {
-            AbstractDungeon.effectsQueue.add(UpgradeRandomCardEffect(owner))
+            val fx = UpgradeRandomCardEffect(AbstractDungeon.player.masterDeck, true)
+            AbstractDungeon.effectsQueue.add(fx)
         }
     }
 

@@ -1,4 +1,7 @@
+import net.bindernews.accesscheck.AccessCheckTask
 import net.bindernews.grimage.*
+import net.bindernews.grimage.ext.drawImage
+import net.bindernews.grimage.ext.withGraphics
 import net.bindernews.grimage.idearuns.IntellijRun
 import net.bindernews.grimage.idearuns.V2Option
 import net.bindernews.grimage.idearuns.jar
@@ -11,7 +14,7 @@ import java.io.FileNotFoundException
 import java.io.Reader
 
 val modName = "TheGrackle"
-group = "io.bindernews.thegrackle"
+group = "net.bindernews.thegrackle"
 version = "0.2-SNAPSHOT"
 
 plugins {
@@ -22,6 +25,20 @@ plugins {
     id("co.uzzu.dotenv.gradle") version "2.0.0"
     id("io.freefair.lombok") version "6.6"
     id("net.bindernews.grimage")
+    id("net.bindernews.accesscheck")
+}
+
+// Read user settings and add defaults
+val steamDir: String = env.STEAM_DIR.value
+
+modMeta {
+    searchPaths.add(file("$rootDir/libs"))
+    searchSteam(file(steamDir))
+
+    addDefaultMods()
+    create("downfall.jar") { workshopId = "1610056683" }
+    create("TS05_Marisa.jar") { workshopId = "1614104912" }
+    create("Bestiary.jar") { workshopId = "2285965269" }
 }
 
 // Constants
@@ -32,14 +49,14 @@ val WORKSHOP_IDS = mapOf(
         "StSLib.jar" to "1609158507",
         "downfall.jar" to "1610056683",
         "TS05_Marisa.jar" to "1614104912",
+        "Bestiary.jar" to "2285965269",
 )
 
 // Read user settings and add defaults
-val steamDir: String = env.STEAM_DIR.value
 val stsHome = env.fetchOrNull("STS_HOME") ?: getStsSteamHome()
 val modsDir = env.fetch("MODS_DIR", "$stsHome/mods")
 val workshopDir = "$steamDir/workshop/content/646570"
-val mtsJar = findMod("ModTheSpire.jar")
+val mtsJar = modMeta.findMod("ModTheSpire.jar")
 
 val RES_DIR = "grackleResources"
 
@@ -48,8 +65,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    compileOnly("org.jetbrains:annotations:16.0.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    compileOnly("org.jetbrains:annotations:24.0.1")
     implementation(files(
         // Add the patched version if it exists, so we can get better IDE help.
 //        file("$projectDir/lib/desktop-1.0-patched.jar").takeIf { it.exists() },
@@ -60,6 +77,7 @@ dependencies {
         findMod("ModTheSpire.jar"),
         findMod("StSLib.jar"),
         findMod("downfall.jar"),
+        findMod("Bestiary.jar"),
 //        findMod("TS05_Marisa.jar"),
     ))
 }
@@ -93,9 +111,6 @@ tasks.register<Copy>("installJar") {
     from(tasks.getByName<Jar>("jar").archiveFile)
     rename { "$modName.jar" }
     into(modsDir)
-//    this.grimage.packImages {
-//
-//    }
 }
 
 run {
@@ -187,8 +202,19 @@ run {
         }
     }
 
-    val tRelicOutlines = tasks.register<MyImageCopy>("relicOutlines") {
+    val tRelicResize = tasks.register<MyImageCopy>("relicResize") {
         from("$resRoot/images/relics") {
+            include("*.png")
+            filter(RelicResizeFilter::class)
+        }
+        into("$resOut/images/relics")
+    }
+
+    val tRelicOutlines = tasks.register<MyImageCopy>("relicOutlines") {
+        dependsOn(tRelicResize)
+        from("$resOut/images/relics") {
+            include("*.png")
+            exclude("*_o.png")
             changeSuffix(".png", "_o.png")
             filterImage(OutlineOp())
         }
@@ -196,10 +222,13 @@ run {
     }
 
     tasks.getByName<Copy>("processResources") {
-        dependsOn(tResizeImages, tPackIcons, tPackCards, tMaskCards, tResizePowers, tRelicOutlines, tCopyEnergy)
+        dependsOn(
+            tResizeImages, tPackIcons, tPackCards, tMaskCards, tResizePowers,
+            tRelicResize, tRelicOutlines, tCopyEnergy
+        )
         // Exclude directories that are directly being packed or manually copied
         val resImg = "grackleResources/images"
-        exclude("$resImg/icons", "$resImg/powers", "$resImg/cards")
+        exclude("$resImg/icons", "$resImg/powers", "$resImg/cards", "$resImg/relics")
     }
 }
 
@@ -240,6 +269,20 @@ tasks.register("packagePatchedJar") {
             into("$projectDir/lib")
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
+    }
+}
+
+tasks.register<AccessCheckTask>("optionalDependencyCheck") {
+    classPath.from(tasks.compileJava.get().destinationDirectory)
+    classPath.from(tasks.compileKotlin.get().destinationDirectory)
+    check {
+        filter.packages.add("net.bindernews.grackle")
+        filter.excludedPackages.add("net.bindernews.grackle.downfall")
+        deny("charbosses.*")
+        deny("collector.*")
+        deny("downfall.*")
+        deny("expansioncontent.*")
+        deny("hermit.*")
     }
 }
 
@@ -285,13 +328,25 @@ class MoveEnergyOrbFilter(`in`: Reader) : ImageFilter(`in`) {
 
     override fun processImage(src: BufferedImage): BufferedImage {
         val dst = BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_INT_ARGB)
-        val g = dst.createGraphics()
-        try {
-            g.drawImage(src, orbArea.x, orbArea.y, orbArea.width, orbArea.height, null)
-        } finally {
-            g.dispose()
-        }
+        dst.withGraphics { g -> g.drawImage(src, orbArea) }
         return dst
+    }
+}
+
+class RelicResizeFilter(`in`: Reader) : ImageFilter(`in`) {
+    override fun processImage(src: BufferedImage): BufferedImage {
+        val dst = BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_INT_ARGB)
+        dst.withGraphics { g -> g.drawImage(src, relicArea) }
+        return dst
+    }
+
+    companion object {
+        private val imgSize = Dimension(128, 128)
+        private val innerSize = Dimension(80, 80)
+        private val relicArea = Rectangle(innerSize).apply {
+            x += imgSize.width - innerSize.width
+            y += imgSize.height - innerSize.height
+        }
     }
 }
 

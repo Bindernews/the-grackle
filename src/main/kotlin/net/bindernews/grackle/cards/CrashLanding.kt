@@ -6,10 +6,12 @@ import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
 import net.bindernews.grackle.cardmods.AloftDmgUnaffectedMod
-import net.bindernews.grackle.cardmods.RequireStanceMod
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 
+/**
+ * Deal damage and exit stance.
+ */
 class CrashLanding : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.SLASH_DIAGONAL
@@ -22,8 +24,7 @@ class CrashLanding : BaseCard(C, VARS) {
         val C = CardConfig("CrashLanding", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY)
         val VARS = CardVariables().apply {
             cost(1, -1)
-            damage(8, 12)
-            addModifier(RequireStanceMod())
+            damage(8, 11)
             addModifier(AloftDmgUnaffectedMod())
         }
     }

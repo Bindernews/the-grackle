@@ -1,8 +1,11 @@
 package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.actions.common.ObtainPotionAction
+import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.monsters.AbstractMonster
+import com.megacrit.cardcrawl.potions.PotionSlot
 import com.megacrit.cardcrawl.potions.RegenPotion
 import com.megacrit.cardcrawl.powers.RegenPower
 import net.bindernews.grackle.cardmods.AutoDescription
@@ -16,6 +19,10 @@ class InFlightService : BaseCard(C, VARS) {
         } else {
             addToBot(iop().actionApplyPower(p, p, RegenPower.POWER_ID, magicNumber))
         }
+    }
+
+    override fun canUse(p: AbstractPlayer, m: AbstractMonster?): Boolean {
+        return super.canUse(p, m) && p.potions.any { it is PotionSlot }
     }
 
     companion object {

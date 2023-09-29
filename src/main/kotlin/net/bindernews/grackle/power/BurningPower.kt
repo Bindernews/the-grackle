@@ -38,33 +38,25 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
         if (AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.getMonsters()
                 .areMonstersBasicallyDead()
         ) {
-            if (owner !is AbstractPlayer) {
-                dealGroupDamage()
-            }
+            processOwnerDamage()
         }
     }
 
-    override fun atEndOfTurn(isPlayer: Boolean) {
-        if (owner is AbstractPlayer && isPlayer) {
-            dealGroupDamage()
+    override fun atDamageReceive(damage: Float, type: DamageType?): Float {
+        return if (type == DamageType.NORMAL) {
+            damage + amount.toFloat()
+        } else {
+            damage
         }
     }
 
-    private fun dealGroupDamage() {
-        flashWithoutSound()
-        // Damage the owner
+    /**
+     * Process the damage to the owner and decreasing the amount of the power.
+     */
+    private fun processOwnerDamage() {
         applyDamage(owner, amount)
-        // If the owner is a monster, damage all monsters
-        if (owner !is AbstractPlayer) {
-            val aoeDamage = amount / 2
-            for (monster in AbstractDungeon.getMonsters().monsters) {
-                if (monster !== owner) {
-                    applyDamage(monster, aoeDamage)
-                }
-            }
-        }
-        // Reduce power
-        addToBot(ReducePowerAction(owner, owner, POWER_ID, REDUCE_PER_TURN))
+        // Reduce debuff by half, rounded up
+        addToBot(ReducePowerAction(owner, owner, POWER_ID, (amount + 1) / 2))
     }
 
     private fun applyDamage(target: AbstractCreature, dmg: Int) {
@@ -73,12 +65,13 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
     }
 
     override fun updateDescription() {
-        description = if (owner is AbstractPlayer) {
-            strings.DESCRIPTIONS[0]
-        } else {
+        description = strings.DESCRIPTIONS[0] + "\n"
+        description += if (owner is AbstractPlayer) {
             strings.DESCRIPTIONS[1]
+        } else {
+            strings.DESCRIPTIONS[2]
         }
-        description += amount.toString() + strings.DESCRIPTIONS[2]
+        description += amount.toString() + strings.DESCRIPTIONS[3]
     }
 
     override fun makeCopy(): AbstractPower {

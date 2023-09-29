@@ -12,12 +12,16 @@ class Tailwind : BaseCard(C, VARS) {
         val power = ModInterop.iop().createPower(DrawPower.POWER_ID, p, magicNumber)
         addToBot(ApplyPowerAction(p, p, power, magicNumber))
     }
+
     companion object {
         @JvmStatic val C = CardConfig("Tailwind", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
         @JvmStatic val VARS = CardVariables().apply {
             cost(1)
             magic(1, -1)
-            onUpgrade { it.isInnate = true; }
+            onUpgrade {
+                it.isInnate = true;
+                it.initializeDescription()
+            }
             addModifier(AutoDescription())
         }
     }

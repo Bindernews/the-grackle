@@ -20,6 +20,10 @@ class FireheartPower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID)
     }
 
     override fun stackPower(stackAmount: Int) {
+        // Cannot stack if in Cooling Phoenix
+        if (owner.hasPower(CoolingPhoenixPower.POWER_ID)) {
+            return
+        }
         super.stackPower(stackAmount)
         // Yes, this means you can build fireheart even while in stance.
         if (amount >= fireheartRequired && canEnterPhoenixStance()) {

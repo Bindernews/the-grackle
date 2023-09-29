@@ -23,6 +23,7 @@ import net.bindernews.grackle.helper.sendPost
 import net.bindernews.grackle.icons.registerIcons
 import net.bindernews.grackle.power.BasePower
 import net.bindernews.grackle.relics.BerserkerTotem
+import net.bindernews.grackle.relics.FlammableFlask
 import net.bindernews.grackle.relics.LoftwingFeather
 import net.bindernews.grackle.relics.SimmeringHeat
 import net.bindernews.grackle.ui.CardClickableLink
@@ -74,6 +75,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         // Add class-specific relics
         Stream.of(
             BerserkerTotem(),
+            FlammableFlask(),
             LoftwingFeather(),
             SimmeringHeat()
         ).forEach { BaseMod.addRelicToCustomPool(it, Grackle.Co.COLOR_BLACK) }

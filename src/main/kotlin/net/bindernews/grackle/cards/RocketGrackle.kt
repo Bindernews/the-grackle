@@ -19,10 +19,10 @@ class RocketGrackle : BaseCard(C, VARS) {
 
     companion object {
         @JvmField val C = CardConfig("RocketGrackle", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
-        val VARS = CardVariables.config { c ->
-            c.cost(1, -1)
-            c.damage(8, 12)
-            c.magic(1, 2)
+        val VARS = CardVariables().apply {
+            cost(1, -1)
+            damage(6, 10)
+            magic(1, 2)
         }
     }
 }

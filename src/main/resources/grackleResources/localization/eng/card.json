@@ -44,10 +44,17 @@
     "NAME": "Cackle",
     "DESCRIPTION": "Apply !M! Vulnerable and !M! Weak."
   },
+  "grackle:ChlorineTrifluoride": {
+    "NAME": "Chlorine Trifluoride",
+    "DESCRIPTION": "Deal !D! damage and apply !M! grackle:Burning to ALL enemies."
+  },
   "grackle:CopyCrow": {
     "NAME": "Copy Crow",
-    "DESCRIPTION": "TODO",
-    "FLAVOR": "Grackles aren't corvids, but you'd think they are. ~corndan"
+    "DESCRIPTION": "Choose a card. Add a copy of the card to your hand.",
+    "FLAVOR": "Grackles aren't corvids, but you'd think they are. ~corndan",
+    "EXTENDED_DESCRIPTION": [
+      "Select a card to duplicate."
+    ]
   },
   "grackle:CrashLanding": {
     "NAME": "Crash Landing",
@@ -147,7 +154,7 @@
   },
   "grackle:Parachute": {
     "NAME": "Parachute",
-    "DESCRIPTION": "Gain !B! Block. NL Exit your #yStance."
+    "DESCRIPTION": "Gain !B! Block. NL Exit your Stance."
   },
   "grackle:Paratrooper": {
     "NAME": "Paratrooper",
@@ -185,7 +192,7 @@
   },
   "grackle:SelfBurn": {
     "NAME": "Self Burn",
-    "DESCRIPTION": "Draw !M! cards. NL Add a *Burn to your discard pile.",
+    "DESCRIPTION": "Draw !M! cards. NL Add an *Ethereal *Burn to your discard pile.",
     "FLAVOR": "Do you want some burn cream for that?"
   },
   "grackle:SnapGracklePop": {
