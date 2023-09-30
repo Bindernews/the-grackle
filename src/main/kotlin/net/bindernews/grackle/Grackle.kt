@@ -151,7 +151,10 @@ class Grackle(name: String?) : CustomPlayer(
         return Co.COLOR_FX
     }
 
-    override fun getSpireHeartSlashEffect(): Array<AttackEffect> = arrayOf()
+    override fun getSpireHeartSlashEffect(): Array<AttackEffect> =
+        arrayOf(AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY,
+            AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT)
+
     override fun getVampireText(): String = STRINGS.TEXT[2]
 
     companion object {

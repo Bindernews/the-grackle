@@ -30,11 +30,11 @@ class ThisWillHurt : BaseCard(C, VARS) {
 
     companion object {
         @JvmField val C = CardConfig("ThisWillHurt", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.ALL_ENEMY)
-        val VARS = CardVariables.config { c ->
-            c.cost(1, 0)
-            c.magic(1, -1)
-            c.block(4, -1)
-            c.onUpgrade { it.initializeDescription() }
+        val VARS = CardVariables().apply {
+            cost(1, 0)
+            magic(1, -1)
+            block(4, -1)
+            onUpgrade { it.initializeDescription() }
         }
     }
 }

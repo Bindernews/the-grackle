@@ -1,5 +1,6 @@
 package net.bindernews.grackle.helper
 
+import basemod.ReflectionHacks
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.metrics.Metrics
@@ -45,7 +46,7 @@ inline var AbstractCreature.fireheartGained: Int
 
 /**
  * Upload the metrics to the passed url in JSON format.
-  * @param url URL to upload data to
+ * @param url URL to upload data to
  */
 fun Metrics.sendPost(url: String) {
     try {
@@ -55,4 +56,13 @@ fun Metrics.sendPost(url: String) {
     } catch (ex: ReflectiveOperationException) {
         GrackleMod.log.error("Exception while sending metrics to $url", ex)
     }
+}
+
+/**
+ * Add data to the metrics.
+ */
+fun Metrics.addData(key: String, value: Any) {
+    val fnAddData = ReflectionHacks.privateMethod(
+        Metrics::class.java, "addData", Any::class.java, Any::class.java)
+    fnAddData.invoke<Void>(this, key, value)
 }

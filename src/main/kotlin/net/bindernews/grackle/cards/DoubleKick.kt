@@ -10,20 +10,20 @@ import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.helper.hits
 
-class HenPeck : BaseCard(C, VARS) {
+class DoubleKick : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
-        val fx = AttackEffect.BLUNT_LIGHT
         val hits = extraHits
         for (i in 0 until hits) {
-            addToBot(DamageAction(m, DamageInfo(p, damage, damageType), fx))
+            addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), AttackEffect.SLASH_HORIZONTAL))
         }
     }
+
     companion object {
-        @JvmStatic val C = CardConfig("HenPeck", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField var C = CardConfig("DoubleKick", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        var VARS = CardVariables().apply {
             cost(1)
-            damage(4)
-            hits(3, 4)
+            damage(6, 9)
+            hits(2)
             tags(GCardTags.TAG_DAMAGE_TIP)
             addModifier(ExtraHitsMod())
         }

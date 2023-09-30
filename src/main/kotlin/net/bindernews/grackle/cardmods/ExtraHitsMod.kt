@@ -4,6 +4,11 @@ import basemod.abstracts.AbstractCardModifier
 import com.megacrit.cardcrawl.cards.AbstractCard
 import net.bindernews.grackle.variables.ExtraHitsVariable
 
+/**
+ * Updates the extraHits field of cards. This should always be added during a card's initialization,
+ * because it will NOT be saved externally.
+ */
+@AbstractCardModifier.SaveIgnore
 class ExtraHitsMod : AbstractCardModifier() {
     override fun onInitialApplication(card: AbstractCard) {
         card.tags.add(ExtraHitsVariable.GK_MULTI_HIT)

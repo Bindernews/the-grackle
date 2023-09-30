@@ -8,6 +8,9 @@ import net.bindernews.eventbus.IEventEmit
 import net.bindernews.eventbus.IHandlerList
 import net.bindernews.grackle.api.IPopup
 import net.bindernews.grackle.api.SvcChangeCardEvent
+import net.bindernews.grackle.interfaces.IPriority
+import java.util.*
+import java.util.function.Consumer
 
 /**
  * A collection of [EventEmit]s, serving as a global event registry.
@@ -19,4 +22,8 @@ object Events {
     @JvmStatic val metricsRun: IEventEmit<Metrics> = EventEmit()
     /** List of UI popups */
     @JvmStatic val popups: IHandlerList<IPopup> = HandlerList()
+    /** Event for adding additional data to the metrics. */
+    @JvmStatic val metricsGather: TreeSet<IMetricsGather> = TreeSet()
+
+    fun interface IMetricsGather : Consumer<Metrics>, IPriority
 }

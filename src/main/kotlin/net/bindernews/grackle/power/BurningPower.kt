@@ -50,6 +50,14 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
         }
     }
 
+    override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
+        return if (damageType == DamageType.NORMAL) {
+            damage + (amount * receiveExtraDamage)
+        } else {
+            damage
+        }
+    }
+
     private fun dealGroupDamage() {
         flashWithoutSound()
         // Damage the owner
@@ -90,6 +98,13 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
 
         /** How much this is reduced by each turn.  */
         var REDUCE_PER_TURN = 2
+
+        /**
+         * Creatures with Burning will receive extra damage equal to the amount of burning multiplied by this value.
+         * Set to 0.0 to disable.
+         */
+        var receiveExtraDamage: Float = 1.0f
+
         fun makeAction(
             source: AbstractCreature?, target: AbstractCreature, amount: Int
         ): AbstractGameAction {

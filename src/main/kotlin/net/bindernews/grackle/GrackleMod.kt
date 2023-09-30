@@ -2,8 +2,11 @@ package net.bindernews.grackle
 
 import basemod.AutoAdd
 import basemod.BaseMod
+import basemod.abstracts.CustomSavable
 import basemod.interfaces.*
 import com.badlogic.gdx.graphics.Texture
+import com.evacipated.cardcrawl.modthespire.Loader
+import com.evacipated.cardcrawl.modthespire.ModInfo
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.CardCrawlGame
@@ -18,6 +21,7 @@ import net.bindernews.grackle.api.IMultiHitManager
 import net.bindernews.grackle.api.IPopup
 import net.bindernews.grackle.cards.*
 import net.bindernews.grackle.helper.MiscUtil
+import net.bindernews.grackle.helper.addData
 import net.bindernews.grackle.helper.fireheartGained
 import net.bindernews.grackle.helper.sendPost
 import net.bindernews.grackle.icons.registerIcons
@@ -51,7 +55,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         /** Metrics upload url  */
         const val METRICS_URL = "https://stats.grackle.bindernews.net"
 
-        /** Sound effect ID  */
+        /** Sound effect ID */
         val SFX_QUACK = makeId("DUCK")
 
         /** The "Aloft" keyword  */
@@ -94,6 +98,11 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         registerPowers()
         popups.on(CardClickableLink.inst)
         popups.on(MainMenuMetricsRequest.inst)
+
+        BaseMod.addSaveField<String>("$MOD_ID:version", object : CustomSavable<String> {
+            override fun onSave(): String = modInfo?.ModVersion.toString() ?: ""
+            override fun onLoad(p0: String?) {}
+        })
     }
 
     override fun receivePreUpdate() {
@@ -141,6 +150,8 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         const val MOD_ID = "grackle"
         private const val MOD_ID_COLON = "$MOD_ID:"
         const val MOD_RES = "grackleResources"
+        /** The mod */
+        var modInfo: ModInfo? = null
 
         /** Cache of loaded textures  */
         private val textureCache = HashMap<String, Texture?>()
@@ -167,6 +178,17 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                         metrics.sendPost(CO.METRICS_URL)
                     }
                 }
+
+                Events.metricsGather.add { metrics ->
+                    val modVersion = modInfo?.ModVersion?.toString() ?: ""
+                    metrics.addData("$MOD_ID:version", modVersion)
+                    val modList = Loader.MODINFOS.map { it.ID + ":" + it.ModVersion }
+                    metrics.addData("$MOD_ID:mods", modList)
+
+                }
+
+                // Find our mod info
+                modInfo = Loader.MODINFOS.find { it.ID == MOD_ID }
                 // Done
                 hasInit = true
             }
@@ -186,22 +208,25 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 BombingRun(),
                 BufferInputs(),
                 BurnCream(),
+                BurningBird(),
                 Cackle(),
                 CopyCrow(),
                 CrashLanding(),
                 Death(),
                 Defend_GK(),
+                DoubleKick(),
                 Duck(),
                 EagleEye(),
                 EmbodyFire(),
                 EvasiveManeuvers(),
-                FOOF(),
-                Forage(),
                 FightFire(),
+                FireControl(),
+                FiredUpCard(),
                 FireTouch(),
                 FireWithin(),
-                FiredUpCard(),
                 Flock(),
+                FOOF(),
+                Forage(),
                 GentleLanding(),
                 Grenenade(),
                 HangarMaintenance(),

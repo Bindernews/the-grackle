@@ -2,6 +2,7 @@ package net.bindernews.grackle.cards
 
 import basemod.AutoAdd
 import basemod.abstracts.CustomCard
+import basemod.helpers.TooltipInfo
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
@@ -9,8 +10,10 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import net.bindernews.grackle.Grackle
 import net.bindernews.grackle.GrackleMod
+import net.bindernews.grackle.api.GCardTags
 import net.bindernews.grackle.helper.ICardInitializer
 import net.bindernews.grackle.helper.ModInterop
+import net.bindernews.grackle.helper.extraHits
 
 @AutoAdd.Ignore
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
@@ -49,6 +52,15 @@ abstract class BaseCard(private val opts: CardConfig, protected var cardInitiali
      * @param m Monster or Player target
      */
     open fun apply(p: AbstractCreature, m: AbstractCreature?) {}
+
+    override fun getCustomTooltips(): MutableList<TooltipInfo> {
+        val tips = super.getCustomTooltips() ?: arrayListOf()
+        if (this is IDamageTip || hasTag(GCardTags.TAG_DAMAGE_TIP)) {
+            val dmg = damage * extraHits
+            tips.add(TooltipInfo("Total Damage", "$dmg"))
+        }
+        return tips
+    }
 
     inline val iop: ModInterop get() = ModInterop.iop()
 

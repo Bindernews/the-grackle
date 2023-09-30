@@ -14,7 +14,7 @@ class Perch : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig(this, CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmStatic val C = CardConfig("Perch", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         val VARS = CardVariables().apply {
             cost(1)
             magic(2, 3)
