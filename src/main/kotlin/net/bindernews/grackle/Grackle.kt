@@ -10,7 +10,9 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.AbstractCard.CardColor
 import com.megacrit.cardcrawl.characters.AbstractPlayer
-import com.megacrit.cardcrawl.core.*
+import com.megacrit.cardcrawl.core.CardCrawlGame
+import com.megacrit.cardcrawl.core.EnergyManager
+import com.megacrit.cardcrawl.core.Settings
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.helpers.CardLibrary.LibraryType
 import com.megacrit.cardcrawl.helpers.FontHelper
@@ -149,10 +151,9 @@ class Grackle(name: String?) : CustomPlayer(
         return Co.COLOR_FX
     }
 
-    override fun getSpireHeartSlashEffect(): Array<AttackEffect> {
-        return arrayOf(AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT,
-                AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT)
-    }
+    override fun getSpireHeartSlashEffect(): Array<AttackEffect> =
+        arrayOf(AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY,
+            AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT)
 
     override fun getVampireText(): String = STRINGS.TEXT[2]
 

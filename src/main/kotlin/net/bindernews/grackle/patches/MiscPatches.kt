@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager
 import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch
+import com.evacipated.cardcrawl.modthespire.lib.SpirePatch2
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.cards.status.Burn
@@ -15,7 +16,7 @@ import com.megacrit.cardcrawl.helpers.TipHelper
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.screens.GameOverScreen
 import com.megacrit.cardcrawl.stances.AbstractStance
-import net.bindernews.grackle.Events.metricsRun
+import net.bindernews.grackle.Events
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.cardmods.EmbodyFireMod
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
@@ -26,8 +27,15 @@ import net.bindernews.grackle.stance.StancePhoenix
 
 @SpirePatch(clz = Metrics::class, method = "run")
 object MetricsRunPatch {
-    @JvmStatic fun Postfix(metrics: Metrics?) {
-        metricsRun.emit(metrics)
+    @JvmStatic fun Postfix(metrics: Metrics) {
+        Events.metricsRun.emit(metrics)
+    }
+}
+
+@SpirePatch2(clz = Metrics::class, method = "gatherAllData")
+object MetricsGatherAllDataPatch {
+    @JvmStatic fun Postfix(__instance: Metrics) {
+        Events.metricsGather.forEach { it.accept(__instance) }
     }
 }
 

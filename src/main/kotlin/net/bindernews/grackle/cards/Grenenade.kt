@@ -1,24 +1,28 @@
 package net.bindernews.grackle.cards
 
+import basemod.helpers.CardModifierManager
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.cardmods.ExtraHitsMod
-import net.bindernews.grackle.helper.CardVariables
-import net.bindernews.grackle.helper.ModInterop.Companion.iop
-import net.bindernews.grackle.helper.hits
+import net.bindernews.grackle.helper.baseExtraHits
+import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.variables.ExtraHitsVariable
 
 class Grenenade : BaseCard(C) {
     init {
-        // Custom upgrade mechanics, so we only need VARS for init
-        VARS.init(this)
+        cost = 2
+        costForTurn = 2
+        baseDamage = 4
+        baseExtraHits = 1
+        isMultiDamage = true
+        CardModifierManager.addModifier(this, ExtraHitsMod())
     }
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.FIRE
-        val hits = ExtraHitsVariable.inst.value(this)
+        val hits = extraHits
         for (i in 0 until hits) {
-            addToBot(iop().damageAllEnemies(p, multiDamage, damageTypeForTurn, fx))
+            addToBot(iop.damageAllEnemies(p, multiDamage, damageTypeForTurn, fx))
         }
     }
 
@@ -57,12 +61,5 @@ class Grenenade : BaseCard(C) {
 
     companion object {
         @JvmField val C = CardConfig("Grenenade", CardType.ATTACK, CardRarity.RARE, CardTarget.ALL_ENEMY)
-        val VARS = CardVariables().apply {
-            cost(2)
-            damage(4)
-            hits(1)
-            multiDamage(true, true)
-            addModifier(ExtraHitsMod())
-        }
     }
 }

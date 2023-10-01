@@ -44,7 +44,7 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
 
     override fun atDamageReceive(damage: Float, type: DamageType?): Float {
         return if (type == DamageType.NORMAL) {
-            damage + amount.toFloat()
+            damage + (amount * receiveExtraDamage)
         } else {
             damage
         }
@@ -54,6 +54,8 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
      * Process the damage to the owner and decreasing the amount of the power.
      */
     private fun processOwnerDamage() {
+        flashWithoutSound()
+        // Damage the owner
         applyDamage(owner, amount)
         // Reduce debuff by half, rounded up
         addToBot(ReducePowerAction(owner, owner, POWER_ID, (amount + 1) / 2))
@@ -83,6 +85,13 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
 
         /** How much this is reduced by each turn.  */
         var REDUCE_PER_TURN = 2
+
+        /**
+         * Creatures with Burning will receive extra damage equal to the amount of burning multiplied by this value.
+         * Set to 0.0 to disable.
+         */
+        var receiveExtraDamage: Float = 1.0f
+
         fun makeAction(
             source: AbstractCreature?, target: AbstractCreature, amount: Int
         ): AbstractGameAction {

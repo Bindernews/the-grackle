@@ -8,18 +8,18 @@ import com.megacrit.cardcrawl.actions.utility.WaitAction
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import com.megacrit.cardcrawl.vfx.combat.GiantTextEffect
 import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect
 import net.bindernews.grackle.cardmods.RequireStanceMod
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.stance.StanceAloft
+import net.bindernews.grackle.vfx.MyGiantTextEffect
 
 class Death : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         if (m != null) {
             addToBot(VFXAction(WeightyImpactEffect(m.hb.cX, m.hb.cY, Color.GOLD.cpy())))
             addToBot(WaitAction(0.8F))
-            addToBot(VFXAction(GiantTextEffect(m.hb.cX, m.hb.cY)))
+            addToBot(VFXAction(MyGiantTextEffect(m.hb.cX, m.hb.cY, C.strings.EXTENDED_DESCRIPTION[0])))
 
             if (!m.isDeadOrEscaped && m.currentHealth <= magicNumber) {
                 addToBot(InstantKillAction(m))
@@ -32,8 +32,8 @@ class Death : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("Death", CardType.SKILL, CardRarity.RARE, CardTarget.ENEMY)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("Death", CardType.SKILL, CardRarity.RARE, CardTarget.ENEMY)
+        val VARS = CardVariables().apply {
             cost(1)
             magic(40, 60)
             addModifier(ExhaustMod())

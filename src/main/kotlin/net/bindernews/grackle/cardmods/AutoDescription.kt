@@ -1,6 +1,7 @@
 package net.bindernews.grackle.cardmods
 
 import basemod.abstracts.AbstractCardModifier
+import basemod.abstracts.AbstractCardModifier.SaveIgnore
 import basemod.cardmods.ExhaustMod
 import basemod.cardmods.InnateMod
 import basemod.cardmods.RetainMod
@@ -9,7 +10,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard
 /**
  * Automatically updates the card's description based on the values
  * of [AbstractCard.exhaust], [AbstractCard.retain], and [AbstractCard.isInnate].
+ *
+ * @author bindernews
  */
+@SaveIgnore
 open class AutoDescription : AbstractCardModifier() {
     override fun modifyDescription(rawDescription: String, card: AbstractCard): String {
         var tmp = rawDescription
@@ -24,6 +28,8 @@ open class AutoDescription : AbstractCardModifier() {
         }
         return tmp
     }
+
+    override fun isInherent(card: AbstractCard?): Boolean = true
 
     override fun makeCopy(): AbstractCardModifier = AutoDescription()
 

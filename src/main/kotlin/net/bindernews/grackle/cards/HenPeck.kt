@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
+import net.bindernews.grackle.api.GCardTags
 import net.bindernews.grackle.cardmods.ExtraHitsMod
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.extraHits
@@ -35,6 +36,7 @@ class HenPeck : BaseCard(C, VARS), BranchingUpgradesCard {
             cost(1)
             damage(4)
             hits(3, 4)
+            tags(GCardTags.TAG_DAMAGE_TIP)
             addModifier(ExtraHitsMod())
         }
 
