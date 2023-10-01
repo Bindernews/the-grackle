@@ -4,14 +4,11 @@ package net.bindernews.grackle.patches
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager
-import com.evacipated.cardcrawl.modthespire.lib.SpireInsertPatch
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch2
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn
-import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.cards.status.Burn
 import com.megacrit.cardcrawl.core.Settings
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.helpers.TipHelper
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.screens.GameOverScreen
@@ -19,10 +16,9 @@ import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.Events
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.cardmods.EmbodyFireMod
-import net.bindernews.grackle.helper.ModInterop.Companion.iop
-import net.bindernews.grackle.relics.FlammableFlask
 import net.bindernews.grackle.stance.StanceAloft
 import net.bindernews.grackle.stance.StanceEagle
+import net.bindernews.grackle.stance.StanceNest
 import net.bindernews.grackle.stance.StancePhoenix
 
 @SpirePatch(clz = Metrics::class, method = "run")
@@ -60,6 +56,7 @@ object GetStanceFromName {
     val stances = mapOf<String, Class<out AbstractStance>>(
         StanceAloft.STANCE_ID to StanceAloft::class.java,
         StanceEagle.STANCE_ID to StanceEagle::class.java,
+        StanceNest.STANCE_ID to StanceNest::class.java,
         StancePhoenix.STANCE_ID to StancePhoenix::class.java,
     )
 
