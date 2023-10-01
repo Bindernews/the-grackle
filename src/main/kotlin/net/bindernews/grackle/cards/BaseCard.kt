@@ -55,7 +55,7 @@ abstract class BaseCard(private val opts: CardConfig, protected var cardInitiali
 
     override fun getCustomTooltips(): MutableList<TooltipInfo> {
         val tips = super.getCustomTooltips() ?: arrayListOf()
-        if (this is IDamageTip || hasTag(GCardTags.TAG_DAMAGE_TIP)) {
+        if (hasTag(GCardTags.TAG_DAMAGE_TIP)) {
             val dmg = damage * extraHits
             tips.add(TooltipInfo("Total Damage", "$dmg"))
         }
