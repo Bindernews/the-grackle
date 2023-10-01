@@ -1,3 +1,4 @@
+
 import net.bindernews.accesscheck.AccessCheckTask
 import net.bindernews.grimage.*
 import net.bindernews.grimage.ext.drawImage
@@ -5,12 +6,11 @@ import net.bindernews.grimage.ext.withGraphics
 import net.bindernews.grimage.idearuns.IntellijRun
 import net.bindernews.grimage.idearuns.V2Option
 import net.bindernews.grimage.idearuns.jar
-import org.apache.tools.ant.taskdefs.condition.Os
+import net.bindernews.grimage.stsbuild.ModMetaExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.awt.Dimension
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
-import java.io.FileNotFoundException
 import java.io.Reader
 
 val modName = "TheGrackle"
@@ -32,8 +32,10 @@ plugins {
 val steamDir: String = env.STEAM_DIR.value
 
 modMeta {
-    searchPaths.add(file("$rootDir/libs"))
-    searchSteam(file(steamDir))
+    useSteam(file(steamDir))
+    env.fetchOrNull("STS_HOME")?.let { stsHome.set(file(it)) }
+    searchPaths.add(file("$rootDir/lib"))
+    searchPaths.add(file("$stsHome/mods"))
 
     addDefaultMods()
     create("downfall.jar") { workshopId = "1610056683" }
@@ -41,22 +43,9 @@ modMeta {
     create("Bestiary.jar") { workshopId = "2285965269" }
 }
 
-// Constants
-/** Map of deps to their Steam workshop IDs */
-val WORKSHOP_IDS = mapOf(
-        "ModTheSpire.jar" to "1605060445",
-        "BaseMod.jar" to "1605833019",
-        "StSLib.jar" to "1609158507",
-        "downfall.jar" to "1610056683",
-        "TS05_Marisa.jar" to "1614104912",
-        "Bestiary.jar" to "2285965269",
-)
-
 // Read user settings and add defaults
-val stsHome = env.fetchOrNull("STS_HOME") ?: getStsSteamHome()
-val modsDir = env.fetch("MODS_DIR", "$stsHome/mods")
-val workshopDir = "$steamDir/workshop/content/646570"
 val mtsJar = modMeta.findMod("ModTheSpire.jar")
+val stsHome = modMeta.stsHome.asFile.get().toString()
 
 val RES_DIR = "grackleResources"
 
@@ -67,19 +56,18 @@ repositories {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     compileOnly("org.jetbrains:annotations:24.0.1")
-    implementation(files(
-        // Add the patched version if it exists, so we can get better IDE help.
+    // Add the patched version if it exists, so we can get better IDE help.
 //        file("$projectDir/lib/desktop-1.0-patched.jar").takeIf { it.exists() },
-        // base game
-        "$stsHome/desktop-1.0.jar",
-        // mods
-        findMod("BaseMod.jar"),
-        findMod("ModTheSpire.jar"),
-        findMod("StSLib.jar"),
-        findMod("downfall.jar"),
-        findMod("Bestiary.jar"),
-//        findMod("TS05_Marisa.jar"),
-    ))
+    // Base game
+    implementation(files("$stsHome/desktop-1.0.jar"))
+    // Mods, required and optional dependencies
+    implementation(files(modMeta.findMods(
+        "ModTheSpire.jar",
+        "BaseMod.jar",
+        "StSLib.jar",
+        "downfall.jar",
+        "Bestiary.jar",
+    )))
 }
 
 tasks.getByName<Test>("test") {
@@ -99,9 +87,7 @@ tasks.getByName<KotlinCompile>("compileKotlin") {
 
 tasks.register<Copy>("copySteamLibs") {
     description = "Copy libraries from the steam workshop to the local lib folder"
-    for (dep in WORKSHOP_IDS) {
-        from("$workshopDir/${dep.value}/${dep.key}")
-    }
+    from(*modMeta.findWorkshopMods(*ModMetaExtension.DEFAULT_MODS, "downfall.jar", "Bestiary.jar"))
     into("$rootDir/lib")
 }
 
@@ -110,7 +96,7 @@ tasks.register<Copy>("installJar") {
     group = "build"
     from(tasks.getByName<Jar>("jar").archiveFile)
     rename { "$modName.jar" }
-    into(modsDir)
+    into("${modMeta.stsHome.get()}/mods")
 }
 
 run {
@@ -234,6 +220,7 @@ run {
 
 tasks.register<IntellijRun>("genIntelliJRuns") {
     description = "Generate run configurations for IntelliJ"
+
     add {
         name = "Run MTS"
         jar {
@@ -292,24 +279,6 @@ tasks.register<AccessCheckTask>("optionalDependencyCheck") {
 
 // This is a bunch of helper functions and classes.
 
-
-fun findMod(name: String): File {
-    val workshopId = WORKSHOP_IDS[name]
-    val paths = listOf("$rootDir/libs", modsDir, "$workshopDir/$workshopId").map { file(it) }
-    for (p in paths) {
-        val child = p.resolve(name)
-        if (p.resolve(name).isFile) {
-            return child
-        }
-    }
-    throw FileNotFoundException(name)
-}
-
-fun getStsSteamHome(): String {
-    val macPath = "/SlayTheSpire.app/Contents/Resources"
-    return "$steamDir/common/SlayTheSpire" + if (Os.isFamily(Os.FAMILY_MAC)) macPath else ""
-}
-
 fun findJavaExe(javaHome: String): String {
     val exeWin = file("$javaHome/bin/java.exe")
     val exeNix = file("$javaHome/bin/java")
@@ -349,6 +318,7 @@ class RelicResizeFilter(`in`: Reader) : ImageFilter(`in`) {
         }
     }
 }
+
 
 open class MyImageCopy : ImageCopy() {
     init {

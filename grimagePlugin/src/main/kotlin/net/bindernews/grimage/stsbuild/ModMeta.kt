@@ -1,6 +1,7 @@
 package net.bindernews.grimage.stsbuild
 
 import org.gradle.api.Named
+import java.io.File
 import java.io.Serializable
 
 class ModMeta(private val name: String) : Named, Serializable {
@@ -27,4 +28,17 @@ class ModMeta(private val name: String) : Named, Serializable {
     }
 
     override fun getName(): String = name
+
+    /**
+     * Search in the given directory for one of the files in [fileNames].
+     */
+    fun searchIn(dir: File): File? {
+        for (n in fileNames) {
+            val child = dir.resolve(n)
+            if (child.isFile) {
+                return child
+            }
+        }
+        return null
+    }
 }
