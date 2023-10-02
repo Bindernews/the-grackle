@@ -1,5 +1,5 @@
 
-import net.bindernews.accesscheck.AccessCheckTask
+import net.bindernews.importcheck.ImportCheckTask
 import net.bindernews.grimage.*
 import net.bindernews.grimage.ext.drawImage
 import net.bindernews.grimage.ext.withGraphics
@@ -24,8 +24,8 @@ plugins {
     kotlin("jvm") version "1.5.32"
     id("co.uzzu.dotenv.gradle") version "2.0.0"
     id("io.freefair.lombok") version "6.6"
+    id("net.bindernews.importcheck") version "0.1.0"
     id("net.bindernews.grimage")
-    id("net.bindernews.accesscheck")
 }
 
 // Read user settings and add defaults
@@ -259,10 +259,10 @@ tasks.register("packagePatchedJar") {
     }
 }
 
-tasks.register<AccessCheckTask>("optionalDependencyCheck") {
+tasks.register<ImportCheckTask>("optionalDependencyCheck") {
     classPath.from(tasks.compileJava.get().destinationDirectory)
     classPath.from(tasks.compileKotlin.get().destinationDirectory)
-    check {
+    check("downfall") {
         filter.packages.add("net.bindernews.grackle")
         filter.excludedPackages.add("net.bindernews.grackle.downfall")
         deny("charbosses.*")

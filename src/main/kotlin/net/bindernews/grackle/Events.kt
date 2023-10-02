@@ -23,7 +23,5 @@ object Events {
     /** List of UI popups */
     @JvmStatic val popups: IHandlerList<IPopup> = HandlerList()
     /** Event for adding additional data to the metrics. */
-    @JvmStatic val metricsGather: TreeSet<IMetricsGather> = TreeSet()
-
-    fun interface IMetricsGather : Consumer<Metrics>, IPriority
+    @JvmStatic val metricsGather: IEventEmit<Metrics> = EventEmit()
 }

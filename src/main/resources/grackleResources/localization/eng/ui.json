@@ -3,7 +3,8 @@
     "TEXT_DICT": {
       "must_be_stance": "Must be in a stance.",
       "must_be_stance_err": "I must be in a stance NL to play this card.",
-      "double_aloft_damage": "Deals double damage while grackle:Aloft."
+      "double_aloft_damage": "Deals double damage while grackle:Aloft.",
+      "total_damage_desc": "(Total Damage: !grackle:magic2!)"
     }
   },
   "grackle:CardClickableLink": {

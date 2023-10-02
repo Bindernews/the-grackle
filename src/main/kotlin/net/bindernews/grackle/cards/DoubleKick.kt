@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.api.GCardTags
 import net.bindernews.grackle.cardmods.ExtraHitsMod
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.extraHits
@@ -24,7 +23,6 @@ class DoubleKick : BaseCard(C, VARS) {
             cost(1)
             damage(6, 9)
             hits(2)
-            tags(GCardTags.TAG_DAMAGE_TIP)
             addModifier(ExtraHitsMod())
         }
     }

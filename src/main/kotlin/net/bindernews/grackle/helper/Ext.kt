@@ -32,10 +32,10 @@ inline var AbstractCard.baseExtraHits: Int
     get() = ExtraHitsVariable.inst.baseValue(this)
     set(value) = ExtraHitsVariable.inst.setBaseValue(this, value)
 
-inline var BaseCard.magic2: Int
+inline var AbstractCard.magic2: Int
     get() = Magic2Var.inst.value(this)
     set(value) = Magic2Var.inst.setValue(this, value)
-inline var BaseCard.baseMagic2: Int
+inline var AbstractCard.baseMagic2: Int
     get() = Magic2Var.inst.baseValue(this)
     set(value) = Magic2Var.inst.setBaseValue(this, value)
 

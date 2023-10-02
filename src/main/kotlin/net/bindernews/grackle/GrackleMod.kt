@@ -181,12 +181,11 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                     }
                 }
 
-                Events.metricsGather.add { metrics ->
+                Events.metricsGather.on { metrics ->
                     val modVersion = modInfo?.ModVersion?.toString() ?: ""
                     metrics.addData("$MOD_ID:version", modVersion)
                     val modList = Loader.MODINFOS.map { it.ID + ":" + it.ModVersion }
                     metrics.addData("$MOD_ID:mods", modList)
-
                 }
 
                 // Find our mod info
