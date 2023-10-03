@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-class Entry<H> implements Comparable<Entry<H>> {
+class Entry<H> implements Comparable<Entry<H>>, IPriority<Entry<H>> {
     final H handler;
     final int priority;
 

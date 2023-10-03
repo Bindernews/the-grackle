@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
+import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.rooms.AbstractRoom
 import net.bindernews.grackle.GrackleMod
@@ -44,7 +45,7 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
 
     override fun atDamageReceive(damage: Float, type: DamageType?): Float {
         return if (type == DamageType.NORMAL) {
-            damage + (amount * receiveExtraDamage)
+            damage * damageMultiplier
         } else {
             damage
         }
@@ -83,14 +84,10 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
     companion object {
         @JvmField val POWER_ID = GrackleMod.makeId(BurningPower::class.java)
 
-        /** How much this is reduced by each turn.  */
-        var REDUCE_PER_TURN = 2
-
         /**
-         * Creatures with Burning will receive extra damage equal to the amount of burning multiplied by this value.
-         * Set to 0.0 to disable.
+         * Damage received multiplier, basically like vulnerable.
          */
-        var receiveExtraDamage: Float = 1.0f
+        var damageMultiplier: Float = 1.50f
 
         fun makeAction(
             source: AbstractCreature?, target: AbstractCreature, amount: Int

@@ -45,9 +45,7 @@ object ShouldUploadMetricData {
 @SpirePatch(clz = TipHelper::class, method = "render")
 object TipHelperOnRender {
     @JvmStatic fun Postfix(sb: SpriteBatch) {
-        popups.handlers.forEach { p ->
-            if (p.isEnabled()) p.render(sb)
-        }
+        popups.forEach { p -> if (p.isEnabled()) p.render(sb) }
     }
 }
 

@@ -98,11 +98,11 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
 
     override fun receivePostInitialize() {
         registerPowers()
-        popups.on(CardClickableLink.inst)
-        popups.on(MainMenuMetricsRequest.inst)
+        popups.add(CardClickableLink.inst)
+        popups.add(MainMenuMetricsRequest.inst)
 
         BaseMod.addSaveField<String>("$MOD_ID:version", object : CustomSavable<String> {
-            override fun onSave(): String = modInfo?.ModVersion.toString() ?: ""
+            override fun onSave(): String = modInfo?.ModVersion?.toString() ?: ""
             override fun onLoad(p0: String?) {}
         })
     }

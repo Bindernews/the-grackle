@@ -12,6 +12,12 @@
       "Gain %d Pecking Order when you exit this stance."
     ]
   },
+  "grackle:StanceNest": {
+    "NAME": "Nest",
+    "DESCRIPTION": [
+      "Gain %d energy when you enter this stance."
+    ]
+  },
   "grackle:StancePhoenix": {
     "NAME": "Phoenix",
     "DESCRIPTION": [
