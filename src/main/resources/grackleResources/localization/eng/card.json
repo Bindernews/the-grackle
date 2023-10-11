@@ -91,7 +91,7 @@
   },
   "grackle:EmbodyFire": {
     "NAME": "Embody Fire",
-    "DESCRIPTION": "Damage from grackle:Burning and NL Burn cards heals instead."
+    "DESCRIPTION": "At the start of your turn, apply !M! grackle:Burning to ALL enemies."
   },
   "grackle:EvasiveManeuvers": {
     "NAME": "Evasive Maneuvers",

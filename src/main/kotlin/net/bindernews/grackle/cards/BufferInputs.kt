@@ -2,7 +2,9 @@ package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
+import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
+import net.bindernews.grackle.helper.addModifier
 import net.bindernews.grackle.power.MultiHitPower
 
 class BufferInputs : BaseCard(C, VARS) {
@@ -14,7 +16,13 @@ class BufferInputs : BaseCard(C, VARS) {
         @JvmField val C = CardConfig("BufferInputs", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
         val VARS = CardVariables.config { c ->
             c.cost(1)
-            c.magic(2, 4)
+            c.magic(2, 3)
+            c.addModifier(AutoDescription())
+            c.onUpgrade {
+                it.selfRetain = true
+                it.retain = true
+                it.initializeDescription()
+            }
         }
     }
 }

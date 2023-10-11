@@ -11,7 +11,7 @@ interface StanceDelegate {
     fun onExitStance()
     fun atDamageGive(damage: Float, type: DamageType): Float
     fun atDamageReceive(damage: Float, damageType: DamageType): Float
-    fun onPlayCard(card: AbstractCard?)
+    fun onPlayCard(card: AbstractCard)
     fun update()
     fun updateAnimation()
     fun updateDescription()

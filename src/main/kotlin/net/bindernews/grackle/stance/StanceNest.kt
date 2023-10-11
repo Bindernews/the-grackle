@@ -34,7 +34,7 @@ class StanceNest : AbstractStance(), StanceDelegate {
     }
 
     companion object {
-        @JvmStatic val STANCE_ID = GrackleMod.makeId("StanceNest")
+        @JvmField val STANCE_ID = GrackleMod.makeId("StanceNest")
         @JvmStatic val STRINGS = CardCrawlGame.languagePack.getStanceString(STANCE_ID)!!
 
         /**

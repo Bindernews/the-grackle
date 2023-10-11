@@ -8,7 +8,7 @@
   "grackle:BurningPower": {
     "NAME": "Burning",
     "DESCRIPTIONS": [
-      "Receive 50% extra damage.",
+      "Receive %d%% extra damage.",
       "At the start of your turn, take #b",
       "At the start of its turn, takes #b",
       " damage, then reduce #yBurning by half."
@@ -26,7 +26,8 @@
   "grackle:EmbodyFirePower": {
     "NAME": "Embody Fire",
     "DESCRIPTIONS": [
-      "Damage from grackle:Burning and NL Burn cards heals instead."
+      "At the start of your turn, apply #b",
+      " #yBurning to ALL enemies."
     ]
   },
   "grackle:FiredUpPower": {

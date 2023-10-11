@@ -1,14 +1,15 @@
 package net.bindernews.grackle.cards
 
-import com.evacipated.cardcrawl.mod.stslib.cards.interfaces.BranchingUpgradesCard
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.cardmods.ExtraHitsMod
-import net.bindernews.grackle.helper.*
+import net.bindernews.grackle.helper.CardVariables
+import net.bindernews.grackle.helper.extraHits
+import net.bindernews.grackle.helper.hits
 
-class HenPeck : BaseCard(C, VARS), BranchingUpgradesCard {
+class HenPeck : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.BLUNT_LIGHT
         val hits = extraHits
@@ -17,28 +18,13 @@ class HenPeck : BaseCard(C, VARS), BranchingUpgradesCard {
         }
     }
 
-    override fun upgrade() {
-        if (!upgraded) {
-            if (isBranchUpgrade) {
-                BRANCH_UPGRADE.upgrade(this)
-            } else {
-                VARS.upgrade(this)
-            }
-        }
-    }
-
     companion object {
         @JvmStatic val C = CardConfig("HenPeck", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
         @JvmStatic val VARS = CardVariables().apply {
-            cost(1)
-            damage(4)
-            hits(3, 4)
+            cost(0)
+            damage(2, 4)
+            hits(2, 1)
             addModifier(ExtraHitsMod())
-        }
-
-        @JvmStatic val BRANCH_UPGRADE = CardVariables().apply {
-            cost(1, 0)
-            damage(4, 2)
         }
     }
 }

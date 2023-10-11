@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.powers.AbstractPower
+import com.megacrit.cardcrawl.powers.VulnerablePower
 import com.megacrit.cardcrawl.rooms.AbstractRoom
 import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.cardmods.EmbodyFireMod
@@ -68,7 +69,7 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
     }
 
     override fun updateDescription() {
-        description = strings.DESCRIPTIONS[0] + "\n"
+        description = strings.DESCRIPTIONS[0].format(damagePercent) + "\n"
         description += if (owner is AbstractPlayer) {
             strings.DESCRIPTIONS[1]
         } else {
@@ -87,7 +88,10 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
         /**
          * Damage received multiplier, basically like vulnerable.
          */
-        var damageMultiplier: Float = 1.50f
+        val damageMultiplier: Float
+            get() = (100f + damagePercent.toFloat()) / 100f
+        var damagePercent: Int = 50
+
 
         fun makeAction(
             source: AbstractCreature?, target: AbstractCreature, amount: Int

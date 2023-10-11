@@ -12,7 +12,7 @@ class Swoop : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField val C = CardConfig("Swoop", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
+        @JvmStatic val C = CardConfig("Swoop", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
         val VARS = CardVariables.config { c: CardVariables -> c.cost(2, 1) }
     }
 }

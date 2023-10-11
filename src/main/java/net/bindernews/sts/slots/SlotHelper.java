@@ -6,11 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.*;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import lombok.Data;
-import lombok.Getter;
 import net.bindernews.eventbus.EventEmit;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,13 +41,8 @@ public abstract class SlotHelper {
     protected float[] slotPositions = new float[0];
 
     /**
-     * Hitboxes for each slot.
-     */
-    protected ArrayList<Hitbox> hitboxes = new ArrayList<>();
-
-    /**
      * Calculate the positions of each slot, returning an array of {@code count * 2} size,
-     * containing pairs of positions, relative to the player's (x,y).
+     * containing pairs of positions.
      *
      * @param count How many slots there are
      * @return Array of (x, y) position pairs
@@ -76,6 +69,10 @@ public abstract class SlotHelper {
         return slotEnabled.length;
     }
 
+    /**
+     *
+     * @return the number of remaining slots that are enabled
+     */
     public int getSlotsRemaining() {
         int count = 0;
         for (boolean b : slotEnabled) {
@@ -98,7 +95,7 @@ public abstract class SlotHelper {
      */
     public void resetSlots() {
         Arrays.fill(slotEnabled, true);
-        Arrays.fill(slotDisplay, 0f);
+        Arrays.fill(slotDisplay, -1f);
     }
 
     /**
@@ -123,9 +120,6 @@ public abstract class SlotHelper {
      *
      */
     public void update() {
-        for (Hitbox hb : hitboxes) {
-            hb.update();
-        }
         final int count = getCount();
         final float dt = Gdx.graphics.getDeltaTime();
         for (int i = 0; i < count; i++) {
@@ -136,17 +130,11 @@ public abstract class SlotHelper {
     }
 
     /**
-     * @return the index of the hovered hitbox, or -1 if no hitboxes are currently hovered
+     * Render a tip near the mouse with the given header and body,
+     * adjusting for left and right side of the screen.
+     * @param header Tip header
+     * @param body Tip body
      */
-    public int getHoveredHitbox() {
-        for (int i = 0; i < hitboxes.size(); i++) {
-            if (hitboxes.get(i).hovered) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     public static void renderTip(String header, String body) {
         final float mx = (float) InputHelper.mX;
         final float tipY = (float) InputHelper.mY - (50f * Settings.scale);
@@ -168,21 +156,20 @@ public abstract class SlotHelper {
         final int count = getCount();
         for (int i = 0; i < count; i++) {
             Vector2 orbPos = new Vector2(slotPositions[i * 2], slotPositions[i * 2 + 1]).add(origin);
-            float displayVal = slotDisplay[i];
-            renderSlot(sb, orbPos, displayVal);
+            renderSlot(sb, orbPos, i);
         }
         // Reset color
         sb.setColor(1f, 1f, 1f, 1f);
     }
 
-    protected void renderSlot(@NotNull SpriteBatch sb, @NotNull Vector2 pos, float displayValue) {
-        float scale = Settings.scale;
+    protected void renderSlot(@NotNull SpriteBatch sb, @NotNull Vector2 pos, int index) {
+        final float displayValue = slotDisplay[index];
         Vector2 sz = getSlotSize();
 
         // Draw basic texture
-        TextureRegion tex0 = displayValue >= 1f ? texBright : texDark;
+        TextureRegion tex0 = displayValue < 0f ? texBright : texDark;
         sb.setColor(1f, 1f, 1f, 0.9f);
-        sb.draw(tex0, pos.x, pos.y, sz.x/2f, sz.y/2f, sz.x, sz.y, scale, scale, 0f);
+        drawCenteredTex(sb, tex0, pos, sz);
 
         // Draw overlay effect texture
         if (displayValue > 0f) {
@@ -193,12 +180,15 @@ public abstract class SlotHelper {
                 alpha = Interpolation.linear.apply(0.0f, 0.95f, (displayValue - 0.2f) / 0.2f);
             }
             sb.setColor(1f, 1f, 1f, alpha);
-            sb.draw(texOverlay, pos.x, pos.y, sz.x/2f, sz.y/2f, sz.x, sz.y, scale, scale, 0f);
+            drawCenteredTex(sb, texOverlay, pos, sz);
         }
     }
 
-    public List<Hitbox> getHitboxes() {
-        return hitboxes;
+    public static void drawCenteredTex(
+            @NotNull SpriteBatch sb, @NotNull TextureRegion tex, @NotNull Vector2 pos, @NotNull Vector2 size
+    ) {
+        final float scale = Settings.scale;
+        sb.draw(tex, pos.x, pos.y, size.x/2f, size.y/2f, size.x, size.y, scale, scale, 0f);
     }
 
     @Data

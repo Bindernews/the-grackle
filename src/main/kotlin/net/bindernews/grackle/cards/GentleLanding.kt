@@ -15,7 +15,11 @@ class GentleLanding : BaseCard(C, VARS) {
         @JvmStatic val C = CardConfig("GentleLanding", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         val VARS = CardVariables().apply {
             cost(1, 0)
-            onInit { it.exhaust = true; it.retain = true; }
+            onInit {
+                it.exhaust = true
+                it.retain = true
+                it.selfRetain = true
+            }
             addModifier(AutoDescription())
         }
     }

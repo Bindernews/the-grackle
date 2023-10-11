@@ -2,28 +2,35 @@ package net.bindernews.grackle
 
 import basemod.AutoAdd
 import basemod.BaseMod
+import basemod.ReflectionHacks
+import basemod.abstracts.CustomRelic
 import basemod.abstracts.CustomSavable
 import basemod.interfaces.*
 import com.badlogic.gdx.graphics.Texture
 import com.evacipated.cardcrawl.modthespire.Loader
 import com.evacipated.cardcrawl.modthespire.ModInfo
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.stream.JsonWriter
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.core.Settings
+import com.megacrit.cardcrawl.core.Settings.GameLanguage
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
+import com.megacrit.cardcrawl.localization.CardStrings
+import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.rooms.AbstractRoom
+import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.Grackle.Companion.register
 import net.bindernews.grackle.api.IMultiHitManager
 import net.bindernews.grackle.api.IPopup
 import net.bindernews.grackle.cards.*
-import net.bindernews.grackle.helper.MiscUtil
-import net.bindernews.grackle.helper.addData
-import net.bindernews.grackle.helper.fireheartGained
-import net.bindernews.grackle.helper.sendPost
+import net.bindernews.grackle.helper.*
 import net.bindernews.grackle.icons.registerIcons
 import net.bindernews.grackle.power.BasePower
 import net.bindernews.grackle.relics.BerserkerTotem
@@ -35,6 +42,10 @@ import net.bindernews.grackle.ui.MainMenuMetricsRequest
 import net.bindernews.grackle.variables.ExtraHitsVariable
 import net.bindernews.grackle.variables.Magic2Var
 import org.apache.logging.log4j.LogManager
+import java.io.File
+import java.lang.Appendable
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodType
 import java.util.stream.Stream
 
 @SpireInitializer
@@ -103,8 +114,14 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
 
         BaseMod.addSaveField<String>("$MOD_ID:version", object : CustomSavable<String> {
             override fun onSave(): String = modInfo?.ModVersion?.toString() ?: ""
-            override fun onLoad(p0: String?) {}
+            override fun onLoad(v: String?) {}
         })
+
+        File(System.getenv("GRACKLE_EXPORT_STRINGS")).let {
+            if (it.isDirectory) {
+                StringSaver(GameLanguage.ENG).exportStrings(it)
+            }
+        }
     }
 
     override fun receivePreUpdate() {
@@ -116,7 +133,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         val aa = AutoAdd(MOD_ID)
         aa.packageFilter(BasePower::class.java)
         for (c in MiscUtil.autoFindClasses(aa, AbstractPower::class.java)) {
-            BaseMod.addPower(c, MiscUtil.getPowerId(c))
+            BaseMod.addPower(c, MiscUtil.getObjectId(c))
         }
         log.debug(CO.REG_END, "powers")
     }
@@ -148,7 +165,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
     }
 
     companion object {
-        val log = LogManager.getLogger(GrackleMod::class.java)
+        val log = LogManager.getLogger(GrackleMod::class.java)!!
         const val MOD_ID = "grackle"
         private const val MOD_ID_COLON = "$MOD_ID:"
         const val MOD_RES = "grackleResources"
@@ -275,6 +292,18 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                     null
                 }
             }
+        }
+
+        /**
+         * Returns a list of classes extending [type] which are in the given package.
+         *
+         * @param type base type of classes to find
+         * @param packageClass Base package to search, or `null` to search the package of `type`
+         */
+        fun <T> autoFindClasses(type: Class<T>, packageClass: Class<*>?): List<Class<out T>> {
+            val aa = AutoAdd(MOD_ID)
+            aa.packageFilter(packageClass ?: type)
+            return MiscUtil.autoFindClasses(aa, type)
         }
 
         @JvmStatic val multiHitManager: IMultiHitManager

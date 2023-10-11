@@ -13,7 +13,7 @@
       "Burning",
       "burning"
     ],
-    "DESCRIPTION": "Burning targets take more attack damage and receive damage at the end of each turn."
+    "DESCRIPTION": "Burning targets take more attack damage and receive damage at the start of each turn."
   },
   {
     "PROPER_NAME": "Eagle",

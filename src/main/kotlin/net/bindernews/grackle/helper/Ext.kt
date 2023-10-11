@@ -3,8 +3,13 @@ package net.bindernews.grackle.helper
 import basemod.abstracts.AbstractCardModifier
 import basemod.helpers.CardModifierManager
 import basemod.ReflectionHacks
+import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText.CardStringsFlavorField
+import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText.PotionStringsFlavorField
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.localization.CardStrings
+import com.megacrit.cardcrawl.localization.PotionStrings
+import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.metrics.Metrics
 import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.cards.BaseCard
@@ -19,9 +24,6 @@ fun CardVariables.hits(base: Int, upg: Int = -1) {
 fun CardVariables.magic2(base: Int, upg: Int = -1) {
     add(Magic2Var.inst, base, upg)
 }
-
-//inline val CardStrings.flavorText: String
-//    get() = FlavorText.CardStringsFlavorField.flavor[this]
 
 inline fun <reified T: Any> makeId(clazz: KClass<T>): String = "grackle:" + clazz.simpleName
 
@@ -38,6 +40,13 @@ inline var AbstractCard.magic2: Int
 inline var AbstractCard.baseMagic2: Int
     get() = Magic2Var.inst.baseValue(this)
     set(value) = Magic2Var.inst.setBaseValue(this, value)
+
+inline var CardStrings.FLAVOR: String
+    get() = CardStringsFlavorField.flavor.get(this)
+    set(value) = CardStringsFlavorField.flavor.set(this, value)
+inline var PotionStrings.FLAVOR: String
+    get() = PotionStringsFlavorField.flavor.get(this)
+    set(value) = PotionStringsFlavorField.flavor.set(this, value)
 
 /**
  * Total amount of Fireheart gained this combat.

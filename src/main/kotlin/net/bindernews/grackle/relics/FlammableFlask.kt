@@ -34,7 +34,7 @@ class FlammableFlask : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.COMMON, L
     }
 
     companion object {
-        @JvmStatic val ID = makeId(FlammableFlask::class)
+        @JvmField val ID = makeId(FlammableFlask::class)
         val IMAGES = RelicHelper.loadImages(ID)
         @JvmStatic var EXTRA_AMOUNT = 1
     }

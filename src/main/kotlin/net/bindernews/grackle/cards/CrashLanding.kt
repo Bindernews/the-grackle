@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.stances.NeutralStance
-import net.bindernews.grackle.cardmods.AloftDmgUnaffectedMod
 import net.bindernews.grackle.helper.CardVariables
+import net.bindernews.grackle.helper.DescriptionBuilder
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 
 /**
@@ -20,12 +20,15 @@ class CrashLanding : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField
-        val C = CardConfig("CrashLanding", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY)
+        @JvmStatic val C = CardConfig("CrashLanding", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY)
         val VARS = CardVariables().apply {
             cost(1, -1)
             damage(8, 11)
-            addModifier(AloftDmgUnaffectedMod())
         }
+
+        val description = DescriptionBuilder.create()
+            .dealDamage("!D!").period().newline()
+            .exitStance().period()
+            .build()
     }
 }

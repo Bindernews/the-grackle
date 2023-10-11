@@ -17,5 +17,20 @@
       "Please enable metrics",
       "Please help us develop The Grackle by uploading run metrics."
     ]
+  },
+  "grackle:DescriptionBuilder": {
+    "TEXT_DICT": {
+      "start_of_turn": "at the start of your turn,",
+      "apply_power": "apply %s %s",
+      "deal_damage": "deal %s damage",
+      "to_all_enemies": "to ALL enemies",
+      "to_random_enemy": "to a random enemy",
+      "exit_stance": "exit your Stance",
+      "enter_stance": "enter %s Stance",
+      "n_times": "%s times",
+      "innate": "Innate",
+      "exhaust": "Exhaust",
+      "newline": " NL "
+    }
   }
 }

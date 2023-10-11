@@ -16,7 +16,10 @@ class MidairRefuel : BaseCard(C, VARS) {
             cost(0)
             magic(1)
             onInit { it.exhaust = true; }
-            onUpgrade { it.exhaust = false; }
+            onUpgrade {
+                it.exhaust = false
+                it.initializeDescription()
+            }
             addModifier(AutoDescription())
         }
     }

@@ -2,6 +2,8 @@ package net.bindernews.grackle.helper
 
 import basemod.AutoAdd
 import basemod.BaseMod
+import basemod.ReflectionHacks
+import basemod.abstracts.CustomRelic
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.evacipated.cardcrawl.mod.stslib.Keyword
@@ -12,6 +14,10 @@ import com.megacrit.cardcrawl.core.Settings.GameLanguage
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.localization.*
 import com.megacrit.cardcrawl.powers.AbstractPower
+import com.megacrit.cardcrawl.stances.AbstractStance
+import net.bindernews.grackle.cards.BaseCard
+import net.bindernews.grackle.cards.CardConfig
+import net.bindernews.grackle.power.BasePower
 import org.apache.logging.log4j.LogManager
 import java.util.*
 
@@ -117,22 +123,36 @@ object MiscUtil {
         return Gdx.files.internal("$base/$langStr/${fileName}.json").takeIf { it.exists() }
     }
 
-    fun getPowerId(clazz: Class<out AbstractPower>): String {
-        try {
-            return clazz.getDeclaredField("POWER_ID").get(null) as String
-        } catch (ignore: Exception) { }
-        try {
-            return clazz.getDeclaredMethod("getPowerId").invoke(null) as String
-        } catch (ignore: Exception) { }
-        try {
-            val ctor = clazz.getDeclaredConstructor(AbstractCreature::class.java, Int::class.javaPrimitiveType)
-            return ctor.newInstance(null, 0).ID
-        } catch (ignore: Exception) { }
-        try {
-            val ctor = clazz.getDeclaredConstructor()
-            return ctor.newInstance().ID
-        } catch (ignore: Exception) { }
-        throw RuntimeException("cannot determine power ID for class $clazz")
+    fun getObjectId(clz: Class<*>): String {
+        if (AbstractPower::class.java.isAssignableFrom(clz)) {
+            @Suppress("UNCHECKED_CAST")
+            val powerClazz = clz as Class<out AbstractPower>
+            try {
+                 return ReflectionHacks.getPrivateStatic(clz, "POWER_ID")
+            } catch (_: Exception) {}
+            try {
+                val ctor = powerClazz.getDeclaredConstructor(AbstractCreature::class.java, Int::class.javaPrimitiveType)
+                return ctor.newInstance(null, 0).ID
+            } catch (_: Exception) { }
+            try {
+                val ctor = powerClazz.getDeclaredConstructor()
+                return ctor.newInstance().ID
+            } catch (_: Exception) { }
+        } else if (BaseCard::class.java.isAssignableFrom(clz)) {
+            try {
+                return ReflectionHacks.getPrivateStatic<CardConfig>(clz, "C").ID
+            } catch (_: Exception) {}
+        } else if (CustomRelic::class.java.isAssignableFrom(clz)) {
+            try {
+                return ReflectionHacks.getPrivateStatic(clz, "ID")
+            } catch (_: Exception) {}
+        } else if (AbstractStance::class.java.isAssignableFrom(clz)) {
+            try {
+                return ReflectionHacks.getPrivateStatic(clz, "STANCE_ID")
+            } catch (_: Exception) {}
+        }
+        // Fallback returns empty string
+        return ""
     }
 
     fun <T> autoFindClasses(aa: AutoAdd, type: Class<T>): List<Class<out T>> {

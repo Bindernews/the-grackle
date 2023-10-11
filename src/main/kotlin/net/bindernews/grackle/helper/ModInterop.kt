@@ -1,14 +1,6 @@
 package net.bindernews.grackle.helper
 
 import basemod.BaseMod
-import charbosses.actions.common.EnemyGainEnergyAction
-import charbosses.actions.common.EnemyMakeTempCardInDiscardAction
-import charbosses.actions.unique.EnemyChangeStanceAction
-import charbosses.bosses.AbstractCharBoss
-import charbosses.cards.AbstractBossCard
-import charbosses.powers.general.EnemyDrawCardNextTurnPower
-import charbosses.powers.general.EnemyVigorPower
-import charbosses.relics.AbstractCharbossRelic
 import com.evacipated.cardcrawl.modthespire.Loader
 import com.megacrit.cardcrawl.actions.AbstractGameAction
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
@@ -28,6 +20,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic
 import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.eventbus.Lazy
 import net.bindernews.grackle.cards.BaseCard
+import net.bindernews.grackle.downfall.DownfallInterop
 import java.util.*
 import java.util.function.Function
 import java.util.stream.Stream
@@ -161,89 +154,21 @@ open class ModInterop {
         } else null
     }
 
-    class DownfallInterop : ModInterop() {
-        private val powerReplacements = HashMap<String, Class<out AbstractPower>>()
-
-        init {
-            initPowerReplacements()
-        }
-
-        override fun getStance(c: AbstractCreature): AbstractStance? {
-            return if (c is AbstractCharBoss) {
-                c.stance
-            } else next!!.getStance(c)
-        }
-
-        override fun changeStance(c: AbstractCreature, stanceId: String): AbstractGameAction? {
-            return if (c is AbstractCharBoss) {
-                EnemyChangeStanceAction(stanceId)
-            } else next!!.changeStance(c, stanceId)
-        }
-
-        override fun getRelics(c: AbstractCreature): Stream<AbstractRelic> {
-            return if (c is AbstractCharBoss) {
-                c.relics.stream().map { r: AbstractCharbossRelic -> r }
-            } else next!!.getRelics(c)
-        }
-
-        override fun getPowerClass(c: AbstractCreature, powerId: String): Class<out AbstractPower>? {
-            if (c is AbstractCharBoss) {
-                val altClz = powerReplacements[powerId]
-                if (altClz != null) {
-                    return altClz
-                }
-            }
-            return next!!.getPowerClass(c, powerId)
-        }
-
-        override fun getCardOwner(card: AbstractCard?): AbstractCreature {
-            return if (card is AbstractBossCard) {
-                card.owner
-            } else next!!.getCardOwner(card)!!
-        }
-
-        override fun actionMakeTempCardInDiscard(
-            c: AbstractCreature?,
-            card: AbstractCard?,
-            amount: Int
-        ): AbstractGameAction? {
-            return if (c is AbstractCharBoss) {
-                EnemyMakeTempCardInDiscardAction(card, amount)
-            } else next!!.actionMakeTempCardInDiscard(c, card, amount)
-        }
-
-        override fun actionGainEnergy(c: AbstractCreature?, amount: Int): AbstractGameAction? {
-            return if (c is AbstractCharBoss) {
-                EnemyGainEnergyAction(c as AbstractCharBoss?, amount)
-            } else next!!.actionGainEnergy(c, amount)
-        }
-
-        override fun getEnergy(c: AbstractCreature): EnergyManager? {
-            return if (c is AbstractCharBoss) {
-                c.energy
-            } else next!!.getEnergy(c)
-        }
-
-        private fun initPowerReplacements() {
-            val m = powerReplacements
-            m["Draw Card"] = EnemyDrawCardNextTurnPower::class.java
-            m["Vigor"] = EnemyVigorPower::class.java
-        }
-    }
-
     companion object {
         private val log = org.apache.logging.log4j.LogManager.getLogger(ModInterop::class.java)
 
         private val inst = Lazy.of {
             var chain = Function { iop: ModInterop -> iop }
-            if (Loader.isModLoaded("downfall")) {
-                // Use a dedicated lambda, so it doesn't load DownfallInterop unless the lambda is run
-                chain = chain.andThen { iop: ModInterop ->
-                    val v = DownfallInterop()
-                    v.next = iop
-                    v
-                }
+            // Use a dedicated lambda, so it doesn't load DownfallInterop unless the lambda is run
+            val downfallLoader = Function { iop: ModInterop ->
+                val v = DownfallInterop()
+                v.next = iop
+                v
             }
+            if (Loader.isModLoaded("downfall")) {
+                chain = chain.andThen(downfallLoader)
+            }
+            // Add more loader chains here for other interop
             chain.apply(ModInterop())
         }
 
