@@ -77,6 +77,10 @@
     "NAME": "Defend",
     "DESCRIPTION": "Gain !B! Block."
   },
+  "grackle:Dive": {
+    "NAME": "Dive",
+    "DESCRIPTION": "--generated--"
+  },
   "grackle:DoubleKick": {
     "NAME": "Double Kick",
     "DESCRIPTION": "Deal !D! damage !grackle:hits! times."
@@ -177,11 +181,14 @@
   },
   "grackle:PeckingOrder": {
     "NAME": "Pecking Order",
-    "DESCRIPTION": "TODO"
+    "DESCRIPTION": "--generated--"
   },
   "grackle:Perch": {
     "NAME": "Perch",
-    "DESCRIPTION": "Gain 1 [E]. NL Gain !M! Vigor. NL Enter Eagle stance."
+    "DESCRIPTION": "--generated--",
+    "EXTENDED_DESCRIPTION": [
+      "Gain 1 [E]. NL Gain !M! Vigor. NL Enter Eagle stance."
+    ]
   },
   "grackle:PhoenixFeather": {
     "NAME": "Phoenix Feather",
@@ -214,6 +221,11 @@
     "NAME": "Snap, Grackle, Pop",
     "DESCRIPTION": "Apply !M! Vulnerable NL and !grackle:magic2! Weak.",
     "FLAVOR": "Did you know grackles like rice krispies? ~corndan"
+  },
+  "grackle:SpeedForm": {
+    "NAME": "Speed Form",
+    "DESCRIPTION": "At the start of your turn, gain !M! grackle:Speed.",
+    "FLAVOR": "Speedy speed bird!"
   },
   "grackle:Strike_GK": {
     "NAME": "Strike",

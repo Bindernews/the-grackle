@@ -1,17 +1,16 @@
 package net.bindernews.grackle.cards
 
+import com.megacrit.cardcrawl.actions.common.DrawCardAction
 import com.megacrit.cardcrawl.core.AbstractCreature
-import com.megacrit.cardcrawl.powers.watcher.VigorPower
+import com.megacrit.cardcrawl.stances.NeutralStance
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.DescriptionBuilder
-import net.bindernews.grackle.stance.StanceEagle
 
-class Perch : BaseCard(C, VARS) {
+class Dive : BaseCard(C, VARS) {
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
-        addToBot(iop.actionGainEnergy(p, cost))
-        addToBot(iop.actionApplyPower(p, p, VigorPower.POWER_ID, magicNumber))
-        addToBot(iop.changeStance(p, StanceEagle.STANCE_ID))
+        addToBot(DrawCardAction(p, magicNumber))
+        addToBot(iop.changeStance(p, NeutralStance.STANCE_ID))
     }
 
     override fun initializeDescription() {
@@ -20,16 +19,15 @@ class Perch : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField val C = CardConfig("Perch", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmField val C = CardConfig("Dive", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         @JvmField val VARS = CardVariables().apply {
             cost(1)
             magic(2, 3)
         }
 
         val RAW_DESCRIPTION = DescriptionBuilder.create()
-            .tr("gain").add("1 [E]").period(true)
-            .tr("gain").add("!M! Vigor").period(true)
-            .enterStance("Eagle").period(false)
+            .tr("draw").add("!M!").tr("cards").period(true)
+            .exitStance().period(false)
             .build()
     }
 }

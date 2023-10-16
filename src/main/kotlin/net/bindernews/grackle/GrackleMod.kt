@@ -65,7 +65,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         const val REG_END = "done registering {}"
 
         /** Metrics upload url  */
-        const val METRICS_URL = "https://stats.grackle.bindernews.net"
+        const val METRICS_URL = "https://grackle.bindernews.net/metrics"
 
         /** Sound effect ID */
         val SFX_QUACK = makeId("DUCK")
@@ -117,9 +117,10 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
             override fun onLoad(v: String?) {}
         })
 
-        File(System.getenv("GRACKLE_EXPORT_STRINGS")).let {
-            if (it.isDirectory) {
-                StringSaver(GameLanguage.ENG).exportStrings(it)
+        System.getenv("GRACKLE_EXPORT_STRINGS")?.let {
+            val f = File(it)
+            if (f.isDirectory) {
+                StringSaver(GameLanguage.ENG).exportStrings(f)
             }
         }
     }

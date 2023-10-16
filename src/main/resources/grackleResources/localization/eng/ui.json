@@ -30,6 +30,12 @@
       "n_times": "%s times",
       "innate": "Innate",
       "exhaust": "Exhaust",
+      "ethereal": "Ethereal",
+      "retain": "Retain",
+      "temporary": "temporary",
+      "gain": "gain",
+      "draw": "draw",
+      "cards": "cards",
       "newline": " NL "
     }
   }

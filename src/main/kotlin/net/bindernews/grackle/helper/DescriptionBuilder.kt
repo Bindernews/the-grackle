@@ -9,33 +9,37 @@ open class DescriptionBuilder protected constructor() {
 
     /**
      * When true, adding a fragment prepends a space.
-     * Reset to `true` after every call to [addFragment].
+     * Reset to `true` after every call to [add].
      */
     var insertSpace: Boolean = false
 
     fun atStartOfTurn(): DescriptionBuilder {
-        return addFragment(strings["start_of_turn"]!!)
+        return add(strings["start_of_turn"]!!)
+    }
+
+    fun gainPower(amount: String, power: String): DescriptionBuilder {
+        return add(strings["gain_power"]!!.format(amount, power))
     }
 
     fun applyPower(amount: String, power: String): DescriptionBuilder {
-        return addFragment(strings["apply_power"]!!.format(amount, power))
+        return add(strings["apply_power"]!!.format(amount, power))
     }
 
     fun dealDamage(amount: String): DescriptionBuilder {
-        return addFragment(strings["deal_damage"]!!.format(amount))
+        return add(strings["deal_damage"]!!.format(amount))
     }
 
     fun toAllEnemies(): DescriptionBuilder {
-        return addFragment(strings["to_all_enemies"]!!)
+        return add(strings["to_all_enemies"]!!)
     }
 
     fun nTimes(amount: String): DescriptionBuilder {
-        return addFragment(strings["n_times"]!!.format(amount))
+        return add(strings["n_times"]!!.format(amount))
     }
 
     fun period(newLine: Boolean = true): DescriptionBuilder {
         insertSpace = false
-        addFragment(".")
+        add(".")
         if (newLine) {
             newline()
         }
@@ -45,31 +49,28 @@ open class DescriptionBuilder protected constructor() {
 
     fun comma(): DescriptionBuilder {
         insertSpace = false
-        return addFragment(",")
+        return add(",")
     }
 
-    fun innate(): DescriptionBuilder {
-        return addFragment(strings["innate"]!!)
-    }
-
-    fun exhaust(): DescriptionBuilder {
-        return addFragment(strings["exhaust"]!!)
+    fun tr(key: String): DescriptionBuilder {
+        val msg = strings[key] ?: throw RuntimeException("unknown translation key '%s'".format(key))
+        return add(msg)
     }
 
     fun newline(): DescriptionBuilder {
         val mod = modifier
         modifier = StringModifier.NONE
-        addFragment(strings["newline"]!!)
+        add(strings["newline"]!!)
         modifier = mod
         return this
     }
 
     fun enterStance(stance: String): DescriptionBuilder {
-        return addFragment(strings["enter_stance"]!!.format(stance))
+        return add(strings["enter_stance"]!!.format(stance))
     }
 
     fun exitStance(): DescriptionBuilder {
-        return addFragment(strings["exit_stance"]!!)
+        return add(strings["exit_stance"]!!)
     }
 
     fun withModifier(m: StringModifier): DescriptionBuilder {
@@ -77,7 +78,7 @@ open class DescriptionBuilder protected constructor() {
         return this
     }
 
-    fun addFragment(s: String): DescriptionBuilder {
+    fun add(s: String): DescriptionBuilder {
         // If user is explicitly adding spaces, don't do it automatically.
         if (s.startsWith(" ")) {
             insertSpace = false
@@ -104,5 +105,36 @@ open class DescriptionBuilder protected constructor() {
             return DescriptionBuilder()
         }
     }
+}
 
+enum class StringModifier {
+    NONE,
+    /**
+     * Lowercase the first character of the string.
+     */
+    LOWERCASE_FIRST,
+    /**
+     * Uppercase the first character of the string.
+     */
+    UPPERCASE_FIRST;
+
+    fun apply(s: String): String {
+        return when (this) {
+            NONE -> s
+            LOWERCASE_FIRST -> {
+                if (!s[0].isLowerCase()) {
+                    s[0].lowercaseChar() + s.substring(1)
+                } else {
+                    s
+                }
+            }
+            UPPERCASE_FIRST -> {
+                if (!s[0].isUpperCase()) {
+                    s[0].uppercaseChar() + s.substring(1)
+                } else {
+                    s
+                }
+            }
+        }
+    }
 }

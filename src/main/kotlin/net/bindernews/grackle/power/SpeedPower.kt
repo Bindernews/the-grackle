@@ -1,21 +1,16 @@
 package net.bindernews.grackle.power
 
-import com.megacrit.cardcrawl.actions.common.ReducePowerAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.variables.ExtraHitsVariable
 import net.bindernews.grackle.variables.ExtraHitsVariable.Companion.addPowerAmount
 
-class PeckingOrderPower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID) {
+class SpeedPower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID) {
     init {
         setOwnerAmount(owner, amount)
-        isTurnBased = true
-        loadRegion("ai")
+        type = PowerType.BUFF
         updateDescription()
-    }
-
-    override fun atEndOfRound() {
-        addToBot(ReducePowerAction(owner, owner, this, 1))
+        loadRegion("energized_blue");
     }
 
     override fun updateDescription() {
@@ -23,7 +18,7 @@ class PeckingOrderPower(owner: AbstractCreature, amount: Int) : BasePower(POWER_
     }
 
     companion object {
-        @JvmField val POWER_ID = GrackleMod.makeId(PeckingOrderPower::class.java)
+        @JvmField val POWER_ID = GrackleMod.makeId(SpeedPower::class.java)
 
         init {
             ExtraHitsVariable.onApplyPowers.on(-5, addPowerAmount(POWER_ID))

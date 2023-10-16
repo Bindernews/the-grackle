@@ -48,5 +48,13 @@
       "peck"
     ],
     "DESCRIPTION": "Increases number of hits for next multi-hit attacks."
+  },
+  {
+    "PROPER_NAME": "Speed",
+    "NAMES": [
+      "Speed",
+      "speed"
+    ],
+    "DESCRIPTION": "Increases number of hits for multi-hit attacks."
   }
 ]

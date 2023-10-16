@@ -27,7 +27,7 @@ class CrashLanding : BaseCard(C, VARS) {
         }
 
         val description = DescriptionBuilder.create()
-            .dealDamage("!D!").period().newline()
+            .dealDamage("!D!").period()
             .exitStance().period()
             .build()
     }

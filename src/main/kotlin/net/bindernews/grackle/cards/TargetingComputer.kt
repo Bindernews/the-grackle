@@ -12,7 +12,7 @@ class TargetingComputer : BaseCard(C, VARS) {
         @JvmField val C = CardConfig("TargetingComputer", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         val VARS = CardVariables.config { c ->
             c.cost(1)
-            c.magic(2, 4)
+            c.magic(1, 3)
         }
     }
 }

@@ -1,17 +1,24 @@
 package net.bindernews.grackle.stance
 
+import com.megacrit.cardcrawl.actions.common.GainEnergyAction
+import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.core.CardCrawlGame
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.GrackleMod
+import net.bindernews.grackle.helper.MiscUtil.addToBot
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
+import net.bindernews.grackle.power.StanceAloftPower
 import java.util.*
 
 class StanceAloft : AbstractStance(), StanceDelegate {
+    var owner: AbstractCreature = AbstractDungeon.player
+
     /**
      * Used for temporary damage calculations.
      */
@@ -25,17 +32,18 @@ class StanceAloft : AbstractStance(), StanceDelegate {
 
     override fun getDescription(): String = description
 
-    override fun atDamageReceive(damage: Float, damageType: DamageType): Float {
-        return if (damageType == DamageType.NORMAL && enabled) {
-            damage / 2f
-        } else {
-            damage
-        }
+    override fun onEnterStance() {
+        addToBot(iop().actionApplyPower(owner, owner, StanceAloftPower.POWER_ID, -1))
+    }
+
+    override fun onExitStance() {
+        addToBot(RemoveSpecificPowerAction(owner, owner, StanceAloftPower.POWER_ID))
+        addToBot(GainEnergyAction(energyGain))
     }
 
     override fun atDamageGive(damage: Float, type: DamageType): Float {
         return if (type == DamageType.NORMAL && enabled) {
-            damage / 2f
+            damage * 0.75f
         } else {
             damage
         }
@@ -49,15 +57,7 @@ class StanceAloft : AbstractStance(), StanceDelegate {
         @JvmField val STANCE_ID = GrackleMod.makeId(StanceAloft::class.java)
         @JvmStatic val STRINGS = CardCrawlGame.languagePack.getStanceString(STANCE_ID)
 
-        /**
-         * List of stance IDs that count as "aloft".
-         */
-        @JvmStatic val ALOFT_STANCES: MutableList<String> = ArrayList()
-
-        init {
-            ALOFT_STANCES.add(STANCE_ID)
-            ALOFT_STANCES.add(StancePhoenix.STANCE_ID)
-        }
+        @JvmField var energyGain = 1
 
         /**
          * If the player is aloft then returns true, otherwise sets `cantUseMessage` and returns false.
@@ -74,14 +74,8 @@ class StanceAloft : AbstractStance(), StanceDelegate {
         }
 
         fun isAloft(p: AbstractCreature?): Boolean {
-            if (p == null) {
-                return false
-            }
-            return iop().getStance(p)?.let { isAloft(it) } ?: false
-        }
-
-        fun isAloft(s: AbstractStance): Boolean {
-            return ALOFT_STANCES.contains(s.ID)
+            val stanceId = p?.let { iop().getStance(it) }?.ID ?: ""
+            return stanceId == STANCE_ID
         }
 
         fun getInstanceOn(c: AbstractCreature): Optional<StanceAloft> {

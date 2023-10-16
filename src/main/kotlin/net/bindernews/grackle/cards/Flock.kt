@@ -24,7 +24,7 @@ class Flock : BaseCard(C, VARS) {
         @JvmField val C = CardConfig("Flock", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
         val VARS = CardVariables().apply {
             cost(1, -1)
-            damage(2, 4)
+            damage(2, 3)
             magic(1, -1)
             hits(1, 2)
             addModifier(ExtraHitsMod())

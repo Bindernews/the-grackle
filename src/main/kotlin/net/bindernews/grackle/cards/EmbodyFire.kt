@@ -35,7 +35,7 @@ class EmbodyFire : BaseCard(C, VARS) {
 
         private fun makeDescription(upg: Boolean): String {
             return DescriptionBuilder.create()
-                .also { if (upg) it.innate().period(true) }
+                .also { if (upg) it.tr("innate").period(true) }
                 .atStartOfTurn()
                 .applyPower("!M!", "grackle:Burning")
                 .toAllEnemies()

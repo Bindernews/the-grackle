@@ -33,8 +33,6 @@ class Paratrooper : BaseCard(C, VARS) {
             c.damage(7, 12)
             c.hits(1, -1)
             c.addModifier(ExtraHitsMod())
-            c.addModifier(RequireStanceMod())
-            c.addModifier(AloftDmgUnaffectedMod())
         }
     }
 }

@@ -2,7 +2,7 @@
   "grackle:StanceAloft": {
     "NAME": "Aloft",
     "DESCRIPTION": [
-      "Your Attacks deal half damage and you take half damage from attacks.",
+      "Gain 75% more block and deal 25% less damage. Gain 1 energy when you exit this stance.",
       "Card may only be played while aloft"
     ]
   },

@@ -22,8 +22,8 @@ class HenPeck : BaseCard(C, VARS) {
         @JvmStatic val C = CardConfig("HenPeck", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
         @JvmStatic val VARS = CardVariables().apply {
             cost(0)
-            damage(2, 4)
-            hits(2, 1)
+            damage(2, 3)
+            hits(2, 2)
             addModifier(ExtraHitsMod())
         }
     }

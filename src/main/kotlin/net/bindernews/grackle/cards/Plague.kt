@@ -1,9 +1,11 @@
 package net.bindernews.grackle.cards
 
+import basemod.AutoAdd
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.power.PlaguePower
 
+@AutoAdd.Ignore
 class Plague : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(iop.actionApplyPower(p, p, PlaguePower.POWER_ID, magicNumber))

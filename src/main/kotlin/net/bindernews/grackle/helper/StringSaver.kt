@@ -67,34 +67,3 @@ interface ISaveStrings<T> {
     fun saveStrings(lang: GameLanguage): T
 }
 
-enum class StringModifier {
-    NONE,
-    /**
-     * Lowercase the first character of the string.
-     */
-    LOWERCASE_FIRST,
-    /**
-     * Uppercase the first character of the string.
-     */
-    UPPERCASE_FIRST;
-
-    fun apply(s: String): String {
-        return when (this) {
-            NONE -> s
-            LOWERCASE_FIRST -> {
-                if (!s[0].isLowerCase()) {
-                    s[0].lowercaseChar() + s.substring(1)
-                } else {
-                    s
-                }
-            }
-            UPPERCASE_FIRST -> {
-                if (!s[0].isUpperCase()) {
-                    s[0].uppercaseChar() + s.substring(1)
-                } else {
-                    s
-                }
-            }
-        }
-    }
-}

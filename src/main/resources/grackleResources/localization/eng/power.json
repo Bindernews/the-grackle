@@ -54,12 +54,6 @@
       "The next multi-attack you play will hit %d extra times."
     ]
   },
-  "grackle:PeckingOrderPower": {
-    "NAME": "Pecking Order",
-    "DESCRIPTIONS": [
-      "Multi-hit attacks will hit %d extra time(s)."
-    ]
-  },
   "grackle:PlaguePower": {
     "NAME": "Plague",
     "DESCRIPTIONS": [
@@ -72,6 +66,18 @@
       "Upgrade a random card at the end of combat. NL Removed if you lose HP."
     ]
   },
+  "grackle:SpeedFormPower": {
+    "NAME": "Speed Form",
+    "DESCRIPTIONS": [
+      "At the start of your turn, gain %d #ySpeed."
+    ]
+  },
+  "grackle:SpeedPower": {
+    "NAME": "Speed",
+    "DESCRIPTIONS": [
+      "Multi-hit attacks will hit %d extra time(s)."
+    ]
+  },
   "grackle:SwoopPower": {
     "NAME": "Swoop",
     "DESCRIPTIONS": [
@@ -82,6 +88,12 @@
     "NAME": "Targeting Computer",
     "DESCRIPTIONS": [
       "Gain %d Vigor at the start of each turn."
+    ]
+  },
+  "grackle:TempSpeedPower": {
+    "NAME": "Temporary Speed",
+    "DESCRIPTIONS": [
+      "Multi-hit attacks will hit %d extra time(s)."
     ]
   },
   "grackle:TempThornsPower": {

@@ -15,7 +15,7 @@ import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.helper.MiscUtil.addToBot
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.power.MultiHitPower
-import net.bindernews.grackle.power.PeckingOrderPower
+import net.bindernews.grackle.power.SpeedPower
 import net.bindernews.grackle.relics.BorrowedMoment
 
 class StanceEagle : AbstractStance(), StanceDelegate {
@@ -49,7 +49,7 @@ class StanceEagle : AbstractStance(), StanceDelegate {
     }
 
     override fun onExitStance() {
-        addToBot(iop().actionApplyPower(owner, owner, PeckingOrderPower.POWER_ID, BUF_AMOUNT))
+        addToBot(iop().actionApplyPower(owner, owner, SpeedPower.POWER_ID, BUF_AMOUNT))
     }
 
     override fun onPlayCard(card: AbstractCard) {
