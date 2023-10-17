@@ -22,7 +22,7 @@ class SelfBurn : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("SelfBurn", CardType.SKILL, CardRarity.COMMON, CardTarget.NONE)
+        @JvmField val C = CardConfig("SelfBurn", CardType.SKILL, CardRarity.COMMON, CardTarget.NONE)
         val VARS = CardVariables().apply {
             cost(0)
             magic(2, 3)

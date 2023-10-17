@@ -27,12 +27,12 @@ class CopyCrow : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("CopyCrow", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("CopyCrow", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        val VARS = CardVariables().apply {
             cost(1, 0)
             onInit { it.exhaust = true }
             addModifier(AutoDescription())
         }
-        @JvmStatic var allowDuplicateTypes = arrayOf(CardType.SKILL, CardType.POWER, CardType.ATTACK)
+        var allowDuplicateTypes = arrayOf(CardType.SKILL, CardType.POWER, CardType.ATTACK)
     }
 }

@@ -19,8 +19,8 @@ class SnapGracklePop : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("SnapGracklePop", CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("SnapGracklePop", CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY)
+        @JvmField val VARS = CardVariables().apply {
             cost(1)
             magic(2, 3)
             magic2(1, 2)

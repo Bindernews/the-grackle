@@ -33,6 +33,7 @@
       "v_hits": "!grackle:hits!",
       "magic2": "!grackle:magic2!",
       "Speed": "grackle:Speed",
+      "costs_n": "it costs %d",
       "Required": "Required"
     }
   }

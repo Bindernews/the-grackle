@@ -12,7 +12,7 @@ class Forage : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("Forage", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmField val C = CardConfig("Forage", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         val VARS = CardVariables().apply {
             cost(1)
             magic(3, 4)

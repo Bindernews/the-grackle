@@ -17,8 +17,8 @@ class WildFire : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("WildFire", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("WildFire", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
+        @JvmField val VARS = CardVariables().apply {
             cost(2)
             magic(8, 10)
             magic2(2, -1)

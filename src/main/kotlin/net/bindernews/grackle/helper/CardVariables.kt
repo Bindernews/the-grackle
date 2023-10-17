@@ -107,7 +107,7 @@ class CardVariables : ICardInitializer {
     }
 
     companion object {
-        fun config(c: Consumer<CardVariables>): CardVariables {
+        @JvmStatic fun config(c: Consumer<CardVariables>): CardVariables {
             val cv = CardVariables()
             c.accept(cv)
             return cv

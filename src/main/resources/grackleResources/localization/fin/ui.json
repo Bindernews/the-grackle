@@ -11,6 +11,7 @@
       "draw": "nosta",
       "cards": "korttia",
       "Speed": "grackle:Speed",
+      "costs_n": "kortin hinta on %d",
       "NL": " NL "
     }
   }

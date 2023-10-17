@@ -14,7 +14,7 @@ class Cackle : BaseCard(C, VARS) {
 
     companion object {
         @JvmField val C = CardConfig("Cackle", CardType.SKILL, CardRarity.COMMON, CardTarget.ENEMY)
-        val VARS = CardVariables.config { c ->
+        @JvmField val VARS = CardVariables.config { c ->
             c.cost(0, -1)
             c.magic(1, 2)
         }

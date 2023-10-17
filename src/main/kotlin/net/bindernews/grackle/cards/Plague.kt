@@ -10,8 +10,8 @@ class Plague : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("Plague", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("Plague", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
+        @JvmField val VARS = CardVariables().apply {
             cost(3, 2)
             magic(1, -1)
         }

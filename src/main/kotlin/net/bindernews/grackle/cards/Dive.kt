@@ -8,7 +8,7 @@ import net.bindernews.grackle.helper.magic2
 import net.bindernews.grackle.power.SpeedPower
 
 class Dive : BaseCard(C, VARS) {
-    override val descriptionSource get() = descriptionBuilder
+    override val descriptionSource get() = DESCRIPTION_BUILDER
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(DrawCardAction(p, magicNumber))
@@ -23,7 +23,7 @@ class Dive : BaseCard(C, VARS) {
             magic2(2, 4)
         }
 
-        val descriptionBuilder = DescriptionBuilder.create {
+        @JvmField val DESCRIPTION_BUILDER = DescriptionBuilder.create {
             when (lang) {
                 else -> format("{Draw} !M! {cards}. NL {Gain} {magic2} {Speed}.")
             }

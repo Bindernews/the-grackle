@@ -14,12 +14,12 @@ class Tailwind : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("Tailwind", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("Tailwind", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
+        val VARS = CardVariables().apply {
             cost(1)
             magic(1, -1)
             onUpgrade {
-                it.isInnate = true;
+                it.isInnate = true
                 it.initializeDescription()
             }
             addModifier(AutoDescription())

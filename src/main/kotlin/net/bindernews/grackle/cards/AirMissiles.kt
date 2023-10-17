@@ -28,7 +28,7 @@ class AirMissiles : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("AirMissiles", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY)
+        @JvmField val C = CardConfig("AirMissiles", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY)
         val VARS = CardVariables().apply {
             cost(2)
             damage(8, 14)

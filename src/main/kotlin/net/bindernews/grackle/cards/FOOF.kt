@@ -17,7 +17,7 @@ class FOOF : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("FOOF", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.ALL)
+        @JvmField val C = CardConfig("FOOF", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.ALL)
         val VARS = CardVariables.config { c ->
             c.cost(1)
             c.magic(10, 16)

@@ -25,7 +25,7 @@ class InFlightService : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("InFlightService", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
+        @JvmField val C = CardConfig("InFlightService", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
         val VARS = CardVariables().apply {
             cost(2, 1)
             magic(5)

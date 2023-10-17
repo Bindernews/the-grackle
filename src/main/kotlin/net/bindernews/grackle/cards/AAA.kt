@@ -13,7 +13,7 @@ class AAA : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("AAA", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        @JvmField val C = CardConfig("AAA", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
         val VARS = CardVariables().apply {
             cost(2)
             damage(14, 20)

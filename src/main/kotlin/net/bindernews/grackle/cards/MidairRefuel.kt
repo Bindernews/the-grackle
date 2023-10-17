@@ -11,8 +11,8 @@ class MidairRefuel : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("MidairRefuel", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("MidairRefuel", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
+        val VARS = CardVariables().apply {
             cost(0)
             magic(1)
             onInit { it.exhaust = true; }

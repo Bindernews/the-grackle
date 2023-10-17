@@ -15,9 +15,8 @@ class Strike_GK : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField
-        val C = CardConfig("Strike_GK", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY)
-        val VARS = CardVariables.config { c ->
+        @JvmField val C = CardConfig("Strike_GK", CardType.ATTACK, CardRarity.BASIC, CardTarget.ENEMY)
+        @JvmField val VARS = CardVariables.config { c ->
             c.cost(1, -1)
             c.damage(6, 9)
             c.tags(CardTags.STARTER_STRIKE, CardTags.STRIKE)

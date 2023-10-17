@@ -19,8 +19,8 @@ class Suplex : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("Suplex", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY)
-        val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("Suplex", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY)
+        @JvmField val VARS = CardVariables().apply {
             cost(2)
             magic(4, 6)
             damage(4, -1)

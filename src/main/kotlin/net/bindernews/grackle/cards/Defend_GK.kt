@@ -12,8 +12,7 @@ class Defend_GK : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField
-        val C = CardConfig("Defend_GK", CardType.SKILL, CardRarity.BASIC, CardTarget.SELF)
+        @JvmField val C = CardConfig("Defend_GK", CardType.SKILL, CardRarity.BASIC, CardTarget.SELF)
         val VARS = CardVariables.config { c ->
             c.cost(1, -1)
             c.block(5, 8)

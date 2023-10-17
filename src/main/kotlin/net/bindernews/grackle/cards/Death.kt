@@ -16,7 +16,7 @@ import net.bindernews.grackle.power.SpeedPower
 import net.bindernews.grackle.vfx.MyGiantTextEffect
 
 class Death : BaseCard(C, VARS) {
-    override val descriptionSource get() = descriptionBuilder
+    override val descriptionSource get() = DESCRIPTION_BUILDER
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         if (!SpeedPower.tryBoost(p, this)) {
@@ -54,7 +54,7 @@ class Death : BaseCard(C, VARS) {
             }
         }
 
-        val descriptionBuilder = DescriptionBuilder.create {
+        val DESCRIPTION_BUILDER = DescriptionBuilder.create {
             val judgementDesc = CardCrawlGame.languagePack.getCardStrings("Judgement").DESCRIPTION
             judgementDesc + format(" NL {Exhaust}. NL {speed_boost} {Required}.")
         }

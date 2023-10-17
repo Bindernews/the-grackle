@@ -8,7 +8,7 @@ import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.power.TempThornsPower
 
 class WindowPain : BaseCard(C, VARS) {
-    override val descriptionSource get() = AerialAdvantage.DESCRIPTION_BUILDER
+    override val descriptionSource get() = DESCRIPTION_BUILDER
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(GainBlockAction(p, p, block))
@@ -16,14 +16,14 @@ class WindowPain : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("WindowPain", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
-        val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("WindowPain", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
+        @JvmField val VARS = CardVariables().apply {
             cost(1)
             block(6, 10)
             magic(2, 3)
         }
 
-        val DESCRIPTION_BUILDER = DescriptionBuilder.create {
+        @JvmField val DESCRIPTION_BUILDER = DescriptionBuilder.create {
             format("{Gain} !B! {Block}. NL {Gain} !M! {temporary} {Thorns}.")
         }
     }

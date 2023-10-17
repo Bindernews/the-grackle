@@ -12,7 +12,7 @@ class GentleLanding : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("GentleLanding", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmField val C = CardConfig("GentleLanding", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         val VARS = CardVariables().apply {
             cost(1, 0)
             onInit {

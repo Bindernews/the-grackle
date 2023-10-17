@@ -13,8 +13,8 @@ class ResearchAndDev : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("ResearchAndDev", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
-        @JvmStatic val VARS = CardVariables().apply {
+        @JvmField val C = CardConfig("ResearchAndDev", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
+        @JvmField val VARS = CardVariables().apply {
             cost(2)
             magic(1, -1)
             onUpgrade { addModifier(it, RetainMod()) }

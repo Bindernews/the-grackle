@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import net.bindernews.grackle.cardmods.ExtraHitsMod
 import net.bindernews.grackle.helper.*
-import net.bindernews.grackle.power.SpeedPower
 
 class DoubleKick : BaseCard(C, VARS) {
     override val descriptionSource get() = descriptionBuilder
@@ -39,7 +38,7 @@ class DoubleKick : BaseCard(C, VARS) {
         }
 
         val descriptionBuilder = DescriptionBuilder.create {
-            format("{Deal} !D! {damage} {v_hits} {times}. NL {speed_boost} NL +1 extra hit.")
+            format("{Deal} !D! {damage} {v_hits} {times}. NL {speed_boost} NL +$EXTRA_HITS extra hit.")
         }
     }
 }
