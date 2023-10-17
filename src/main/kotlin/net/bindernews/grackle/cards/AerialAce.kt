@@ -10,7 +10,7 @@ import net.bindernews.grackle.helper.DescriptionBuilder
 import net.bindernews.grackle.helper.speedBoost
 
 class AerialAce : BaseCard(C, VARS) {
-    override val descriptionSource = DESCRIPTION_BUILDER
+    override val descriptionSource get() = DESCRIPTION_BUILDER
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(DamageAction(m, DamageInfo(p, damage, damageType), AttackEffect.SLASH_DIAGONAL))
@@ -32,7 +32,7 @@ class AerialAce : BaseCard(C, VARS) {
         }
 
         val DESCRIPTION_BUILDER = DescriptionBuilder.create {
-            format("{Deal} !D! {damage}. NL {speed_boost} NL {+costs_n}.").format(0)
+            format("{Deal} !D! {damage}. NL {speed_boost} NL {+costs_n:0}.", 0)
         }
     }
 }

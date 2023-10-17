@@ -74,11 +74,17 @@ open class DescriptionBuilder protected constructor(protected val buildFn: Build
         return fmt.replace(formatRegex) { match ->
             val modifiers = match.groupValues[1]
             val key = match.groupValues[2]
+            val formatParam = match.groupValues[3]
             // If the key is an int, lookup in params array, otherwise lookup in strings
             var outStr = key.toIntOrNull()?.let { params[it].toString() }
                 ?: strings[key]
                 ?: lookupText(key)
                 ?: throw RuntimeException("invalid format key '%s'".format(key))
+            // Format string parameterization.
+            if (formatParam.isNotEmpty()) {
+                val paramIndex = formatParam.substring(1).toInt()
+                outStr = String.format(outStr, params[paramIndex])
+            }
             // Apply modifiers
             for (c in modifiers) {
                 val mod = when (c) {
@@ -156,7 +162,7 @@ open class DescriptionBuilder protected constructor(protected val buildFn: Build
             return m
         }
 
-        private val formatRegex = Regex("""(?<!\\)\{([+-]*)(\w+)}""")
+        private val formatRegex = Regex("""(?<!\\)\{([+-]*)(\w+)(:\w+)?}""")
 
         @JvmStatic fun create(text: Array<String>, buildFn: BuildFn): DescriptionBuilder {
             val b = DescriptionBuilder(buildFn)

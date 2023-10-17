@@ -54,6 +54,12 @@ class CardVariables : ICardInitializer {
     fun cost(base: Int, upg: Int = -1) { add(vCost, base, upg) }
     fun damage(base: Int, upg: Int = -1) { add(vDamage, base, upg) }
     fun magic(base: Int, upg: Int = -1) { add(vMagic, base, upg) }
+    @Suppress("UNUSED")
+    fun exhaustive(base: Int, upg: Int) { add(vExhaustive, base, upg) }
+    @Suppress("UNUSED")
+    fun refund(base: Int, upg: Int) { add(vRefund, base, upg) }
+    @Suppress("UNUSED")
+    fun persist(base: Int, upg: Int) { add(vPersist, base, upg) }
 
     fun multiDamage(base: Boolean, upg: Boolean) {
         initList.add { fIsMultiDamage[it] = base }
