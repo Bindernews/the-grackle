@@ -4,9 +4,9 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.ExtraHitsMod
 import net.bindernews.grackle.cardmods.SuplexMod
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.hits
 import net.bindernews.grackle.power.MultiHitPower
 

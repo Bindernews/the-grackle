@@ -56,5 +56,14 @@
       "speed"
     ],
     "DESCRIPTION": "Increases number of hits for multi-hit attacks."
+  },
+  {
+    "PROPER_NAME": "Speed Boost",
+    "NAMES": [
+      "Speed Boost",
+      "Speed_Boost",
+      "speed_boost"
+    ],
+    "DESCRIPTION": "Consume Speed to trigger bonus effects."
   }
 ]

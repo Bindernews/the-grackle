@@ -16,13 +16,17 @@ import net.bindernews.grackle.cards.BaseCard
 import net.bindernews.grackle.patches.Fields
 import net.bindernews.grackle.variables.ExtraHitsVariable
 import net.bindernews.grackle.variables.Magic2Var
+import net.bindernews.grackle.variables.SpeedBoostVar
 import kotlin.reflect.KClass
 
-fun CardVariables.hits(base: Int, upg: Int = -1) {
+fun CardVariables.hits(base: Int, upg: Int) {
     add(ExtraHitsVariable.inst, base, upg)
 }
-fun CardVariables.magic2(base: Int, upg: Int = -1) {
+fun CardVariables.magic2(base: Int, upg: Int) {
     add(Magic2Var.inst, base, upg)
+}
+fun CardVariables.speedBoost(base: Int, upg: Int) {
+    add(SpeedBoostVar.inst, base, upg)
 }
 
 inline fun <reified T: Any> makeId(clazz: KClass<T>): String = "grackle:" + clazz.simpleName

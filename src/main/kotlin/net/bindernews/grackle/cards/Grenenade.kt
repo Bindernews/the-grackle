@@ -53,7 +53,7 @@ class Grenenade : BaseCard(C) {
         // Odd upgrades (1st, 3rd, etc.) will upgrade hit count
         // Even upgrades will upgrade damage amount
         if (timesUpgraded % 2 == 0) {
-            upgradeDamage(2)
+            upgradeDamage(3)
         } else {
             ExtraHitsVariable.inst.upgrade(this, 1)
         }

@@ -4,17 +4,13 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.DescriptionBuilder
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
-import net.bindernews.grackle.helper.StringModifier
 import net.bindernews.grackle.power.EmbodyFirePower
 
 class EmbodyFire : BaseCard(C, VARS) {
+    override val descriptionSource get() = descriptionBuilder
+
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(iop().actionApplyPower(p, p, EmbodyFirePower.POWER_ID, magicNumber))
-    }
-
-    override fun initializeDescription() {
-        rawDescription = if (upgraded) descriptions[1] else descriptions[0]
-        super.initializeDescription()
     }
 
     companion object {
@@ -28,19 +24,11 @@ class EmbodyFire : BaseCard(C, VARS) {
             }
         }
 
-        val descriptions = arrayOf(
-            makeDescription(false),
-            makeDescription(true),
-        )
-
-        private fun makeDescription(upg: Boolean): String {
-            return DescriptionBuilder.create()
-                .also { if (upg) it.tr("innate").period(true) }
-                .atStartOfTurn()
-                .applyPower("!M!", "grackle:Burning")
-                .toAllEnemies()
-                .period(false)
-                .build()
+        val descriptionBuilder = DescriptionBuilder.create { upg ->
+            val innate = if (upg) format("{Innate}. NL ") else ""
+            when (lang) {
+                else -> innate + format("{+start_of_turn} apply !M! grackle:Burning to ALL enemies.")
+            }
         }
     }
 }

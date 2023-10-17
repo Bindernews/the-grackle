@@ -32,5 +32,11 @@
     "DESCRIPTIONS": [
       "Gain 1 energy, add a Burn to your hand at the start of each turn."
     ]
+  },
+  "grackle:SlipstreamEngine": {
+    "NAME": "Slipstream Engine",
+    "DESCRIPTIONS": [
+      "Gain 1 grackle:Speed when you play a Skill."
+    ]
   }
 }

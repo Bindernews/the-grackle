@@ -2,29 +2,20 @@ package net.bindernews.grackle
 
 import basemod.AutoAdd
 import basemod.BaseMod
-import basemod.ReflectionHacks
-import basemod.abstracts.CustomRelic
 import basemod.abstracts.CustomSavable
 import basemod.interfaces.*
 import com.badlogic.gdx.graphics.Texture
 import com.evacipated.cardcrawl.modthespire.Loader
 import com.evacipated.cardcrawl.modthespire.ModInfo
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.stream.JsonWriter
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.core.Settings
 import com.megacrit.cardcrawl.core.Settings.GameLanguage
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
-import com.megacrit.cardcrawl.localization.CardStrings
-import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.rooms.AbstractRoom
-import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.Grackle.Companion.register
 import net.bindernews.grackle.api.IMultiHitManager
@@ -33,19 +24,14 @@ import net.bindernews.grackle.cards.*
 import net.bindernews.grackle.helper.*
 import net.bindernews.grackle.icons.registerIcons
 import net.bindernews.grackle.power.BasePower
-import net.bindernews.grackle.relics.BerserkerTotem
-import net.bindernews.grackle.relics.FlammableFlask
-import net.bindernews.grackle.relics.LoftwingFeather
-import net.bindernews.grackle.relics.SimmeringHeat
+import net.bindernews.grackle.relics.*
 import net.bindernews.grackle.ui.CardClickableLink
 import net.bindernews.grackle.ui.MainMenuMetricsRequest
 import net.bindernews.grackle.variables.ExtraHitsVariable
 import net.bindernews.grackle.variables.Magic2Var
+import net.bindernews.grackle.variables.SpeedBoostVar
 import org.apache.logging.log4j.LogManager
 import java.io.File
-import java.lang.Appendable
-import java.lang.invoke.MethodHandles
-import java.lang.invoke.MethodType
 import java.util.stream.Stream
 
 @SpireInitializer
@@ -92,7 +78,8 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
             BerserkerTotem(),
             FlammableFlask(),
             LoftwingFeather(),
-            SimmeringHeat()
+            SimmeringHeat(),
+            SlipstreamEngine(),
         ).forEach { BaseMod.addRelicToCustomPool(it, Grackle.Co.COLOR_BLACK) }
         log.debug(CO.REG_END, "relics")
     }
@@ -143,6 +130,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         log.debug(CO.REG_START, "dynamic variables")
         BaseMod.addDynamicVariable(ExtraHitsVariable.inst)
         BaseMod.addDynamicVariable(Magic2Var.inst)
+        BaseMod.addDynamicVariable(SpeedBoostVar.inst)
         log.debug(CO.REG_END, "dynamic variables")
     }
 
@@ -222,7 +210,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 AAA(),
                 AerialAce(),
                 AerialAdvantage(),
-                AirToGroundMissiles(),
+                AirMissiles(),
                 BePrepared(),
                 BombingRun(),
                 BufferInputs(),
@@ -233,6 +221,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 CrashLanding(),
                 Death(),
                 Defend_GK(),
+                Dive(),
                 DoubleKick(),
                 Duck(),
                 EagleEye(),
@@ -265,6 +254,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 Scratch(),
                 SelfBurn(),
                 SnapGracklePop(),
+                SpeedForm(),
                 Strike_GK(),
                 SummonEgrets(),
                 Suplex(),

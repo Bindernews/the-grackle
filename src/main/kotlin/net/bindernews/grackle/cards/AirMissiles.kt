@@ -6,14 +6,15 @@ import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.cardmods.DoubleAloftDamageMod
 import net.bindernews.grackle.cardmods.ExtraHitsMod
-import net.bindernews.grackle.cardmods.RequireStanceMod
 import net.bindernews.grackle.helper.CardVariables
+import net.bindernews.grackle.helper.DescriptionBuilder
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.helper.hits
 
-class AirToGroundMissiles : BaseCard(C, VARS) {
+class AirMissiles : BaseCard(C, VARS) {
+    override val descriptionSource get() = DESCRIPTION_BUILDER
+
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val fx = AttackEffect.SLASH_HORIZONTAL
         val hits = extraHits
@@ -27,15 +28,17 @@ class AirToGroundMissiles : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmStatic val C = CardConfig("AirToGroundMissiles", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY)
+        @JvmStatic val C = CardConfig("AirMissiles", CardType.ATTACK, CardRarity.COMMON, CardTarget.ALL_ENEMY)
         val VARS = CardVariables().apply {
             cost(2)
             damage(8, 14)
             hits(1, -1)
             multiDamage(true, true)
             addModifier(ExtraHitsMod())
-            addModifier(RequireStanceMod())
-            addModifier(DoubleAloftDamageMod())
+        }
+
+        val DESCRIPTION_BUILDER = DescriptionBuilder.create {
+            format("{Deal} !D! {damage} {v_hits} {times} {to_all_enemies}.")
         }
     }
 }

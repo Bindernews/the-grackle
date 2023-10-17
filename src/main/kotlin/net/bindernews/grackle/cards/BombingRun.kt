@@ -2,8 +2,8 @@ package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.ExtraHitsMod
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.helper.hits

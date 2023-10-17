@@ -62,8 +62,3 @@ class StringSaver(val lang: GameLanguage) {
         }
     }
 }
-
-interface ISaveStrings<T> {
-    fun saveStrings(lang: GameLanguage): T
-}
-

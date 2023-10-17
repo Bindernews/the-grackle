@@ -1,21 +1,27 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.ExhaustMod
 import com.badlogic.gdx.graphics.Color
 import com.megacrit.cardcrawl.actions.animations.VFXAction
 import com.megacrit.cardcrawl.actions.common.InstantKillAction
 import com.megacrit.cardcrawl.actions.utility.WaitAction
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
+import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect
-import net.bindernews.grackle.cardmods.RequireStanceMod
 import net.bindernews.grackle.helper.CardVariables
-import net.bindernews.grackle.stance.StanceAloft
+import net.bindernews.grackle.helper.DescriptionBuilder
+import net.bindernews.grackle.helper.speedBoost
+import net.bindernews.grackle.power.SpeedPower
 import net.bindernews.grackle.vfx.MyGiantTextEffect
 
 class Death : BaseCard(C, VARS) {
+    override val descriptionSource get() = descriptionBuilder
+
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
+        if (!SpeedPower.tryBoost(p, this)) {
+            return
+        }
         if (m != null) {
             addToBot(VFXAction(WeightyImpactEffect(m.hb.cX, m.hb.cY, Color.GOLD.cpy())))
             addToBot(WaitAction(0.8F))
@@ -28,16 +34,29 @@ class Death : BaseCard(C, VARS) {
     }
 
     override fun canUse(p: AbstractPlayer, m: AbstractMonster?): Boolean {
-        return StanceAloft.checkPlay(this, p, m)
+        if (!SpeedPower.canBoost(p, this)) {
+            cantUseMessage = SpeedPower.needMoreSpeed
+            return false
+        }
+        return super.canUse(p, m)
     }
+
+    override fun isBonusActive(): Boolean = isBonusActive(owner!!)
 
     companion object {
         @JvmField val C = CardConfig("Death", CardType.SKILL, CardRarity.RARE, CardTarget.ENEMY)
         val VARS = CardVariables().apply {
-            cost(1)
+            cost(0)
             magic(40, 60)
-            addModifier(ExhaustMod())
-            addModifier(RequireStanceMod())
+            speedBoost(20, -1)
+            onInit {
+                it.exhaust = true
+            }
+        }
+
+        val descriptionBuilder = DescriptionBuilder.create {
+            val judgementDesc = CardCrawlGame.languagePack.getCardStrings("Judgement").DESCRIPTION
+            judgementDesc + format(" NL {Exhaust}. NL {speed_boost} {Required}.")
         }
     }
 }

@@ -1,14 +1,10 @@
 package net.bindernews.grackle.power
 
 import com.megacrit.cardcrawl.core.AbstractCreature
-import com.megacrit.cardcrawl.core.Settings.GameLanguage
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
-import com.megacrit.cardcrawl.localization.PowerStrings
 import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.helper.DescriptionBuilder
-import net.bindernews.grackle.helper.ISaveStrings
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
-import java.lang.RuntimeException
 
 class EmbodyFirePower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID) {
     init {
@@ -31,25 +27,16 @@ class EmbodyFirePower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID
     }
 
     override fun updateDescription() {
-        description = rawDescription.format(amount)
+        description = descriptionBuilder.get(false).format(amount)
     }
 
-    companion object : ISaveStrings<PowerStrings> {
+    companion object {
         @JvmField val POWER_ID = GrackleMod.makeId(EmbodyFirePower::class.java)
 
-        val rawDescription = DescriptionBuilder.create()
-            .atStartOfTurn()
-            .applyPower("#b%d", "#yBurning")
-            .toAllEnemies()
-            .period(false)
-            .build()
-
-        override fun saveStrings(lang: GameLanguage): PowerStrings = PowerStrings().apply {
-            NAME = when (lang) {
-                GameLanguage.ENG -> "Embody Fire"
-                else -> throw RuntimeException("unsupported language")
+        val descriptionBuilder = DescriptionBuilder.create {
+            when (lang) {
+                else -> format("{+start_of_turn} apply #b%d #yBurning to ALL enemies.")
             }
-            DESCRIPTIONS = arrayOf(rawDescription)
         }
     }
 }

@@ -68,8 +68,4 @@ abstract class AbstractSimpleVariable(
         return f
     }
 
-    /**
-     * The backing field type that stores field data.
-     */
-    data class VariableInst(var value: Int = -1, var baseValue: Int = -1, var upgraded: Boolean = false)
 }

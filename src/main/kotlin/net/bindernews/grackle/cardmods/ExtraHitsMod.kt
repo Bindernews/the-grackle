@@ -1,6 +1,7 @@
 package net.bindernews.grackle.cardmods
 
 import basemod.abstracts.AbstractCardModifier
+import com.badlogic.gdx.graphics.Color
 import com.megacrit.cardcrawl.actions.utility.UseCardAction
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
@@ -31,9 +32,7 @@ class ExtraHitsMod(private val showTotalDamage: Boolean = true) : AbstractCardMo
         }
     }
 
-    override fun isInherent(card: AbstractCard): Boolean {
-        return true
-    }
+    override fun isInherent(card: AbstractCard): Boolean = true
 
     override fun onApplyPowers(card: AbstractCard) {
         ExtraHitsVariable.inst.applyPowers(card)

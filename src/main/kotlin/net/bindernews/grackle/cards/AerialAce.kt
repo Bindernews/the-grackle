@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.actions.common.DamageAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.cardmods.AloftDmgUnaffectedMod
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.DoubleAloftDamageMod
+import net.bindernews.grackle.helper.CardVariables
 
 class AerialAce : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {

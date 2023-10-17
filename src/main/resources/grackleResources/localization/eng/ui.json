@@ -20,23 +20,20 @@
   },
   "grackle:DescriptionBuilder": {
     "TEXT_DICT": {
-      "start_of_turn": "at the start of your turn,",
-      "apply_power": "apply %s %s",
-      "deal_damage": "deal %s damage",
+      "start_of_turn": "at the start of your turn",
+      "end_of_turn": "at the end of your turn",
       "to_all_enemies": "to ALL enemies",
       "to_random_enemy": "to a random enemy",
       "exit_stance": "exit your Stance",
       "enter_stance": "enter %s Stance",
-      "n_times": "%s times",
-      "innate": "Innate",
-      "exhaust": "Exhaust",
-      "ethereal": "Ethereal",
-      "retain": "Retain",
+      "speed_boost": "grackle:Speed_Boost !grackle:speedBoost!:",
       "temporary": "temporary",
-      "gain": "gain",
-      "draw": "draw",
       "cards": "cards",
-      "newline": " NL "
+      "times": "times",
+      "v_hits": "!grackle:hits!",
+      "magic2": "!grackle:magic2!",
+      "Speed": "grackle:Speed",
+      "Required": "Required"
     }
   }
 }

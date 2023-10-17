@@ -4,9 +4,9 @@ import com.megacrit.cardcrawl.actions.common.ApplyPowerAction
 import com.megacrit.cardcrawl.actions.common.GainBlockAction
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.BlurPower
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.actions.SoundAction
+import net.bindernews.grackle.helper.CardVariables
 
 class Duck : BaseCard(C, VARS) {
     /**

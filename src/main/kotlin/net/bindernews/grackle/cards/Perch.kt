@@ -4,19 +4,15 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.powers.watcher.VigorPower
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.DescriptionBuilder
-import net.bindernews.grackle.stance.StanceEagle
+import net.bindernews.grackle.power.SpeedPower
 
 class Perch : BaseCard(C, VARS) {
+    override val descriptionSource get() = descriptionBuilder
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(iop.actionGainEnergy(p, cost))
         addToBot(iop.actionApplyPower(p, p, VigorPower.POWER_ID, magicNumber))
-        addToBot(iop.changeStance(p, StanceEagle.STANCE_ID))
-    }
-
-    override fun initializeDescription() {
-        rawDescription = RAW_DESCRIPTION
-        super.initializeDescription()
+        addToBot(iop.actionApplyPower(p, p, SpeedPower.POWER_ID, magicNumber))
     }
 
     companion object {
@@ -26,10 +22,10 @@ class Perch : BaseCard(C, VARS) {
             magic(2, 3)
         }
 
-        val RAW_DESCRIPTION = DescriptionBuilder.create()
-            .tr("gain").add("1 [E]").period(true)
-            .tr("gain").add("!M! Vigor").period(true)
-            .enterStance("Eagle").period(false)
-            .build()
+        val descriptionBuilder = DescriptionBuilder.create {
+            when (lang) {
+                else -> format("{Gain} [E] , !M! {Vigor}, !M! {Speed}.")
+            }
+        }
     }
 }

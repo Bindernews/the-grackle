@@ -2,32 +2,31 @@ package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.actions.common.DrawCardAction
 import com.megacrit.cardcrawl.core.AbstractCreature
-import com.megacrit.cardcrawl.stances.NeutralStance
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.DescriptionBuilder
+import net.bindernews.grackle.helper.magic2
+import net.bindernews.grackle.power.SpeedPower
 
 class Dive : BaseCard(C, VARS) {
+    override val descriptionSource get() = descriptionBuilder
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(DrawCardAction(p, magicNumber))
-        addToBot(iop.changeStance(p, NeutralStance.STANCE_ID))
-    }
-
-    override fun initializeDescription() {
-        rawDescription = RAW_DESCRIPTION
-        super.initializeDescription()
+        addToBot(iop.actionApplyPower(p, p, SpeedPower.POWER_ID, magic2))
     }
 
     companion object {
-        @JvmField val C = CardConfig("Dive", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmField val C = CardConfig("Dive", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
         @JvmField val VARS = CardVariables().apply {
-            cost(1)
-            magic(2, 3)
+            cost(0)
+            magic(1, 2)
+            magic2(2, 4)
         }
 
-        val RAW_DESCRIPTION = DescriptionBuilder.create()
-            .tr("draw").add("!M!").tr("cards").period(true)
-            .exitStance().period(false)
-            .build()
+        val descriptionBuilder = DescriptionBuilder.create {
+            when (lang) {
+                else -> format("{Draw} !M! {cards}. NL {Gain} {magic2} {Speed}.")
+            }
+        }
     }
 }

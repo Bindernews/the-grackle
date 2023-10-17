@@ -313,8 +313,8 @@ class RelicResizeFilter(`in`: Reader) : ImageFilter(`in`) {
         private val imgSize = Dimension(128, 128)
         private val innerSize = Dimension(80, 80)
         private val relicArea = Rectangle(innerSize).apply {
-            x += imgSize.width - innerSize.width
-            y += imgSize.height - innerSize.height
+            x += (imgSize.width - innerSize.width) / 2
+            y += (imgSize.height - innerSize.height) / 2
         }
     }
 }

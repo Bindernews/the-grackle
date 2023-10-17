@@ -73,7 +73,7 @@ class ExtraHitsVariable : AbstractSimpleVariable(Fields.extraHits, VariableInst(
          * Indicates that the card supports multi-hit.
          */
         @SpireEnum lateinit var GK_MULTI_HIT: AbstractCard.CardTags
-        @JvmField var inst = ExtraHitsVariable()
+        @JvmField val inst = ExtraHitsVariable()
         @JvmField val onApplyPowers = EventEmit<HitCountEvent>()
 
         /**

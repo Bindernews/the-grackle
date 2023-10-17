@@ -4,8 +4,8 @@ import com.megacrit.cardcrawl.actions.unique.WhirlwindAction
 import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.monsters.AbstractMonster
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.cardmods.ExtraHitsMod
+import net.bindernews.grackle.helper.CardVariables
 
 class SummonEgrets : BaseCard(C, VARS) {
     override fun use(p: AbstractPlayer, m: AbstractMonster) {

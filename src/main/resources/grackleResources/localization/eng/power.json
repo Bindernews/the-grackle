@@ -75,7 +75,8 @@
   "grackle:SpeedPower": {
     "NAME": "Speed",
     "DESCRIPTIONS": [
-      "Multi-hit attacks will hit %d extra time(s)."
+      "%d Speed. Provides %d #yDexterity. Consumed to power #ySpeed-Boost effects.",
+      "I need more Speed!"
     ]
   },
   "grackle:SwoopPower": {

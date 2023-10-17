@@ -18,6 +18,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary.LibraryType
 import com.megacrit.cardcrawl.helpers.FontHelper
 import com.megacrit.cardcrawl.screens.CharSelectInfo
 import net.bindernews.grackle.cards.*
+import net.bindernews.grackle.relics.SlipstreamEngine
 
 class Grackle(name: String?) : CustomPlayer(
     name, Co.GRACKLE, Co.ORB_TEXTURES, Co.RES_IMAGES_CHAR + "/orb/vfx.png",
@@ -102,7 +103,7 @@ class Grackle(name: String?) : CustomPlayer(
         )
     }
 
-    override fun getStartingRelics(): ArrayList<String> = arrayListOf("Black Star")
+    override fun getStartingRelics(): ArrayList<String> = arrayListOf(SlipstreamEngine.ID)
 
     override fun getLoadout(): CharSelectInfo {
         return CharSelectInfo(
@@ -119,7 +120,7 @@ class Grackle(name: String?) : CustomPlayer(
      * Match and keep event card
      */
     override fun getStartCardForEvent(): AbstractCard {
-        return Flock()
+        return Takeoff()
     }
 
     override fun getCardTrailColor(): Color = Co.COLOR_FX
@@ -147,9 +148,7 @@ class Grackle(name: String?) : CustomPlayer(
         return STRINGS.TEXT[1]
     }
 
-    override fun getSlashAttackColor(): Color {
-        return Co.COLOR_FX
-    }
+    override fun getSlashAttackColor(): Color = Co.COLOR_FX
 
     override fun getSpireHeartSlashEffect(): Array<AttackEffect> =
         arrayOf(AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY, AttackEffect.BLUNT_LIGHT, AttackEffect.BLUNT_HEAVY,

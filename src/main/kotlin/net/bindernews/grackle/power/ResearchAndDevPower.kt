@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.DamageInfo
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import net.bindernews.grackle.GrackleMod
-import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.vfx.UpgradeRandomCardEffect
 
 /**

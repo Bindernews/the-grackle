@@ -16,7 +16,7 @@ class Scratch : BaseCard(C, VARS) {
         @JvmField val C = CardConfig("Scratch", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
         val VARS = CardVariables.config { c: CardVariables ->
             c.cost(0, -1)
-            c.damage(6, 10)
+            c.damage(6, 9)
         }
     }
 }

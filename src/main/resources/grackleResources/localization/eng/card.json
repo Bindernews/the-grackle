@@ -13,9 +13,9 @@
     "DESCRIPTION": "Gain !M! [E] NL Enter grackle:Aloft NL Draw !grackle:magic2! cards.",
     "FLAVOR": "It's over Nob! I have the high ground!"
   },
-  "grackle:AirToGroundMissiles": {
-    "NAME": "Air to Ground Missiles",
-    "DESCRIPTION": "Deal !D! damage !grackle:hits! times to ALL enemies.",
+  "grackle:AirMissiles": {
+    "NAME": "Air Missiles",
+    "DESCRIPTION": "--",
     "FLAVOR": "They're not bombs, they're missiles."
   },
   "grackle:BePrepared": {
@@ -29,7 +29,7 @@
   },
   "grackle:BufferInputs": {
     "NAME": "Buffer Inputs",
-    "DESCRIPTION": "Gain !M! grackle:Peck .",
+    "DESCRIPTION": "Gain !M! grackle:Speed, you cannot lose grackle:Speed this turn.",
     "FLAVOR": "Two full steps and one half-step will get me back on step-route. ~tinahacks"
   },
   "grackle:BurnCream": {
@@ -42,7 +42,7 @@
   },
   "grackle:BurningBird": {
     "NAME": "Burning Bird",
-    "DESCRIPTION": "Gain !M! Strength. NL At the end of this turn, lose !M! Strength. NL Gain !B! grackle:Burning.",
+    "DESCRIPTION": "Gain !M! Strength. NL At the end of this turn, lose !M! Strength.",
     "FLAVOR": "This, bird is on fi-yah!"
   },
   "grackle:Cackle": {
@@ -63,7 +63,7 @@
   },
   "grackle:CrashLanding": {
     "NAME": "Crash Landing",
-    "DESCRIPTION": "Deal !D! damage, exit Stance"
+    "DESCRIPTION": "--"
   },
   "grackle:Death": {
     "NAME": "Death",
@@ -79,11 +79,11 @@
   },
   "grackle:Dive": {
     "NAME": "Dive",
-    "DESCRIPTION": "--generated--"
+    "DESCRIPTION": "--"
   },
   "grackle:DoubleKick": {
     "NAME": "Double Kick",
-    "DESCRIPTION": "Deal !D! damage !grackle:hits! times."
+    "DESCRIPTION": "--"
   },
   "grackle:Duck": {
     "NAME": "Duck!",
@@ -274,7 +274,7 @@
   },
   "grackle:WindowPain": {
     "NAME": "Window Pain",
-    "DESCRIPTION": "Gain !B! Block. NL Gain !M! temporary Thorns.",
+    "DESCRIPTION": "--",
     "FLAVOR": "Hahahaha you fell for it!"
   }
 }

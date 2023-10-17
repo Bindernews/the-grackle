@@ -1,10 +1,9 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.Events
 import net.bindernews.grackle.cardmods.AutoDescription
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.power.BurningPower
 import net.bindernews.grackle.ui.CardClickableLink

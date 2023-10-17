@@ -1,0 +1,17 @@
+{
+  "grackle:DescriptionBuilder": {
+    "TEXT_DICT": {
+      "start_of_turn": "vuorosi alussa",
+      "end_of_turn": "kortti vuorosi lopussa",
+      "to_random_enemy": "to a random enemy",
+      "speed_boost": "grackle:Speed_Boost !grackle:speedBoost!:",
+      "temporary": "väliaikaista",
+      "times": "times",
+      "gain": "saa",
+      "draw": "nosta",
+      "cards": "korttia",
+      "Speed": "grackle:Speed",
+      "NL": " NL "
+    }
+  }
+}
