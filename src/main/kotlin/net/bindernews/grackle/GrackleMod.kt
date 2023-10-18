@@ -211,6 +211,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
                 AerialAce(),
                 AerialAdvantage(),
                 AirMissiles(),
+                AirRaid(),
                 BePrepared(),
                 BombingRun(),
                 BufferInputs(),

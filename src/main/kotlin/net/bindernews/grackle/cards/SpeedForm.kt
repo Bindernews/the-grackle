@@ -16,7 +16,7 @@ class SpeedForm : BaseCard(C, VARS) {
         @JvmField val C = CardConfig("SpeedForm", CardType.POWER, CardRarity.RARE, CardTarget.SELF)
         @JvmField val VARS = CardVariables().apply {
             cost(3)
-            magic(1)
+            magic(6)
             onInit {
                 it.isEthereal = true
                 it.initializeDescription()

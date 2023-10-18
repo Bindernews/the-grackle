@@ -8,11 +8,13 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.DescriptionBuilder
 import net.bindernews.grackle.helper.speedBoost
+import net.bindernews.grackle.power.SpeedPower
 
 class AerialAce : BaseCard(C, VARS) {
     override val descriptionSource get() = DESCRIPTION_BUILDER
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
+        SpeedPower.tryBoost(p, this)
         addToBot(DamageAction(m, DamageInfo(p, damage, damageType), AttackEffect.SLASH_DIAGONAL))
     }
 

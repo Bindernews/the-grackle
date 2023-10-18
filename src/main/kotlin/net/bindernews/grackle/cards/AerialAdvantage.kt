@@ -19,7 +19,7 @@ class AerialAdvantage : BaseCard(C, VARS) {
 
     companion object {
         @JvmField val C = CardConfig("AerialAdvantage", CardType.SKILL, CardRarity.RARE, CardTarget.SELF)
-        const val DRAW_COUNT = 4
+        const val DRAW_COUNT = 3
         val VARS = CardVariables.config { c ->
             c.cost(0)
             c.magic(8, -1)
@@ -28,7 +28,7 @@ class AerialAdvantage : BaseCard(C, VARS) {
             }
         }
 
-        fun energyGained(upg: Boolean): Int = if (upg) 3 else 2
+        fun energyGained(upg: Boolean): Int = if (upg) 2 else 1
 
         val DESCRIPTION_BUILDER = DescriptionBuilder.create { upg ->
             val eCount = energyStr(energyGained(upg))

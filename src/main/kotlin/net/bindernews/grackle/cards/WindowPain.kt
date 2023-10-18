@@ -16,7 +16,7 @@ class WindowPain : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField val C = CardConfig("WindowPain", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
+        @JvmField val C = CardConfig("WindowPain", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
         @JvmField val VARS = CardVariables().apply {
             cost(1)
             block(6, 10)

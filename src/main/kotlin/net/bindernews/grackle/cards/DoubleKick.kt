@@ -7,11 +7,13 @@ import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.monsters.AbstractMonster
 import net.bindernews.grackle.cardmods.ExtraHitsMod
 import net.bindernews.grackle.helper.*
+import net.bindernews.grackle.power.SpeedPower
 
 class DoubleKick : BaseCard(C, VARS) {
     override val descriptionSource get() = descriptionBuilder
 
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
+        SpeedPower.tryBoost(p, this)
         val hits = extraHits
         for (i in 0 until hits) {
             addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), AttackEffect.SLASH_HORIZONTAL))
@@ -33,7 +35,7 @@ class DoubleKick : BaseCard(C, VARS) {
             cost(1)
             damage(6, 9)
             hits(BASE_HITS, -1)
-            speedBoost(8, 6)
+            speedBoost(10, 8)
             addModifier(ExtraHitsMod())
         }
 

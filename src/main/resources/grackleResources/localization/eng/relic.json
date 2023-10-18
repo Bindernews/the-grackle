@@ -30,7 +30,7 @@
   "grackle:SimmeringHeat": {
     "NAME": "Simmering Heat",
     "DESCRIPTIONS": [
-      "Gain 1 energy, add a Burn to your hand at the start of each turn."
+      "Gain 1 energy, add a Burn with Exhaust to your discard pile at the start of each turn."
     ]
   },
   "grackle:SlipstreamEngine": {

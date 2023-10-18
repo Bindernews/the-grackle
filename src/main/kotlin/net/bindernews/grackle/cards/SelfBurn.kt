@@ -1,6 +1,7 @@
 package net.bindernews.grackle.cards
 
 import basemod.cardmods.EtherealMod
+import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.actions.common.DrawCardAction
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.status.Burn
@@ -31,7 +32,7 @@ class SelfBurn : BaseCard(C, VARS) {
         const val BURN_COUNT = 1
 
         val PREVIEW_BURN: AbstractCard = Burn().apply {
-            addModifier(EtherealMod())
+            addModifier(ExhaustMod())
         }
     }
 }

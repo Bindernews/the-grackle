@@ -9,13 +9,17 @@ import net.bindernews.grackle.cardmods.ExtraHitsMod
 import net.bindernews.grackle.helper.*
 import net.bindernews.grackle.power.SpeedPower
 
-/**
- * Crash-Landing, but better.
- */
-class Paratrooper : BaseCard(C, VARS) {
+class AirRaid : BaseCard(C, VARS) {
+    override val descriptionSource get() = DESCRIPTION_BUILDER
+
+    init {
+        damageType = DamageInfo.DamageType.NORMAL
+        damageTypeForTurn = damageType
+    }
+
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
-        val fx = AttackEffect.SLASH_DIAGONAL
         SpeedPower.tryBoost(p, this)
+        val fx = AttackEffect.BLUNT_HEAVY
         val hits = extraHits
         for (i in 0 until hits) {
             addToBot(DamageAction(m, DamageInfo(p, damage, damageTypeForTurn), fx))
@@ -23,27 +27,27 @@ class Paratrooper : BaseCard(C, VARS) {
     }
 
     override fun calculateCardDamage(mo: AbstractMonster?) {
+        baseExtraHits = BASE_HITS + if (isBonusActive()) BOOST_HITS else 0
+        extraHits = baseExtraHits
         super.calculateCardDamage(mo)
-        if (isBonusActive()) {
-            extraHits += BOOST_EXTRA_HITS
-        }
     }
 
     override fun isBonusActive(): Boolean = isBonusActive(owner!!)
 
     companion object {
-        @JvmField val C = CardConfig("Paratrooper", CardType.ATTACK, CardRarity.UNCOMMON, CardTarget.ENEMY)
-        const val BOOST_EXTRA_HITS = 2
-        val VARS = CardVariables.config { c ->
-            c.cost(1, -1)
-            c.damage(7, 12)
-            c.hits(1, -1)
-            c.speedBoost(8, 6)
+        @JvmField val C = CardConfig("AirRaid", CardType.ATTACK, CardRarity.COMMON, CardTarget.ENEMY)
+        const val BASE_HITS = 1
+        const val BOOST_HITS = 2
+        val VARS = CardVariables.config { c: CardVariables ->
+            c.cost(2, -1)
+            c.damage(8, 12)
+            c.hits(BASE_HITS, -1)
+            c.speedBoost(20, 16)
             c.addModifier(ExtraHitsMod())
         }
 
-        val descriptionBuilder = DescriptionBuilder.create {
-            format("{Deal} !D! {damage} {v_hits} {times}. NL {speed_boost} NL +$BOOST_EXTRA_HITS hits.")
+        val DESCRIPTION_BUILDER = DescriptionBuilder.create {
+            format("{Deal} !D! {damage} {v_hits} {times}. NL {speed_boost} NL +$BOOST_HITS {extra} {hits}.")
         }
     }
 }

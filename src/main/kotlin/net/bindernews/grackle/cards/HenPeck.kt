@@ -23,7 +23,7 @@ class HenPeck : BaseCard(C, VARS) {
         val VARS = CardVariables().apply {
             cost(0)
             damage(2, 3)
-            hits(2, 2)
+            hits(3, 0)
             addModifier(ExtraHitsMod())
         }
     }

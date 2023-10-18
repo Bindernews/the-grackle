@@ -16,7 +16,11 @@
   "grackle:AirMissiles": {
     "NAME": "Air Missiles",
     "DESCRIPTION": "--",
-    "FLAVOR": "They're not bombs, they're missiles."
+    "FLAVOR": "The missile know where it is, because it knows where it isn't."
+  },
+  "grackle:AirRaid": {
+    "NAME": "Air Raid",
+    "DESCRIPTION": "--"
   },
   "grackle:BePrepared": {
     "NAME": "Be Prepared",
@@ -214,7 +218,7 @@
   },
   "grackle:SelfBurn": {
     "NAME": "Self Burn",
-    "DESCRIPTION": "Draw !M! cards. NL Add an *Ethereal *Burn to your discard pile.",
+    "DESCRIPTION": "Draw !M! cards. NL Add an *Exhaust *Burn to your discard pile.",
     "FLAVOR": "Do you want some burn cream for that?"
   },
   "grackle:SnapGracklePop": {

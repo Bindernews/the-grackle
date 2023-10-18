@@ -9,10 +9,10 @@ class TargetingComputer : BaseCard(C, VARS) {
     }
 
     companion object {
-        @JvmField val C = CardConfig("TargetingComputer", CardType.SKILL, CardRarity.COMMON, CardTarget.SELF)
+        @JvmField val C = CardConfig("TargetingComputer", CardType.SKILL, CardRarity.UNCOMMON, CardTarget.SELF)
         val VARS = CardVariables.config { c ->
             c.cost(1)
-            c.magic(1, 3)
+            c.magic(2, 4)
         }
     }
 }
