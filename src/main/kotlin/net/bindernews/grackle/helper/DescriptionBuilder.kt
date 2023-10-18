@@ -1,16 +1,12 @@
 package net.bindernews.grackle.helper
 
 import com.megacrit.cardcrawl.core.CardCrawlGame
-import com.megacrit.cardcrawl.core.Settings
 import com.megacrit.cardcrawl.core.Settings.GameLanguage
 import com.megacrit.cardcrawl.helpers.GameDictionary
-import com.megacrit.cardcrawl.localization.LocalizedStrings
 import net.bindernews.grackle.GrackleMod
 import org.apache.commons.lang3.StringUtils
-import java.lang.annotation.RetentionPolicy
 import java.util.*
 import java.util.function.Function
-import kotlin.collections.HashMap
 
 typealias BuildFn = DescriptionBuilder.(Boolean) -> String
 
@@ -152,13 +148,20 @@ open class DescriptionBuilder protected constructor(protected val buildFn: Build
                 m["deal"] = atcDesc[it - 1]
                 m["Deal"] = StringUtils.capitalize(m["deal"])
                 m["damage"] = atcDesc[it + 1]
-                m["to_all_enemies"] = atcDesc.slice(it + 2 until atcDesc.size).joinToString(" ")
+                m["to_all_enemies"] = atcDesc.slice(it + 2 until atcDesc.size)
+                    .joinToString(" ")
+                    .substringBeforeLast('.')
             }
             // Extract "Gain" and "Draw" from "Adrenaline"
             val adrenalineDesc = CardCrawlGame.languagePack.getCardStrings("Adrenaline").DESCRIPTION.split(" ")
             m["Gain"] = adrenalineDesc[0]
             m["Draw"] = adrenalineDesc[adrenalineDesc.indexOf("2") - 1]
-            // Extract "discard" from "Acrobatics"
+            // Extract "discard", "card", and "cards" from Tools of the Trade
+            val toolsDesc = CardCrawlGame.languagePack.getPowerStrings("Tools Of The Trade").DESCRIPTIONS
+            m["card"] = toolsDesc[2].replace('.', ' ').trim()
+            m["cards"] = toolsDesc[4].replace('.', ' ').trim()
+            // NOTE: could also get from Acrobatics if this doesn't work for too many languages.
+            m["discard"] = toolsDesc[1].split(" ")[3]
             return m
         }
 

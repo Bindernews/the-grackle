@@ -17,7 +17,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.cards.BaseCard
 import net.bindernews.grackle.cards.CardConfig
-import net.bindernews.grackle.power.BasePower
 import org.apache.logging.log4j.LogManager
 import java.util.*
 

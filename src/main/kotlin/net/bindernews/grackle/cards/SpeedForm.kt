@@ -8,8 +8,18 @@ import net.bindernews.grackle.power.SpeedFormPower
 
 class SpeedForm : BaseCard(C, VARS) {
 
+    init {
+        isEthereal = true
+        initializeDescription()
+    }
+
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         addToBot(iop.actionApplyPower(p, p, SpeedFormPower.POWER_ID, magicNumber))
+    }
+
+    override fun initializeDescription() {
+        rawDescription = C.strings.DESCRIPTION
+        super.initializeDescription()
     }
 
     companion object {
@@ -17,16 +27,12 @@ class SpeedForm : BaseCard(C, VARS) {
         @JvmField val VARS = CardVariables().apply {
             cost(3)
             magic(6)
-            onInit {
-                it.isEthereal = true
-                it.initializeDescription()
-            }
+            addModifier(AutoDescription())
             onUpgrade {
                 it.isEthereal = false
                 it.initializeDescription()
             }
             tags(BaseModCardTags.FORM)
-            addModifier(AutoDescription())
         }
     }
 }

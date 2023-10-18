@@ -13,7 +13,7 @@ import net.bindernews.grackle.power.SpeedPower
 /**
  * Gain 1 speed when you play a skill.
  */
-class SlipstreamEngine : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.STARTER, LandingSound.HEAVY) {
+class SlipstreamEngine : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.BOSS, LandingSound.HEAVY) {
     init {
         description = relicStrings.DESCRIPTIONS[0]
     }

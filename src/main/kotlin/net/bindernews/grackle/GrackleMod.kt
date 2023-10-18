@@ -3,6 +3,7 @@ package net.bindernews.grackle
 import basemod.AutoAdd
 import basemod.BaseMod
 import basemod.abstracts.CustomSavable
+import basemod.helpers.RelicType
 import basemod.interfaces.*
 import com.badlogic.gdx.graphics.Texture
 import com.evacipated.cardcrawl.modthespire.Loader
@@ -69,16 +70,16 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
     override fun receiveEditRelics() {
         log.debug(CO.REG_START, "relics")
         // Add shared relics
-//        Stream.of(
-//                new PhoenixIdol()
-//        ).forEach(r -> BaseMod.addRelic(r, RelicType.SHARED));
+        Stream.of(
+            SimmeringHeat(),
+        ).forEach { BaseMod.addRelic(it, RelicType.SHARED) }
 
         // Add class-specific relics
         Stream.of(
             BerserkerTotem(),
             FlammableFlask(),
             LoftwingFeather(),
-            SimmeringHeat(),
+            OrangeGel(),
             SlipstreamEngine(),
         ).forEach { BaseMod.addRelicToCustomPool(it, Grackle.Co.COLOR_BLACK) }
         log.debug(CO.REG_END, "relics")
@@ -135,11 +136,11 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
     }
 
     override fun receiveEditStrings() {
-        MiscUtil.loadLocalization(CO.RES_LANG, Settings.GameLanguage.ENG, Settings.language)
+        MiscUtil.loadLocalization(CO.RES_LANG, GameLanguage.ENG, Settings.language)
     }
 
     override fun receiveEditKeywords() {
-        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, Settings.GameLanguage.ENG, Settings.language)
+        MiscUtil.loadKeywords(MOD_ID, CO.RES_LANG, GameLanguage.ENG, Settings.language)
     }
 
     override fun receiveAddAudio() {

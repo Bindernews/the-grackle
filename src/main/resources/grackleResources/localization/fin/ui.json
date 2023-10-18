@@ -6,12 +6,15 @@
       "to_random_enemy": "to a random enemy",
       "speed_boost": "grackle:Speed_Boost !grackle:speedBoost!:",
       "temporary": "väliaikaista",
-      "times": "times",
-      "gain": "saa",
-      "draw": "nosta",
       "cards": "korttia",
-      "Speed": "grackle:Speed",
+      "times": "times",
+      "v_hits": "!grackle:hits!",
+      "extra": "extra",
+      "hits": "hit(s)",
+      "magic2": "!grackle:magic2!",
       "costs_n": "kortin hinta on %d",
+      "Speed": "grackle:Speed",
+      "Required": "Required",
       "NL": " NL "
     }
   }

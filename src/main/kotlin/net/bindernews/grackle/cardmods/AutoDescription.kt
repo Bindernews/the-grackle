@@ -2,6 +2,7 @@ package net.bindernews.grackle.cardmods
 
 import basemod.abstracts.AbstractCardModifier
 import basemod.abstracts.AbstractCardModifier.SaveIgnore
+import basemod.cardmods.EtherealMod
 import basemod.cardmods.ExhaustMod
 import basemod.cardmods.InnateMod
 import basemod.cardmods.RetainMod
@@ -26,6 +27,9 @@ open class AutoDescription : AbstractCardModifier() {
         if (card.isInnate) {
             tmp = innateMod.modifyDescription(tmp, card)
         }
+        if (card.isEthereal) {
+            tmp = etherealMod.modifyDescription(tmp, card)
+        }
         return tmp
     }
 
@@ -37,5 +41,6 @@ open class AutoDescription : AbstractCardModifier() {
         private val exhaustMod = ExhaustMod()
         private val retainMod = RetainMod()
         private val innateMod = InnateMod()
+        private val etherealMod = EtherealMod()
     }
 }

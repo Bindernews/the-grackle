@@ -1,6 +1,5 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.EtherealMod
 import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.actions.common.DrawCardAction
 import com.megacrit.cardcrawl.cards.AbstractCard

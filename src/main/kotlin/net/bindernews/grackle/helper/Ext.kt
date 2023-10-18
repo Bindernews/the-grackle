@@ -1,18 +1,16 @@
 package net.bindernews.grackle.helper
 
+import basemod.ReflectionHacks
 import basemod.abstracts.AbstractCardModifier
 import basemod.helpers.CardModifierManager
-import basemod.ReflectionHacks
 import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText.CardStringsFlavorField
 import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText.PotionStringsFlavorField
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.localization.CardStrings
 import com.megacrit.cardcrawl.localization.PotionStrings
-import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.metrics.Metrics
 import net.bindernews.grackle.GrackleMod
-import net.bindernews.grackle.cards.BaseCard
 import net.bindernews.grackle.patches.Fields
 import net.bindernews.grackle.variables.ExtraHitsVariable
 import net.bindernews.grackle.variables.Magic2Var

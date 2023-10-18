@@ -27,6 +27,13 @@
       "Enter grackle:Aloft at the end of each turn."
     ]
   },
+  "grackle:OrangeGel": {
+    "NAME": "Orange Gel",
+    "FLAVOR": "Do you want a Companion Cube?",
+    "DESCRIPTIONS": [
+      "Gain 2 grackle:Speed at the start of each turn."
+    ]
+  },
   "grackle:SimmeringHeat": {
     "NAME": "Simmering Heat",
     "DESCRIPTIONS": [

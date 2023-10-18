@@ -17,8 +17,11 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.helpers.CardLibrary.LibraryType
 import com.megacrit.cardcrawl.helpers.FontHelper
 import com.megacrit.cardcrawl.screens.CharSelectInfo
-import net.bindernews.grackle.cards.*
-import net.bindernews.grackle.relics.SlipstreamEngine
+import net.bindernews.grackle.cards.CrashLanding
+import net.bindernews.grackle.cards.Defend_GK
+import net.bindernews.grackle.cards.Strike_GK
+import net.bindernews.grackle.cards.Takeoff
+import net.bindernews.grackle.relics.OrangeGel
 
 class Grackle(name: String?) : CustomPlayer(
     name, Co.GRACKLE, Co.ORB_TEXTURES, Co.RES_IMAGES_CHAR + "/orb/vfx.png",
@@ -103,7 +106,7 @@ class Grackle(name: String?) : CustomPlayer(
         )
     }
 
-    override fun getStartingRelics(): ArrayList<String> = arrayListOf(SlipstreamEngine.ID)
+    override fun getStartingRelics(): ArrayList<String> = arrayListOf(OrangeGel.ID)
 
     override fun getLoadout(): CharSelectInfo {
         return CharSelectInfo(
