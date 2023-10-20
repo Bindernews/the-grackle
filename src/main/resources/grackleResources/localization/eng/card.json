@@ -20,7 +20,8 @@
   },
   "grackle:AirRaid": {
     "NAME": "Air Raid",
-    "DESCRIPTION": "--"
+    "DESCRIPTION": "--",
+    "FLAVOR": "Deals 3d6 hearing damage."
   },
   "grackle:BePrepared": {
     "NAME": "Be Prepared",
