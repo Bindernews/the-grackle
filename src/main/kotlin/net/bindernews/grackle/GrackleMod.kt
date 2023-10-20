@@ -52,7 +52,7 @@ class GrackleMod : AddAudioSubscriber, EditCharactersSubscriber, EditRelicsSubsc
         const val REG_END = "done registering {}"
 
         /** Metrics upload url  */
-        const val METRICS_URL = "https://grackle.bindernews.net/metrics"
+        const val METRICS_URL = "https://sts.bindernews.net/metrics"
 
         /** Sound effect ID */
         val SFX_QUACK = makeId("DUCK")
