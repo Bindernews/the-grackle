@@ -5,6 +5,7 @@ import com.evacipated.cardcrawl.modthespire.Loader
 import com.megacrit.cardcrawl.actions.AbstractGameAction
 import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect
 import com.megacrit.cardcrawl.actions.common.*
+import com.megacrit.cardcrawl.actions.defect.ChannelAction
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.CardGroup

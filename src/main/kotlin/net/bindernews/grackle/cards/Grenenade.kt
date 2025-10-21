@@ -8,6 +8,9 @@ import net.bindernews.grackle.helper.baseExtraHits
 import net.bindernews.grackle.helper.extraHits
 import net.bindernews.grackle.variables.ExtraHitsVariable
 
+/**
+ * It's a Nene-grenade!
+ */
 class Grenenade : BaseCard(C) {
     init {
         cost = 2

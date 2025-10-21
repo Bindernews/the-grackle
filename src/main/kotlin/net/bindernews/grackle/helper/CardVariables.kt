@@ -50,10 +50,13 @@ class CardVariables : ICardInitializer {
         onInit { CardModifierManager.addModifier(it, modifier) }
     }
 
-    fun block(base: Int, upg: Int = -1) { add(vBlock, base, upg) }
-    fun cost(base: Int, upg: Int = -1) { add(vCost, base, upg) }
-    fun damage(base: Int, upg: Int = -1) { add(vDamage, base, upg) }
-    fun magic(base: Int, upg: Int = -1) { add(vMagic, base, upg) }
+    @JvmOverloads fun block(base: Int, upg: Int = -1) { add(vBlock, base, upg) }
+    @JvmOverloads fun cost(base: Int, upg: Int = -1) { add(vCost, base, upg) }
+    @JvmOverloads fun damage(base: Int, upg: Int = -1) { add(vDamage, base, upg) }
+    @JvmOverloads fun magic(base: Int, upg: Int = -1) { add(vMagic, base, upg) }
+    fun exhaustive(base: Int, upg: Int) { add(vExhaustive, base, upg) }
+    fun refund(base: Int, upg: Int) { add(vRefund, base, upg) }
+    fun persist(base: Int, upg: Int) { add(vPersist, base, upg) }
 
     fun multiDamage(base: Boolean, upg: Boolean) {
         initList.add { fIsMultiDamage[it] = base }
@@ -107,6 +110,7 @@ class CardVariables : ICardInitializer {
     }
 
     companion object {
+        @JvmStatic
         fun config(c: Consumer<CardVariables>): CardVariables {
             val cv = CardVariables()
             c.accept(cv)
