@@ -8,6 +8,9 @@ import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.hits
 import net.bindernews.grackle.variables.ExtraHitsVariable
 
+/**
+ * It's a Nene-grenade!
+ */
 class Grenenade : BaseCard(C) {
     init {
         // Custom upgrade mechanics, so we only need VARS for init
