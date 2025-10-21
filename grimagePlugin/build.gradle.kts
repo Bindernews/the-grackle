@@ -5,7 +5,7 @@ version = "1.0.0-SNAPSHOT"
 
 
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.10"
     id("java-gradle-plugin")
     `kotlin-dsl`
 }
@@ -20,10 +20,10 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        create("grimagePlugin") {
+        create("grimagePlugin", Action {
             id = "net.bindernews.grimage"
             implementationClass = "net.bindernews.grimage.GrimagePlugin"
-        }
+        })
     }
 }
 

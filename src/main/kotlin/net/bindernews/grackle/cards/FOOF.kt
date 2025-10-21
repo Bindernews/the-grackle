@@ -1,6 +1,5 @@
 package net.bindernews.grackle.cards
 
-import basemod.cardmods.ExhaustMod
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.Events
@@ -30,7 +29,7 @@ class FOOF : BaseCard(C, VARS) {
         const val ABOUT_URL = "https://www.science.org/content/blog-post/things-i-won-t-work-dioxygen-difluoride"
 
         init {
-            Events.svcCardChange.on { ev ->
+            Events.scvCardChange.on { ev ->
                 if (ev.card is FOOF) {
                     CardClickableLink.inst.openOrClose(ABOUT_TITLE, ABOUT_URL, ev.open)
                 }

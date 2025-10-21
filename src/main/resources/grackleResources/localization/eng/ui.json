@@ -36,6 +36,7 @@
       "gain": "gain",
       "draw": "draw",
       "cards": "cards",
+      "choose": "choose",
       "newline": " NL "
     }
   }

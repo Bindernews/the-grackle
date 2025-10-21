@@ -3,7 +3,7 @@ package net.bindernews.grackle.api
 import com.megacrit.cardcrawl.cards.AbstractCard
 import com.megacrit.cardcrawl.cards.CardGroup
 
-data class SvcChangeCardEvent(
+data class ScvChangeCardEvent(
     val card: AbstractCard,
     val group: CardGroup?,
     val open: Boolean,

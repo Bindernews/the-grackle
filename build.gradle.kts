@@ -1,5 +1,4 @@
 
-import net.bindernews.importcheck.ImportCheckTask
 import net.bindernews.grimage.*
 import net.bindernews.grimage.ext.drawImage
 import net.bindernews.grimage.ext.withGraphics
@@ -7,6 +6,7 @@ import net.bindernews.grimage.idearuns.IntellijRun
 import net.bindernews.grimage.idearuns.V2Option
 import net.bindernews.grimage.idearuns.jar
 import net.bindernews.grimage.stsbuild.ModMetaExtension
+import net.bindernews.importcheck.ImportCheckTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.awt.Dimension
 import java.awt.Rectangle
@@ -22,25 +22,25 @@ plugins {
     // MTS ships kotlin 1.4.10, but as long as we don't use any newer stdlib
     // features, we can get the compiler improvements of 1.5
     kotlin("jvm") version "1.5.32"
-    id("co.uzzu.dotenv.gradle") version "2.0.0"
     id("io.freefair.lombok") version "6.6"
     id("net.bindernews.importcheck") version "0.1.0"
     id("net.bindernews.grimage")
 }
 
 // Read user settings and add defaults
-val steamDir: String = env.STEAM_DIR.value
+val steamDir: String = project.property("STEAM_DIR") as String?
+    ?: throw GradleException("STEAM_DIR property undefined")
 
 modMeta {
     useSteam(file(steamDir))
-    env.fetchOrNull("STS_HOME")?.let { stsHome.set(file(it)) }
+    System.getenv("STS_HOME")?.let { stsHome.set(file(it)) }
     searchPaths.add(file("$rootDir/lib"))
     searchPaths.add(file("$stsHome/mods"))
 
     addDefaultMods()
-    create("downfall.jar") { workshopId = "1610056683" }
-    create("TS05_Marisa.jar") { workshopId = "1614104912" }
-    create("Bestiary.jar") { workshopId = "2285965269" }
+    create("downfall.jar", Action { workshopId = "1610056683" })
+    create("TS05_Marisa.jar", Action { workshopId = "1614104912" })
+    create("Bestiary.jar", Action { workshopId = "2285965269" })
 }
 
 // Read user settings and add defaults

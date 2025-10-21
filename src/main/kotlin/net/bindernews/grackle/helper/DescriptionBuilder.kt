@@ -1,7 +1,9 @@
 package net.bindernews.grackle.helper
 
 import com.megacrit.cardcrawl.core.CardCrawlGame
+import com.megacrit.cardcrawl.core.Settings
 import net.bindernews.grackle.GrackleMod
+import java.util.*
 
 open class DescriptionBuilder protected constructor() {
     val fragments: ArrayList<String> = ArrayList()
@@ -97,12 +99,64 @@ open class DescriptionBuilder protected constructor() {
             CardCrawlGame.languagePack.getUIString("${GrackleMod.MOD_ID}:DescriptionBuilder").TEXT_DICT
         }
 
+        private val parenRegex = """\(([^()$]+)\)""".toRegex()
+        private val gameLocale by lazy {
+            when (Settings.language) {
+                Settings.GameLanguage.ENG -> Locale.ENGLISH
+                Settings.GameLanguage.FIN -> Locale("fi", "FI")
+                else -> Locale.getDefault()
+            }
+        }
+
         /**
          * Returns a new description builder appropriate for the current language.
          * This will allow sub-classing in case we ever support RtL languages.
          */
         fun create(): DescriptionBuilder {
             return DescriptionBuilder()
+        }
+
+        fun parse(source: String): String {
+            val sb = StringBuilder()
+            val parts = splitByRegex(parenRegex, source, 1)
+            for (i in parts.indices step 2) {
+                // add non-match
+                sb.append(parts[i])
+                // convert match based on strings and add it
+                val matchVal = parts[i + 1]
+                if (matchVal == "\n") {
+                    sb.append(" NL ")
+                } else {
+                    val shouldUpper = matchVal[0].isUpperCase()
+                    val matchLower = matchVal.lowercase(gameLocale)
+                    val convert = strings[matchLower] ?: matchLower
+                        .let { if (shouldUpper) uppercaseFirstChar(it) else it }
+                    sb.append(convert)
+                }
+            }
+            return sb.toString()
+        }
+
+        private fun uppercaseFirstChar(s: String): String {
+            return s[0].uppercaseChar() + s.substring(1)
+        }
+
+        fun splitByRegex(regex: Regex, input: String, group: Int = 0): List<String> {
+            val parts = mutableListOf<String>()
+            var index = 0
+            while (true) {
+                val m = regex.find(input, index)
+                if (m != null) {
+                    // Add pre-match and the match, then update index
+                    parts.add(input.substring(index, m.range.first))
+                    parts.add(m.groupValues[group])
+                    index = m.range.last + 1
+                } else {
+                    // Add remainder of string after match
+                    parts.add(input.substring(index))
+                    return parts
+                }
+            }
         }
     }
 }

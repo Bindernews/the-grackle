@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.screens.SingleCardViewPopup
 import net.bindernews.eventbus.EventEmit
 import net.bindernews.eventbus.IEventEmit
 import net.bindernews.grackle.api.IPopup
-import net.bindernews.grackle.api.SvcChangeCardEvent
+import net.bindernews.grackle.api.ScvChangeCardEvent
 import java.util.*
 
 /**
@@ -13,7 +13,7 @@ import java.util.*
  */
 object Events {
     /** Event for when [SingleCardViewPopup] changes cards.  */
-    @JvmStatic val svcCardChange: IEventEmit<SvcChangeCardEvent> = EventEmit()
+    @JvmStatic val scvCardChange: IEventEmit<ScvChangeCardEvent> = EventEmit()
     /** Event emitter, called at the end of [Metrics.run].  */
     @JvmStatic val metricsRun: IEventEmit<Metrics> = EventEmit()
     /** List of UI popups */
