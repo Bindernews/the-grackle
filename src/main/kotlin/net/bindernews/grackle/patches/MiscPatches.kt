@@ -2,19 +2,16 @@
 
 package net.bindernews.grackle.patches
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.evacipated.cardcrawl.mod.stslib.damagemods.DamageModifierManager
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch2
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn
 import com.megacrit.cardcrawl.cards.status.Burn
 import com.megacrit.cardcrawl.core.Settings
-import com.megacrit.cardcrawl.helpers.TipHelper
 import com.megacrit.cardcrawl.metrics.Metrics
 import com.megacrit.cardcrawl.screens.GameOverScreen
 import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.Events
-import net.bindernews.grackle.Events.popups
 import net.bindernews.grackle.cardmods.EmbodyFireMod
 import net.bindernews.grackle.stance.StanceAloft
 import net.bindernews.grackle.stance.StanceEagle
@@ -39,13 +36,6 @@ object MetricsGatherAllDataPatch {
 object ShouldUploadMetricData {
     @JvmStatic fun Postfix(returnValue: Boolean): Boolean {
         return Settings.UPLOAD_DATA
-    }
-}
-
-@SpirePatch(clz = TipHelper::class, method = "render")
-object TipHelperOnRender {
-    @JvmStatic fun Postfix(sb: SpriteBatch) {
-        popups.forEach { p -> if (p.isEnabled()) p.render(sb) }
     }
 }
 

@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.actions.SeekCardGroupAction
 import net.bindernews.grackle.helper.CardVariables
-import net.bindernews.grackle.helper.DescriptionBuilder
 
 class ClawShot : BaseCard(C, VARS) {
 
@@ -18,7 +17,7 @@ class ClawShot : BaseCard(C, VARS) {
     }
 
     override fun initializeDescription() {
-        rawDescription = RAW_DESCRIPTION
+//        rawDescription = RAW_DESCRIPTION
         super.initializeDescription()
     }
 
@@ -31,7 +30,7 @@ class ClawShot : BaseCard(C, VARS) {
 
         const val SCRY_SIZE: Int = 5
 
-        val RAW_DESCRIPTION = DescriptionBuilder.parse(
-            "(Choose) !M! (cards) (from) (the top) $SCRY_SIZE(\n)(of your) (draw pile), add them to your hand.")
+//        val RAW_DESCRIPTION = DescriptionBuilder.parse(
+//            "(Choose) !M! (cards) (from) (the top) $SCRY_SIZE(\n)(of your) (draw pile), add them to your hand.")
     }
 }

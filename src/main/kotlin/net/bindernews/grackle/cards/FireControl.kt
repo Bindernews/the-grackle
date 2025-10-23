@@ -3,13 +3,13 @@ package net.bindernews.grackle.cards
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
-import net.bindernews.grackle.power.BurningPower
+import net.bindernews.grackle.power.OldBurningPower
 
 class FireControl : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         if (m != null) {
-            val amt = (m.getPower(BurningPower.POWER_ID)?.amount ?: 0) * magicNumber
-            addToBot(BurningPower.makeAction(p, m, amt))
+            val amt = (m.getPower(OldBurningPower.POWER_ID)?.amount ?: 0) * magicNumber
+            addToBot(OldBurningPower.makeAction(p, m, amt))
         }
     }
 

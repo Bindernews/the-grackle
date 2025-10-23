@@ -7,14 +7,13 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
 import com.megacrit.cardcrawl.powers.AbstractPower
-import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.RelicHelper
 import net.bindernews.grackle.helper.RelicHelper.relicStrings
 import net.bindernews.grackle.helper.makeId
-import net.bindernews.grackle.power.BurningPower
+import net.bindernews.grackle.power.OldBurningPower
 
 /**
- * Whenever [BurningPower] is applied, apply [EXTRA_AMOUNT] more.
+ * Whenever [OldBurningPower] is applied, apply [EXTRA_AMOUNT] more.
  */
 class FlammableFlask : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.COMMON, LandingSound.CLINK), OnApplyPowerRelic {
     override fun updateDescription(c: AbstractPlayer.PlayerClass?) {
@@ -23,7 +22,7 @@ class FlammableFlask : CustomRelic(ID, IMAGES[0], IMAGES[1], RelicTier.COMMON, L
     }
 
     override fun onApplyPower(toApply: AbstractPower, target: AbstractCreature, source: AbstractCreature): Boolean {
-        if (toApply.ID == BurningPower.POWER_ID && target !== AbstractDungeon.player && source === AbstractDungeon.player) {
+        if (toApply.ID == OldBurningPower.POWER_ID && target !== AbstractDungeon.player && source === AbstractDungeon.player) {
             toApply.amount += EXTRA_AMOUNT
         }
         return true

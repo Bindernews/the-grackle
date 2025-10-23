@@ -217,6 +217,11 @@
     "DESCRIPTION": "Draw !M! cards. NL Add an *Ethereal *Burn to your discard pile.",
     "FLAVOR": "Do you want some burn cream for that?"
   },
+  "grackle:Snaaaake": {
+    "NAME": "Snaaaake!",
+    "DESCRIPTION": "$gain_b_block$ $gain_m1_power,grackle:BlindPower$",
+    "FLAVOR": "Box!"
+  },
   "grackle:SnapGracklePop": {
     "NAME": "Snap, Grackle, Pop",
     "DESCRIPTION": "Apply !M! Vulnerable NL and !grackle:magic2! Weak.",

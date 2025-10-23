@@ -40,7 +40,7 @@ class ModMetaExtension(
     fun useSteam(steamDir: File) {
         val macPath = "/SlayTheSpire.app/Contents/Resources"
         stsHome.set(File("$steamDir/common/SlayTheSpire" + if (Os.isFamily(Os.FAMILY_MAC)) macPath else ""))
-        workshopRoot = steamDir.resolve("workshop/content/646570/")
+        workshopRoot = steamDir.resolve("workshop/content/${STS_WORKSHOP_ID}/")
     }
 
     fun searchStSHome() {
@@ -107,5 +107,6 @@ class ModMetaExtension(
 
     companion object {
         @JvmStatic val DEFAULT_MODS = arrayOf("ModTheSpire.jar", "BaseMod.jar", "StSLib.jar")
+        const val STS_WORKSHOP_ID = "646570"
     }
 }

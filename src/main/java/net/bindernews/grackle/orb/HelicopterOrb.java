@@ -24,7 +24,7 @@ public class HelicopterOrb extends BaseWeaponOrb {
         val attackFx = AbstractGameAction.AttackEffect.SLASH_HORIZONTAL;
 
         HELPER.flashOrbVfx(this, 0.6F);
-        MiscUtil.INSTANCE.addToBot(
+        MiscUtil.addToBot(
                 getIop().damageAllEnemies(AbstractDungeon.player, damage, DamageInfo.DamageType.NORMAL, attackFx));
         this.evokeAmount -= this.passiveAmount;
         this.updateDescription();

@@ -8,10 +8,17 @@ import java.lang.invoke.MethodHandles;
 import java.util.function.Function;
 
 public interface IField<T, F> extends Function<T, F> {
+
+    /**
+     * Get the field value on the object.
+     */
     default F get(T obj) {
         return apply(obj);
     }
 
+    /**
+     * Set the field value for {@code obj}.
+     */
     void set(T obj, F value);
 
 

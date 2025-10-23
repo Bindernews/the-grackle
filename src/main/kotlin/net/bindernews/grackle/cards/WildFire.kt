@@ -6,12 +6,12 @@ import net.bindernews.grackle.cardmods.AutoDescription
 import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
 import net.bindernews.grackle.helper.magic2
-import net.bindernews.grackle.power.BurningPower
+import net.bindernews.grackle.power.OldBurningPower
 
 class WildFire : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val amt = magicNumber
-        iop().getEnemies(p).forEach { addToBot(BurningPower.makeAction(p, it, amt)) }
+        iop().getEnemies(p).forEach { addToBot(OldBurningPower.makeAction(p, it, amt)) }
 //        iop().getFriends(p).forEach { addToBot(BurningPower.makeAction(p, it, amt)) }
         addToBot(iop().actionMakeTempCardInDiscard(p, Burn(), magic2))
     }

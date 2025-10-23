@@ -8,11 +8,11 @@ import net.bindernews.grackle.GrackleMod
 val iconAtlas by lazy { TextureAtlas(GrackleMod.CO.RES_IMAGES + "/icons.atlas") }
 
 fun registerIcons() {
-    GrackleMod.log.debug(GrackleMod.CO.REG_START, "icons")
+    GrackleMod.log.traceEntry()
     listOf<AbstractCustomIcon>(
         MusicNoteIcon
     ).forEach(CustomIconHelper::addCustomIcon)
-    GrackleMod.log.debug(GrackleMod.CO.REG_END, "icons")
+    GrackleMod.log.traceExit()
 }
 
 object MusicNoteIcon : AbstractCustomIcon(

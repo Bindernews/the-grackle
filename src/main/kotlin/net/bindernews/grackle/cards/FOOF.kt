@@ -1,19 +1,19 @@
 package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.core.AbstractCreature
-import net.bindernews.grackle.helper.CardVariables
-import net.bindernews.grackle.Events
+import net.bindernews.bnsts.api.BnSts
 import net.bindernews.grackle.cardmods.AutoDescription
+import net.bindernews.grackle.helper.CardVariables
 import net.bindernews.grackle.helper.ModInterop.Companion.iop
-import net.bindernews.grackle.power.BurningPower
+import net.bindernews.grackle.power.OldBurningPower
 import net.bindernews.grackle.ui.CardClickableLink
 
 @Suppress("MemberVisibilityCanBePrivate")
 class FOOF : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
         val amt = magicNumber
-        iop().getFriends(p).forEach { addToBot(BurningPower.makeAction(p, it, amt)) }
-        iop().getEnemies(p).forEach { addToBot(BurningPower.makeAction(p, it, amt)) }
+        iop().getFriends(p).forEach { addToBot(OldBurningPower.makeAction(p, it, amt)) }
+        iop().getEnemies(p).forEach { addToBot(OldBurningPower.makeAction(p, it, amt)) }
     }
 
     companion object {
@@ -29,7 +29,7 @@ class FOOF : BaseCard(C, VARS) {
         const val ABOUT_URL = "https://www.science.org/content/blog-post/things-i-won-t-work-dioxygen-difluoride"
 
         init {
-            Events.scvCardChange.on { ev ->
+            BnSts.getInstance().singleCardViewChanged.on { ev ->
                 if (ev.card is FOOF) {
                     CardClickableLink.inst.openOrClose(ABOUT_TITLE, ABOUT_URL, ev.open)
                 }

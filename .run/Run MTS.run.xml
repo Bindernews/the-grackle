@@ -5,6 +5,9 @@
     <option name="WORKING_DIRECTORY" value="$STS_HOME$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="$STS_HOME$/jre" />
+    <envs>
+      <env name="STS_HOME" value="F:\Steam\steamapps\common\SlayTheSpire" />
+    </envs>
     <method v="2">
       <option name="Gradle.BeforeRunTask" enabled="true" tasks="installJar" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
     </method>

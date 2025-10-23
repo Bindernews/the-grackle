@@ -20,6 +20,9 @@
   },
   "grackle:DescriptionBuilder": {
     "TEXT_DICT": {
+      "deal_d_damage": "Deal !D! damage.",
+      "gain_b_block": "Gain !B! Block.",
+      "gain_m1_power": "Gain !M! %s.",
       "start_of_turn": "at the start of your turn,",
       "apply_power": "apply %s %s",
       "deal_damage": "deal %s damage",

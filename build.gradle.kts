@@ -41,6 +41,7 @@ modMeta {
     create("downfall.jar", Action { workshopId = "1610056683" })
     create("TS05_Marisa.jar", Action { workshopId = "1614104912" })
     create("Bestiary.jar", Action { workshopId = "2285965269" })
+    create("TheMarked.jar", Action { workshopId = "2326379575" })
 }
 
 // Read user settings and add defaults
@@ -87,7 +88,11 @@ tasks.getByName<KotlinCompile>("compileKotlin") {
 
 tasks.register<Copy>("copySteamLibs") {
     description = "Copy libraries from the steam workshop to the local lib folder"
-    from(*modMeta.findWorkshopMods(*ModMetaExtension.DEFAULT_MODS, "downfall.jar", "Bestiary.jar"))
+    from(*modMeta.findWorkshopMods(
+        *ModMetaExtension.DEFAULT_MODS,
+        "downfall.jar",
+        "Bestiary.jar",
+    ))
     into("$rootDir/lib")
 }
 

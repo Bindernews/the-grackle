@@ -1,12 +1,18 @@
 package net.bindernews.grackle.orb;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
+import com.megacrit.cardcrawl.actions.common.DamageAllEnemiesAction;
 import com.megacrit.cardcrawl.actions.defect.LightningOrbEvokeAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import lombok.val;
 import net.bindernews.grackle.GrackleMod;
+import net.bindernews.grackle.helper.MiscUtil;
 
+/**
+ * Bombs grow in power each turn like a Dark Orb, but hit ALL enemies when evoked.
+ */
 public class BombOrb extends BaseWeaponOrb {
     public static final String ID = GrackleMod.makeId(BombOrb.class);
     private static final OrbHelper HELPER = new OrbHelper(ID);
@@ -22,9 +28,10 @@ public class BombOrb extends BaseWeaponOrb {
 
     @Override
     public void onEvoke() {
-        val dmgInfo = new DamageInfo(AbstractDungeon.player, this.evokeAmount, DamageInfo.DamageType.THORNS);
-//        new DarkOrbEvokeAction(, AbstractGameAction.AttackEffect.FIRE)
-        AbstractDungeon.actionManager.addToTop(new LightningOrbEvokeAction(dmgInfo, true));
+        val source = AbstractDungeon.player;
+        val damageMat = DamageInfo.createDamageMatrix(evokeAmount);
+        MiscUtil.addToBot(new DamageAllEnemiesAction(
+                source, damageMat, DamageInfo.DamageType.NORMAL, AttackEffect.FIRE));
     }
 
     @Override

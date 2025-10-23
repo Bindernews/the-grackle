@@ -24,7 +24,7 @@ class EmbodyFirePower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID
             flash()
             for (m in monsters.monsters) {
                 if (!m.isDead && !m.isDying) {
-                    addToBot(iop().actionApplyPower(owner, m, BurningPower.POWER_ID, amount))
+                    addToBot(iop().actionApplyPower(owner, m, OldBurningPower.POWER_ID, amount))
                 }
             }
         }

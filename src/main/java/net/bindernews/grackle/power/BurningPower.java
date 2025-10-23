@@ -7,10 +7,10 @@ import net.bindernews.grackle.GrackleMod;
 import net.bindernews.grackle.helper.PowerUtil;
 import org.jetbrains.annotations.NotNull;
 
-public class Burning2Power extends BasePower {
-    public static final String POWER_ID = GrackleMod.makeId(Burning2Power.class);
+public class BurningPower extends BasePower {
+    public static final String POWER_ID = GrackleMod.makeId(BurningPower.class);
 
-    public Burning2Power(AbstractCreature owner, int amount) {
+    public BurningPower(AbstractCreature owner, int amount) {
         super(POWER_ID);
         setOwnerAmount(owner, amount);
         isTurnBased = true;

@@ -2,11 +2,11 @@ package net.bindernews.grackle.cards
 
 import com.megacrit.cardcrawl.core.AbstractCreature
 import net.bindernews.grackle.helper.CardVariables
-import net.bindernews.grackle.power.BurningPower
+import net.bindernews.grackle.power.OldBurningPower
 
 class FireTouch : BaseCard(C, VARS) {
     override fun apply(p: AbstractCreature, m: AbstractCreature?) {
-        addToBot(BurningPower.makeAction(p, m!!, magicNumber))
+        addToBot(OldBurningPower.makeAction(p, m!!, magicNumber))
     }
 
     companion object {

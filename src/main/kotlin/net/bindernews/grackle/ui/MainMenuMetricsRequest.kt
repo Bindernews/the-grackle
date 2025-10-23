@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.core.Settings
 import com.megacrit.cardcrawl.screens.mainMenu.MainMenuScreen
 import com.megacrit.cardcrawl.screens.options.ToggleButton
-import net.bindernews.grackle.api.IPopup
+import net.bindernews.bnsts.api.IPopup
 import net.bindernews.grackle.helper.makeId
 
 class MainMenuMetricsRequest : IPopup {

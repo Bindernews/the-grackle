@@ -11,14 +11,12 @@ import com.megacrit.cardcrawl.cards.DamageInfo.DamageType
 import com.megacrit.cardcrawl.characters.AbstractPlayer
 import com.megacrit.cardcrawl.core.AbstractCreature
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon
-import com.megacrit.cardcrawl.localization.PowerStrings
 import com.megacrit.cardcrawl.powers.AbstractPower
-import com.megacrit.cardcrawl.powers.VulnerablePower
 import com.megacrit.cardcrawl.rooms.AbstractRoom
 import net.bindernews.grackle.GrackleMod
 import net.bindernews.grackle.cardmods.EmbodyFireMod
 
-class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amount: Int) : BasePower(POWER_ID) {
+class OldBurningPower(owner: AbstractCreature, val source: AbstractCreature?, amount: Int) : BasePower(POWER_ID) {
     private val damageMods: DamageModContainer
 
     @Suppress("unused")
@@ -79,11 +77,11 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
     }
 
     override fun makeCopy(): AbstractPower {
-        return BurningPower(owner, source, amount)
+        return OldBurningPower(owner, source, amount)
     }
 
     companion object {
-        @JvmField val POWER_ID = GrackleMod.makeId(BurningPower::class.java)
+        @JvmField val POWER_ID = GrackleMod.makeId(OldBurningPower::class.java)
 
         /**
          * Damage received multiplier, basically like vulnerable.
@@ -96,7 +94,7 @@ class BurningPower(owner: AbstractCreature, val source: AbstractCreature?, amoun
         fun makeAction(
             source: AbstractCreature?, target: AbstractCreature, amount: Int
         ): AbstractGameAction {
-            return ApplyPowerAction(target, source, BurningPower(target, source, amount), amount)
+            return ApplyPowerAction(target, source, OldBurningPower(target, source, amount), amount)
         }
     }
 }

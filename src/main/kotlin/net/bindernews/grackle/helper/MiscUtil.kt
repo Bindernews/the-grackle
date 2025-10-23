@@ -17,7 +17,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower
 import com.megacrit.cardcrawl.stances.AbstractStance
 import net.bindernews.grackle.cards.BaseCard
 import net.bindernews.grackle.cards.CardConfig
-import net.bindernews.grackle.power.BasePower
 import org.apache.logging.log4j.LogManager
 import java.util.*
 
@@ -51,18 +50,18 @@ object MiscUtil {
     /**
      * Add an action to the bottom of the stack, convenient static import.
      */
-    fun addToBot(a: AbstractGameAction?) {
+    @JvmStatic fun addToBot(a: AbstractGameAction?) {
         AbstractDungeon.actionManager.addToBottom(a)
     }
 
     /**
      * Add an action to the top of the stack, convenient static import.
      */
-    fun addToTop(a: AbstractGameAction?) {
+    @JvmStatic fun addToTop(a: AbstractGameAction?) {
         AbstractDungeon.actionManager.addToTop(a)
     }
 
-    fun getPowerAmount(c: AbstractCreature, powerId: String, defaultAmount: Int): Int {
+    @JvmStatic fun getPowerAmount(c: AbstractCreature, powerId: String, defaultAmount: Int): Int {
         return c.getPower(powerId)?.amount ?: defaultAmount
     }
 

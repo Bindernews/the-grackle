@@ -21,7 +21,8 @@ class MultiHitPower(owner: AbstractCreature, amount: Int) : BasePower(POWER_ID) 
     }
 
     override fun onUseCard(card: AbstractCard, action: UseCardAction) {
-        if (card.type == AbstractCard.CardType.ATTACK && card.hasTag(ExtraHitsVariable.GK_MULTI_HIT)
+        if (card.type == AbstractCard.CardType.ATTACK
+            && card.hasTag(ExtraHitsVariable.GK_MULTI_HIT)
             && !card.hasTag(GK_MULTI_HIT_PRESERVE)
         ) {
             flash()

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard.*
 import com.megacrit.cardcrawl.core.CardCrawlGame
 import com.megacrit.cardcrawl.localization.CardStrings
 import net.bindernews.grackle.GrackleMod
+import net.bindernews.grackle.helper.DescriptionBuilder
 
 /**
  * Card configuration class. Reduces the repetitiveness of creating a card.
@@ -25,6 +26,12 @@ class CardConfig(
 
     private var _betaPortrait: AtlasRegion? = null
     val betaPortrait: AtlasRegion get() = _betaPortrait!!
+
+    var parseDescription: Boolean = false
+
+    val description: String by lazy {
+        if (parseDescription) DescriptionBuilder.parse(strings.DESCRIPTION) else strings.DESCRIPTION
+    }
 
     constructor(
             companion: Any,

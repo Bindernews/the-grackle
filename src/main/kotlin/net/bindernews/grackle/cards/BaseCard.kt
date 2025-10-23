@@ -15,7 +15,7 @@ import net.bindernews.grackle.helper.ModInterop
 @AutoAdd.Ignore
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
 abstract class BaseCard(private val opts: CardConfig, protected var cardInitializer: ICardInitializer?) : CustomCard(
-    opts.ID, opts.strings.NAME, RegionName(""), 1, opts.strings.DESCRIPTION,
+    opts.ID, opts.strings.NAME, RegionName(""), 1, opts.description,
     opts.type, Grackle.Co.COLOR_BLACK, opts.rarity, opts.target
 ) {
     var owner: AbstractCreature? = AbstractDungeon.player

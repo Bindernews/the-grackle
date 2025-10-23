@@ -99,6 +99,7 @@ open class DescriptionBuilder protected constructor() {
             CardCrawlGame.languagePack.getUIString("${GrackleMod.MOD_ID}:DescriptionBuilder").TEXT_DICT
         }
 
+        private val dollarDelimited = """\$([^$]*)\$""".toRegex()
         private val parenRegex = """\(([^()$]+)\)""".toRegex()
         private val gameLocale by lazy {
             when (Settings.language) {
@@ -116,21 +117,34 @@ open class DescriptionBuilder protected constructor() {
             return DescriptionBuilder()
         }
 
+
         fun parse(source: String): String {
             val sb = StringBuilder()
-            val parts = splitByRegex(parenRegex, source, 1)
-            for (i in parts.indices step 2) {
-                // add non-match
-                sb.append(parts[i])
-                // convert match based on strings and add it
-                val matchVal = parts[i + 1]
-                if (matchVal == "\n") {
+            val segments = splitByRegex(dollarDelimited, source, 1)
+            for (i in segments.indices) {
+                val segment = segments[i]
+                if (i % 2 == 0) {
+                    // add non-match
+                    sb.append(segment)
+                } else if (segment == "") {
+                    // empty match means insert a literal $
+                    sb.append("$");
+                } else if (segment == "\n") {
+                    // Insert newline
                     sb.append(" NL ")
                 } else {
-                    val shouldUpper = matchVal[0].isUpperCase()
-                    val matchLower = matchVal.lowercase(gameLocale)
-                    val convert = strings[matchLower] ?: matchLower
-                        .let { if (shouldUpper) uppercaseFirstChar(it) else it }
+                    val partArgs = segment.split(",")
+                    val trKey = partArgs[0]
+                    // Convert case and append matched string
+                    val shouldUpper = trKey[0].isUpperCase()
+                    val matchLower = trKey.lowercase(gameLocale)
+                    var convert = (strings[matchLower] ?: matchLower)
+                    if (partArgs.size > 1) {
+                        convert = String.format(convert, *partArgs.drop(1).toTypedArray())
+                    }
+                    if (shouldUpper) {
+                        convert = uppercaseFirstChar(convert)
+                    }
                     sb.append(convert)
                 }
             }
@@ -141,8 +155,8 @@ open class DescriptionBuilder protected constructor() {
             return s[0].uppercaseChar() + s.substring(1)
         }
 
-        fun splitByRegex(regex: Regex, input: String, group: Int = 0): List<String> {
-            val parts = mutableListOf<String>()
+        fun splitByRegex(regex: Regex, input: String, group: Int = 0): ArrayList<String> {
+            val parts = arrayListOf<String>()
             var index = 0
             while (true) {
                 val m = regex.find(input, index)

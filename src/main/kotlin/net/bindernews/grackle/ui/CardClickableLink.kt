@@ -11,8 +11,8 @@ import com.megacrit.cardcrawl.helpers.FontHelper
 import com.megacrit.cardcrawl.helpers.Hitbox
 import com.megacrit.cardcrawl.helpers.HitboxListener
 import com.megacrit.cardcrawl.helpers.input.InputHelper
+import net.bindernews.bnsts.api.IPopup
 import net.bindernews.grackle.GrackleMod
-import net.bindernews.grackle.api.IPopup
 import net.bindernews.grackle.helper.makeId
 import java.awt.Desktop
 import java.awt.Insets
